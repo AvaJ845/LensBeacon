@@ -105,10 +105,12 @@ private struct DeviceDetail: View {
                         field("Local name", v.localName ?? "—")
                         field("peripheral.name", v.peripheralName ?? "—")
                         field("Company ID", v.companyID ?? "none")
-                        field("Manufacturer data", v.manufacturerHex ?? "—")
+                        field("Manufacturer data", v.manufacturerHex ?? "—",
+                              ascii: RawAdvertisement.asciiHint(v.manufacturerHex))
                         field("Service UUIDs", v.serviceUUIDs.isEmpty ? "—" : v.serviceUUIDs.joined(separator: "\n"))
                         if !v.serviceData.isEmpty {
-                            field("Service data", v.serviceData.map { "\($0.key) = \($0.value)" }.joined(separator: "\n"))
+                            field("Service data", v.serviceData.sorted { $0.key < $1.key }
+                                .map { "\($0.key) = \($0.value)" }.joined(separator: "\n"))
                         }
                         if !v.overflowServiceUUIDs.isEmpty {
                             field("Overflow UUIDs", v.overflowServiceUUIDs.joined(separator: "\n"))
@@ -125,11 +127,15 @@ private struct DeviceDetail: View {
         }
     }
 
-    private func field(_ k: String, _ value: String) -> some View {
+    private func field(_ k: String, _ value: String, ascii: String? = nil) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(k).font(.caption2).foregroundStyle(.secondary)
             Text(value).font(.footnote.monospaced()).textSelection(.enabled)
                 .fixedSize(horizontal: false, vertical: true)
+            if let ascii {
+                Text("ascii: “\(ascii)”  (likely a serial / model — not a signal)")
+                    .font(.caption2.monospaced()).foregroundStyle(.secondary)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 1)

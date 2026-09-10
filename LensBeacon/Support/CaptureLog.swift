@@ -32,6 +32,17 @@ struct RawAdvertisement: Codable, Equatable, Sendable {
     var txPower: Int?
     var isConnectable: Bool
 
+    /// The printable-ASCII run of a spaced-hex string, or nil. Helps a tester see
+    /// when a payload is just a serial / model string rather than a real signal.
+    static func asciiHint(_ spacedHex: String?) -> String? {
+        guard let bytes = spacedHex?.split(separator: " ").compactMap({ UInt8($0, radix: 16) }),
+              bytes.count >= 4 else { return nil }
+        let printable = bytes.map { (0x20...0x7E).contains($0) ? Character(UnicodeScalar($0)) : "·" }
+        let text = String(printable)
+        let ratio = Double(text.filter { $0 != "·" }.count) / Double(text.count)
+        return ratio >= 0.6 ? text : nil
+    }
+
     /// A stable key for "have I seen this exact payload before" (ignores RSSI).
     var fingerprint: String {
         [
@@ -138,6 +149,9 @@ final class CaptureLog: NSObject {
                 out += "  name:        \(v.localName ?? "—")   (peripheral.name: \(v.peripheralName ?? "—"))\n"
                 out += "  company:     \(v.companyID ?? "none")\n"
                 out += "  mfg data:    \(v.manufacturerHex ?? "—")\n"
+                if let ascii = RawAdvertisement.asciiHint(v.manufacturerHex) {
+                    out += "  mfg ascii:   \"\(ascii)\"  (likely serial/model, not a signal)\n"
+                }
                 out += "  services:    \(v.serviceUUIDs.isEmpty ? "—" : v.serviceUUIDs.joined(separator: ", "))\n"
                 if !v.serviceData.isEmpty {
                     out += "  serviceData: \(v.serviceData.map { "\($0.key)={\($0.value)}" }.joined(separator: ", "))\n"
