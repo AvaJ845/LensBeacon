@@ -75,22 +75,26 @@ struct DetectionRuleTable: Codable, Equatable, Sendable {
     }()
 
     // ─────────────────────────────────────────────────────────────────────────────
-    // SIGNATURE SET.  Sources: first-party captures + the public ZuckOff detector.
-    // See docs/RULES.md for how to add one from a capture.
+    // SIGNATURE SET.  See docs/RULES.md for how to add one from a capture.
+    //
+    // CONFIRMED ON HARDWARE (first-party BLE captures):
+    //   0x058E + name "Quest 2"        Meta Quest 2  (2026-09-10, two devices)
+    //   0x0075 + name "[TV] Samsung…"  Samsung TV    — the reason 0x0075 is excluded
+    //
+    // SOURCED, NOT YET CAPTURED (SIG registry + the public ZuckOff detector):
+    //   0x0D53 Luxottica · 0x03C2 Snap · 0xFD5F Oculus · every name pattern.
     //
     // TWO SHARED IDENTIFIERS THAT MUST NOT STAND ALONE AS A CAMERA FLAG:
     //   0x058E  Meta Platforms Technologies (Reality Labs / Oculus) — used by the
-    //           Meta Quest *and* the Ray-Ban / Oakley Meta glasses. First-party
-    //           testing (2026-09-10) confirmed a Quest with no glasses present
-    //           advertises 0x058E. So a bare 0x058E is classified as a *headset*
-    //           (worn openly, never flagged, never alerts). A real pair of glasses
-    //           is identified by 0x0D53 (Luxottica) or a glasses name, which
-    //           outranks the headset guess.
-    //   0xFD5F  Oculus VR service UUID — Quest. Also a headset signal.
+    //           Quest *and* the Ray-Ban / Oakley Meta glasses. A bare 0x058E is a
+    //           *headset* (worn openly, never flagged). A real pair of glasses is
+    //           identified by 0x0D53 (Luxottica, frame maker) or a glasses name,
+    //           either of which outranks the headset guess.
+    //   0xFD5F  Oculus VR service UUID — a headset signal.
     //
     // DELIBERATELY EXCLUDED — do not re-add without a second discriminator:
     //   0x00E0  Google  — every Pixel and every Fast Pair accessory broadcasts it.
-    //   0x0075  Samsung — same, louder. Neither ships camera glasses.
+    //   0x0075  Samsung — confirmed above on a Samsung TV. Neither ships glasses.
     // A future rule that needs any of these MUST gate on a second signal, never the
     // company ID by itself. This comment is load-bearing: leave it here.
     // ─────────────────────────────────────────────────────────────────────────────

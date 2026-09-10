@@ -39,10 +39,14 @@ own hardware: confirming the detection rules against real advertisements.
 
 ## Confirming the detection rules
 
-Every flag comes from `Shared/DetectionRules.swift` (see `RULES.md`). **Only
-`0x058E` has been observed on real hardware** (a Meta Quest). `0x0D53` (Luxottica),
-`0x03C2` (Snap), `0xFD5F` (Oculus) and every name pattern are from the Bluetooth SIG
-registry + a competitor and want a first-party capture.
+Every flag comes from `Shared/DetectionRules.swift` (see `RULES.md`).
+
+**Confirmed on hardware:** `0x058E` + name `"Quest 2"` (Meta Quest 2, two devices);
+`0x0075` + `"[TV] Samsung…"` (a Samsung TV — the reason `0x0075` is excluded).
+
+**Still sourced only** (SIG registry + a competitor): `0x0D53` (Luxottica), `0x03C2`
+(Snap), `0xFD5F` (Oculus), and every name pattern — the real Meta / Snap / Even
+Realities *glasses* have never been captured.
 
 ### The tool — BLE capture (dev only)
 
