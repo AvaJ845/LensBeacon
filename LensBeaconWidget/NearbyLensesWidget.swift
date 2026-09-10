@@ -71,20 +71,22 @@ struct NearbyLensesView: View {
     // MARK: - Families
 
     private var small: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Label("LensBeacon", systemImage: "dot.radiowaves.left.and.right")
-                .font(.caption2.weight(.semibold))
-                .foregroundStyle(.secondary)
-            Text("\(count)")
-                .font(.system(size: 40, weight: .semibold, design: .rounded))
-                .contentTransition(.numericText())
-                .lineLimit(1)
-                .minimumScaleFactor(0.5)
-            Text("camera glasses nearby")
-                .font(.caption2)
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                BeaconMark(tint: count > 0 ? Palette.tier(.serviceUUID) : Palette.accent)
+                    .frame(width: 26, height: 26)
+                Spacer()
+                Text("\(count)")
+                    .font(.system(size: 34, weight: .semibold, design: .rounded))
+                    .contentTransition(.numericText())
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+            }
+            Spacer(minLength: 4)
+            Text(count == 0 ? "Nothing flagged" : "camera glasses nearby")
+                .font(.caption2.weight(.medium))
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
-            Spacer(minLength: 0)
             ageLine
         }
     }

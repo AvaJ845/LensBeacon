@@ -101,6 +101,7 @@ targets:
     sources:
       - path: LensBeaconWidget
       - path: Shared
+      - path: LensBeacon/Views/BeaconMark.swift
     settings:
       base:
         PRODUCT_NAME: LensBeaconWidget

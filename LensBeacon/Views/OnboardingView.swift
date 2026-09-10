@@ -14,19 +14,19 @@ struct OnboardingView: View {
         VStack(spacing: 0) {
             TabView(selection: $page) {
                 Panel(
-                    symbol: "dot.radiowaves.left.and.right",
+                    art: .beacon,
                     title: "Awareness, not accusation",
                     text: "Camera glasses announce themselves over Bluetooth. LensBeacon listens for a known pair nearby — never for a person."
                 ).tag(0)
 
                 Panel(
-                    symbol: "checkmark.seal",
+                    art: .symbol("checkmark.seal"),
                     title: "Every flag shows its evidence",
                     text: "See the exact signal behind each flag and disagree with it. A detection is not proof anyone is recording, and quiet is not proof no one is."
                 ).tag(1)
 
                 Panel(
-                    symbol: "iphone",
+                    art: .symbol("lock.iphone"),
                     title: "Nothing leaves your iPhone",
                     text: "No account, no server, no analytics — zero network connections. Your log is on this device only, and Settings ▸ Data erases it any time."
                 ).tag(2)
@@ -64,16 +64,26 @@ struct OnboardingView: View {
 }
 
 private struct Panel: View {
-    let symbol: String
+    enum Art { case beacon, symbol(String) }
+    let art: Art
     let title: String
     let text: String
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 22) {
             Spacer()
-            Image(systemName: symbol)
-                .font(.system(size: 56, weight: .light))
-                .foregroundStyle(Palette.accent)
+            Group {
+                switch art {
+                case .beacon:
+                    ScanField(active: true)
+                        .frame(width: 132, height: 132)
+                case .symbol(let name):
+                    Image(systemName: name)
+                        .font(.system(size: 54, weight: .light))
+                        .foregroundStyle(Palette.accent)
+                        .frame(height: 132)
+                }
+            }
             Text(title)
                 .font(.title.weight(.semibold))
                 .multilineTextAlignment(.center)

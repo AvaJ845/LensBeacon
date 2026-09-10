@@ -135,7 +135,8 @@ struct LimitsNote: View {
     }
 }
 
-/// Card container matching the theme.
+/// Card container matching the theme — a soft raised surface, a hairline, and a
+/// whisper of shadow for depth (kept low so nothing "floats").
 struct Card<Content: View>: View {
     @ViewBuilder var content: Content
     var body: some View {
@@ -146,5 +147,6 @@ struct Card<Content: View>: View {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .strokeBorder(Palette.hairline)
             )
+            .shadow(color: Palette.deepNavy.opacity(0.06), radius: 8, y: 3)
     }
 }

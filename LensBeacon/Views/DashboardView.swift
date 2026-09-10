@@ -27,15 +27,23 @@ struct DashboardView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
-                    StatusHeader(state: coordinator.state,
-                                 flagCount: coordinator.flags.count,
-                                 isScanning: coordinator.isScanning,
-                                 isPaused: coordinator.isPaused,
-                                 animate: !reduceMotion,
-                                 onResume: { coordinator.setPaused(false) })
+                    StatusHero(state: coordinator.state,
+                               flagCount: coordinator.flags.count,
+                               isScanning: coordinator.isScanning,
+                               isPaused: coordinator.isPaused,
+                               settled: settled,
+                               onResume: { coordinator.setPaused(false); Haptics.resume() })
+                    .padding(.top, 8)
 
                     if coordinator.state == .unauthorized || coordinator.state == .poweredOff {
                         PermissionCard(state: coordinator.state)
+                    }
+
+                    if coordinator.isScanning && !coordinator.isPaused && !coordinator.allInRange.isEmpty {
+                        NearbySummary(inRange: coordinator.allInRange.count,
+                                      flagged: coordinator.flags.count,
+                                      headsets: coordinator.headsets.count,
+                                      displayGlasses: coordinator.displayGlasses.count)
                     }
 
                     if !coordinator.flags.isEmpty {
@@ -45,22 +53,13 @@ struct DashboardView: View {
                                     FlagRow(flag: flag)
                                 }
                                 .buttonStyle(.plain)
+                                .transition(.asymmetric(
+                                    insertion: .move(edge: .top).combined(with: .opacity),
+                                    removal: .opacity))
                             }
                         }
-                    } else if coordinator.isScanning && !coordinator.isPaused {
-                        if settled {
-                            EmptyStateView(
-                                symbol: "checkmark.shield",
-                                title: "Nothing flagged",
-                                message: Copy.notAccusation
-                            )
-                        } else {
-                            EmptyStateView(
-                                symbol: "dot.radiowaves.left.and.right",
-                                title: "Listening…",
-                                message: "Checking nearby Bluetooth devices against known camera-glasses signatures."
-                            )
-                        }
+                        .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.85),
+                                   value: coordinator.flags.map(\.id))
                     }
 
                     seenNotFlaggedSection
@@ -76,6 +75,7 @@ struct DashboardView: View {
                 .padding(16)
             }
             .lensChrome()
+            .scrollIndicators(.hidden)
             .navigationTitle("Nearby")
             .navigationDestination(for: String.self) { key in
                 if let live = coordinator.live[key] {
@@ -85,7 +85,9 @@ struct DashboardView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
-                        coordinator.setPaused(!coordinator.isPaused)
+                        let wasPaused = coordinator.isPaused
+                        coordinator.setPaused(!wasPaused)
+                        if wasPaused { Haptics.resume() }
                     } label: {
                         Label(coordinator.isPaused ? "Resume scanning" : "Pause scanning",
                               systemImage: coordinator.isPaused ? "play.circle" : "pause.circle")
@@ -188,40 +190,77 @@ struct DashboardView: View {
     }
 }
 
-// MARK: - Header
+// MARK: - Nearby summary
 
-private struct StatusHeader: View {
+/// One quiet line: how much Bluetooth is around, and how much of it LensBeacon
+/// cares about. Gives the scan a sense of place without adding a card.
+private struct NearbySummary: View {
+    let inRange: Int
+    let flagged: Int
+    let headsets: Int
+    let displayGlasses: Int
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "dot.radiowaves.left.and.right").font(.caption2)
+            Text(text)
+        }
+        .font(.caption)
+        .foregroundStyle(.secondary)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 7)
+        .background(Palette.card.opacity(0.6), in: Capsule())
+        .overlay(Capsule().strokeBorder(Palette.hairline))
+        .accessibilityElement(children: .combine)
+    }
+
+    private var text: String {
+        var parts = ["\(inRange) in range"]
+        if flagged > 0 { parts.append("\(flagged) flagged") }
+        let openly = headsets + displayGlasses
+        if openly > 0 { parts.append("\(openly) worn openly") }
+        return parts.joined(separator: "  ·  ")
+    }
+}
+
+// MARK: - Status hero
+
+/// The top of the Dashboard. A centred presence — the beacon mark, breathing, with
+/// two slow rings while it listens — that resolves into a calm count when a flag
+/// appears. No siren, no red, never a full-bleed alarm.
+private struct StatusHero: View {
     let state: BluetoothScanner.State
     let flagCount: Int
     let isScanning: Bool
     let isPaused: Bool
-    var animate: Bool = true
+    let settled: Bool
     let onResume: () -> Void
 
     var body: some View {
-        Card {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack(spacing: 8) {
-                    Image(systemName: symbol)
-                        .font(.title2)
-                        .foregroundStyle(tint)
-                        .symbolEffect(.pulse, options: .repeating, isActive: animate && isScanning && !isPaused && flagCount == 0)
-                    Text(headline)
-                        .font(.title3.weight(.semibold))
-                }
+        VStack(spacing: 14) {
+            ScanField(active: isScanning && !isPaused && flagCount == 0, tint: tint)
+
+            VStack(spacing: 4) {
+                Text(headline)
+                    .font(.title2.weight(.semibold))
+                    .contentTransition(.numericText())
+                    .multilineTextAlignment(.center)
                 Text(subline)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-
-                if isPaused {
-                    Button("Resume scanning", systemImage: "play.fill", action: onResume)
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.small)
-                        .padding(.top, 2)
-                }
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: 320)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+
+            if isPaused {
+                Button("Resume scanning", systemImage: "play.fill", action: onResume)
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.regular)
+            }
         }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 6)
+        .animation(.default, value: headline)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(headline). \(subline)")
     }
@@ -235,7 +274,7 @@ private struct StatusHeader: View {
         case .idle:         return "Not scanning"
         case .scanning:
             switch flagCount {
-            case 0:  return "Scanning — nothing flagged"
+            case 0:  return settled ? "Nothing flagged" : "Listening"
             case 1:  return "1 camera flag nearby"
             default: return "\(flagCount) camera flags nearby"
             }
@@ -246,21 +285,15 @@ private struct StatusHeader: View {
         if isPaused { return "LensBeacon has stopped listening. Nothing is being detected or logged." }
         switch state {
         case .unauthorized: return "Turn on Bluetooth for LensBeacon in Settings to scan."
-        case .poweredOff:   return "Turn on Bluetooth in Control Center to scan."
+        case .poweredOff:   return "Turn on Bluetooth in Control Centre to scan."
         case .unsupported:  return "This device has no Bluetooth LE radio."
-        case .idle:         return "Open scanning resumes when you return to this screen."
-        case .scanning:     return flagCount == 0
-            ? "LensBeacon is listening for camera-glasses signatures."
-            : "Each flag below shows exactly which Bluetooth signals matched."
-        }
-    }
-
-    private var symbol: String {
-        if isPaused { return "pause.circle" }
-        switch state {
-        case .scanning: return flagCount == 0 ? "dot.radiowaves.left.and.right" : "eyeglasses"
-        case .unauthorized, .poweredOff: return "antenna.radiowaves.left.and.right.slash"
-        default: return "dot.radiowaves.left.and.right"
+        case .idle:         return "Scanning resumes when you return to this screen."
+        case .scanning:
+            switch flagCount {
+            case 0:  return settled ? Copy.notAccusation
+                                    : "Checking nearby Bluetooth for camera-glasses signatures."
+            default: return "Each flag shows exactly which Bluetooth signals matched. Tap for the evidence."
+            }
         }
     }
 
@@ -280,10 +313,12 @@ private struct FlagRow: View {
     let flag: LiveSighting
 
     var body: some View {
-        Card {
-            VStack(alignment: .leading, spacing: 8) {
-                // Title + badge side by side when they fit; stacked when Dynamic Type
-                // makes them collide (HIG-1).
+        HStack(spacing: 0) {
+            // A quiet tier-coloured spine — informative, never loud.
+            if let t = flag.tier {
+                Palette.tier(t).frame(width: 3)
+            }
+            VStack(alignment: .leading, spacing: 9) {
                 ViewThatFits(in: .horizontal) {
                     HStack(alignment: .firstTextBaseline) {
                         Text(flag.title).font(.headline)
@@ -302,17 +337,31 @@ private struct FlagRow: View {
                         .foregroundStyle(.secondary)
                 }
                 if let first = flag.detection.evidence.first {
-                    Text("\(first.adType.label) matched: \(first.matchedValue)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(2)
+                    HStack(spacing: 5) {
+                        Image(systemName: "checkmark.seal.fill")
+                            .font(.caption2)
+                            .foregroundStyle(Palette.accent)
+                        Text("\(first.adType.label): \(first.matchedValue)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
                 }
-                Text("Tap for the full evidence")
-                    .font(.caption2)
-                    .foregroundStyle(Palette.accent)
             }
+            .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
+
+            Image(systemName: "chevron.right")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.tertiary)
+                .padding(.trailing, 14)
         }
+        .background(Palette.card, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(Palette.hairline))
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .shadow(color: Palette.deepNavy.opacity(0.06), radius: 8, y: 3)
+        .accessibilityElement(children: .combine)
+        .accessibilityHint("Opens the full evidence")
     }
 }
 
