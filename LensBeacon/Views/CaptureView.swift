@@ -6,14 +6,7 @@ import SwiftUI
 /// / Even Realities hardware. Not in the Release / TestFlight binary.
 struct CaptureView: View {
     @State private var model = CaptureLog()
-    @State private var selected: CapturedDevice.ID?
-
-    private var sorted: [CapturedDevice] {
-        model.devices.sorted {
-            ($0.userTag != nil ? 0 : 1, $0.isCandidate ? 0 : 1, $0.strongestRSSI)
-                > ($1.userTag != nil ? 0 : 1, $1.isCandidate ? 0 : 1, $1.strongestRSSI)
-        }
-    }
+    @State private var exportText = ""
 
     var body: some View {
         List {
@@ -21,10 +14,13 @@ struct CaptureView: View {
                 Toggle("Scanning", isOn: Binding(get: { model.isRunning },
                                                  set: { $0 ? model.start() : model.stop() }))
                 if !model.devices.isEmpty {
-                    ShareLink("Export capture (\(model.devices.count) devices)", item: model.exportText())
-                    Button("Clear", role: .destructive) { model.clear() }
+                    Button("Prepare export…") { exportText = model.exportText() }
+                    if !exportText.isEmpty {
+                        ShareLink("Share capture text", item: exportText)
+                    }
+                    Button("Clear", role: .destructive) { model.clear(); exportText = "" }
                 }
-                Text("Put the device in pairing mode / out of its case, hold the phone ~20 cm away. Tag the ones you can identify, then Export and send the text. Central-role scan only — nothing is stored or transmitted.")
+                Text("Put the device in pairing mode / out of its case, hold the phone ~20 cm away. Tag the ones you can identify, then prepare + share the text. Central-role scan only — nothing is stored or transmitted.")
                     .font(.caption).foregroundStyle(.secondary)
             } header: {
                 Text(headerState)
@@ -35,17 +31,16 @@ struct CaptureView: View {
                     .foregroundStyle(.secondary)
             }
 
-            ForEach(sorted) { d in
-                NavigationLink(value: d.id) { DeviceRow(device: d) }
+            ForEach(model.devices) { d in
+                NavigationLink {
+                    DeviceDetail(id: d.id, model: model)
+                } label: {
+                    DeviceRow(device: d)
+                }
             }
         }
         .navigationTitle("BLE capture (dev)")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationDestination(for: CapturedDevice.ID.self) { id in
-            if let d = model.devices.first(where: { $0.id == id }) {
-                DeviceDetail(device: d, model: model)
-            }
-        }
         .onAppear { model.start() }
         .onDisappear { model.stop() }
     }
@@ -86,44 +81,48 @@ private struct DeviceRow: View {
 }
 
 private struct DeviceDetail: View {
-    let device: CapturedDevice
+    let id: String
     let model: CaptureLog
 
     var body: some View {
-        List {
-            Section("Identify") {
-                Picker("This device is", selection: Binding(
-                    get: { device.userTag ?? "" },
-                    set: { model.tag(device.id, $0.isEmpty ? nil : $0) }
-                )) {
-                    Text("(untagged)").tag("")
-                    ForEach(CaptureLog.tags, id: \.self) { Text($0).tag($0) }
+        if let device = model.device(id) {
+            List {
+                Section("Identify") {
+                    Picker("This device is", selection: Binding(
+                        get: { device.userTag ?? "" },
+                        set: { model.tag(id, $0.isEmpty ? nil : $0) }
+                    )) {
+                        Text("(untagged)").tag("")
+                        ForEach(CaptureLog.tags, id: \.self) { Text($0).tag($0) }
+                    }
+                    LabeledContent("Engine says", value: device.engineVerdict)
+                    LabeledContent("Packets", value: "\(device.packetCount)")
+                    ShareLink("Share this device", item: model.exportText(only: id))
                 }
-                LabeledContent("Engine says", value: device.engineVerdict)
-                LabeledContent("Packets", value: "\(device.packetCount)")
-                ShareLink("Share this device", item: model.exportText())
-            }
 
-            ForEach(Array(device.variants.enumerated()), id: \.offset) { i, v in
-                Section("Advertisement \(i + 1)") {
-                    field("Local name", v.localName ?? "—")
-                    field("peripheral.name", v.peripheralName ?? "—")
-                    field("Company ID", v.companyID ?? "none")
-                    field("Manufacturer data", v.manufacturerHex ?? "—")
-                    field("Service UUIDs", v.serviceUUIDs.isEmpty ? "—" : v.serviceUUIDs.joined(separator: "\n"))
-                    if !v.serviceData.isEmpty {
-                        field("Service data", v.serviceData.map { "\($0.key) = \($0.value)" }.joined(separator: "\n"))
+                ForEach(Array(device.variants.enumerated()), id: \.offset) { i, v in
+                    Section("Advertisement \(i + 1)") {
+                        field("Local name", v.localName ?? "—")
+                        field("peripheral.name", v.peripheralName ?? "—")
+                        field("Company ID", v.companyID ?? "none")
+                        field("Manufacturer data", v.manufacturerHex ?? "—")
+                        field("Service UUIDs", v.serviceUUIDs.isEmpty ? "—" : v.serviceUUIDs.joined(separator: "\n"))
+                        if !v.serviceData.isEmpty {
+                            field("Service data", v.serviceData.map { "\($0.key) = \($0.value)" }.joined(separator: "\n"))
+                        }
+                        if !v.overflowServiceUUIDs.isEmpty {
+                            field("Overflow UUIDs", v.overflowServiceUUIDs.joined(separator: "\n"))
+                        }
+                        field("Tx power", v.txPower.map(String.init) ?? "—")
+                        field("Connectable", v.isConnectable ? "yes" : "no")
                     }
-                    if !v.overflowServiceUUIDs.isEmpty {
-                        field("Overflow UUIDs", v.overflowServiceUUIDs.joined(separator: "\n"))
-                    }
-                    field("Tx power", v.txPower.map(String.init) ?? "—")
-                    field("Connectable", v.isConnectable ? "yes" : "no")
                 }
             }
+            .navigationTitle(device.userTag ?? device.latest?.localName ?? "Device")
+            .navigationBarTitleDisplayMode(.inline)
+        } else {
+            ContentUnavailableView("Device left range", systemImage: "dot.radiowaves.right")
         }
-        .navigationTitle(device.userTag ?? "Device")
-        .navigationBarTitleDisplayMode(.inline)
     }
 
     private func field(_ k: String, _ value: String) -> some View {

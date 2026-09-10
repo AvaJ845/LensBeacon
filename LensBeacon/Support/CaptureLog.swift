@@ -98,6 +98,7 @@ final class CaptureLog: NSObject {
     func stop() {
         central?.stopScan()
         isRunning = false
+        publish()
     }
 
     func clear() {
@@ -110,11 +111,15 @@ final class CaptureLog: NSObject {
         publish()
     }
 
-    /// The whole session as pasteable text — the thing to Share back for signature work.
-    func exportText() -> String {
+    func device(_ id: String) -> CapturedDevice? { byID[id] }
+
+    /// Pasteable text — the whole session, or one device when `only` is set.
+    func exportText(only id: String? = nil) -> String {
+        let selection = id.flatMap { key in byID[key].map { [$0] } }
+            ?? byID.values.sorted { ($0.userTag != nil ? 0 : 1, $0.strongestRSSI) > ($1.userTag != nil ? 0 : 1, $1.strongestRSSI) }
         var out = "LensBeacon BLE capture — \(Date().formatted(date: .abbreviated, time: .standard))\n"
-        out += "\(devices.count) device(s), central-role scan, allowDuplicates.\n\n"
-        for d in devices.sorted(by: { ($0.userTag != nil ? 0 : 1, $0.strongestRSSI) > ($1.userTag != nil ? 0 : 1, $1.strongestRSSI) }) {
+        out += "\(selection.count) device(s), central-role scan, allowDuplicates.\n\n"
+        for d in selection {
             out += "──────────────────────────────────────────────\n"
             out += "TAG:        \(d.userTag ?? "(untagged)")\n"
             out += "peripheral: \(d.id)\n"
@@ -159,11 +164,30 @@ final class CaptureLog: NSObject {
         device.engineVerdict = verdict
 
         byID[id] = device
-        publish()
+        dirty = true
+        schedulePublish()
+    }
+
+    // Republish to the view at ~1.5 Hz max — a raw scan sees several packets a
+    // second, and reordering the list under the user's finger makes a row
+    // impossible to tap. Order is fixed by first-seen so devices never jump.
+    private var publishTask: Task<Void, Never>?
+    private var dirty = false
+
+    private func schedulePublish() {
+        guard publishTask == nil else { return }
+        publishTask = Task { [weak self] in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .milliseconds(650))
+                guard let self else { return }
+                if self.dirty { self.dirty = false; self.publish() }
+                else if !self.isRunning { self.publishTask = nil; return }
+            }
+        }
     }
 
     private func publish() {
-        devices = byID.values.sorted { $0.lastSeen > $1.lastSeen }
+        devices = byID.values.sorted { $0.firstSeen < $1.firstSeen }
     }
 
     /// Parses every CB advertisement key into Sendable values, callable from the
