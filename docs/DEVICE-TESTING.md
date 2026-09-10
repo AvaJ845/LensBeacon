@@ -41,12 +41,14 @@ own hardware: confirming the detection rules against real advertisements.
 
 Every flag comes from `Shared/DetectionRules.swift` (see `RULES.md`).
 
-**Confirmed on hardware:** `0x058E` + name `"Quest 2"` (Meta Quest 2, two devices);
-`0x0075` + `"[TV] Samsung…"` (a Samsung TV — the reason `0x0075` is excluded).
+**Confirmed on hardware (2026-09-10):**
+- Meta Quest 2 — `0x058E` + service `0xFEB8` + name `"Quest 2"`
+- Even Realities G2 — prefix `0x5245` ("ER") + name `Even G2_32_L_5EFC69`
+- Samsung TV — `0x0075` (the reason it is excluded)
 
 **Still sourced only** (SIG registry + a competitor): `0x0D53` (Luxottica), `0x03C2`
-(Snap), `0xFD5F` (Oculus), and every name pattern — the real Meta / Snap / Even
-Realities *glasses* have never been captured.
+(Snap), `0xFD5F` (Oculus), and the camera-glasses name patterns — no real
+Ray-Ban / Oakley Meta or Snap Spectacles has been captured.
 
 ### The tool — BLE capture (dev only)
 
