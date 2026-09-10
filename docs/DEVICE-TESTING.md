@@ -80,7 +80,7 @@ AirDrop / Messages / Files).
 | Device | Confirm |
 | --- | --- |
 | **Meta Quest** | `0x058E` seen already. Check whether `0xFD5F` and/or `0x00E0` (Google) also appear, and the exact name. |
-| **Even Realities G1 / G2** | the **company ID** (missing from the table entirely), the exact name from **both arms**, any service UUIDs. |
+| **Even Realities G1 / G2** | ✓ confirmed on a G2: company prefix `0x5245` ("ER") + name `Even G<1|2>_<ch>_<L|R>_<id>`. Capture a **G1** and the **right arm** to confirm the pattern holds. |
 | **Ray-Ban / Oakley Meta** | does `0x0D53` or `0x058E` actually appear? The exact advertised name. Any service UUIDs (tell me if `0xFD5F` shows — it would move that rule to camera-only). |
 | **Snap Spectacles** | is it `0x03C2`? Exact name. |
 

@@ -96,22 +96,30 @@ struct DetectionEngineTests {
         #expect(d.bestTier == .name)
     }
 
-    @Test func evenRealitiesRegexMatchesBothArmsAndIsDisplayGlasses() {
-        for name in ["G1_7_L_a1b2", "G1_12_R_ffee", "G1_0_L_0"] {
-            let d = DetectionEngine.classify(.init(localName: name))
-            #expect(d.category == .displayGlasses, "\(name) should be display glasses")
-            #expect(d.isCameraFlag == false)
-            #expect(d.productKey == "even-realities")
+    @Test func evenRealitiesG2Capture_isDisplayGlassesByCompanyOrName() {
+        // The real advertisement (captured 2026-09-10): 0x5245 ("ER") + this name.
+        let d = DetectionEngine.classify(.init(
+            manufacturerData: Data([0x45, 0x52, 0x53, 0x32, 0x31, 0x31]),
+            localName: "Even G2_32_L_5EFC69"
+        ))
+        #expect(d.category == .displayGlasses)
+        #expect(d.isCameraFlag == false)
+        #expect(d.canNotifyInBackground == false)
+        #expect(d.productKey == "even-realities")
+
+        // Name alone (either arm, G1 or G2) still resolves.
+        for name in ["Even G2_32_L_5EFC69", "Even G2_32_R_5EFC70", "Even G1_7_L_a1b2"] {
+            #expect(DetectionEngine.classify(.init(localName: name)).category == .displayGlasses, "\(name)")
         }
         // Near-misses must not match.
-        for name in ["G1_L_abc", "XG1_7_L_a", "G2_7_L_a"] {
-            #expect(DetectionEngine.classify(.init(localName: name)).matched == false, "\(name) should not match")
+        for name in ["Even G3_1_L_x", "Evening G2_1_L_x", "Even G2_L_x", "G1_7_L_x"] {
+            #expect(DetectionEngine.classify(.init(localName: name)).matched == false, "\(name)")
         }
     }
 
     @Test func displayGlassesWinsEvenIfAWeakerCameraRuleAlsoFires() {
-        // Name matches the G1 regex AND (hypothetically) a camera name — display wins.
-        let d = DetectionEngine.classify(.init(localName: "G1_7_L_Spectacles"))
+        // Name matches the Even Realities arm pattern AND a camera name — display wins.
+        let d = DetectionEngine.classify(.init(localName: "Even G2_7_L_Spectacles"))
         #expect(d.category == .displayGlasses)
     }
 
@@ -124,7 +132,7 @@ struct DetectionEngineTests {
         #expect(DetectionEngine.classify(.init(localName: "Spectacles")).canNotifyInBackground == false)
         // Headset / display glasses → never.
         #expect(DetectionEngine.classify(.init(serviceUUIDs16: ["FD5F"])).canNotifyInBackground == false)
-        #expect(DetectionEngine.classify(.init(localName: "G1_7_L_x")).canNotifyInBackground == false)
+        #expect(DetectionEngine.classify(.init(localName: "Even G1_7_L_x")).canNotifyInBackground == false)
         #expect(DetectionEngine.classify(.init(localName: "Meta Quest 3")).canNotifyInBackground == false)
     }
 
@@ -163,7 +171,7 @@ struct DetectionEngineTests {
     }
 
     @Test func mergeNeverFlipsDisplayGlassesIntoACamera() {
-        let display = DetectionEngine.classify(.init(localName: "G1_7_L_a"))
+        let display = DetectionEngine.classify(.init(localName: "Even G1_7_L_a"))
         let camera = DetectionEngine.classify(.init(manufacturerData: Data([0x53, 0x0D])))
         #expect(display.merged(with: camera).category == .displayGlasses)
     }

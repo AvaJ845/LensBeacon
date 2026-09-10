@@ -77,15 +77,14 @@ struct DetectionRuleTable: Codable, Equatable, Sendable {
     // ─────────────────────────────────────────────────────────────────────────────
     // SIGNATURE SET.  See docs/RULES.md for how to add one from a capture.
     //
-    // CONFIRMED ON HARDWARE (first-party BLE captures):
-    //   0x058E + "Quest 2" + service 0xFEB8 (list + data "20 01")   Meta Quest 2
-    //     (2026-09-10, two devices; mfg data = 8E 05 + an ASCII serial)
-    //   0x0075 + "[TV] Samsung…"                                    Samsung TV
-    //     — the reason 0x0075 is on the exclusion list
+    // CONFIRMED ON HARDWARE (first-party BLE captures, 2026-09-10):
+    //   Meta Quest 2       0x058E + service 0xFEB8 (list + data "20 01") + "Quest 2"
+    //   Even Realities G2  0x5245 ("ER") + name "Even G2_<ch>_<L|R>_<id>"
+    //   Samsung TV         0x0075 — the reason 0x0075 is on the exclusion list
     //
     // SOURCED, NOT YET CAPTURED (SIG registry + the public ZuckOff detector):
-    //   0x0D53 Luxottica · 0x03C2 Snap · 0xFD5F Oculus · every name pattern ·
-    //   the Even Realities company ID (missing entirely).
+    //   0x0D53 Luxottica · 0x03C2 Snap · 0xFD5F Oculus · the camera-glasses name
+    //   patterns (Ray-Ban / Oakley / Spectacles / HeyCyan / VistaView).
     //
     // TWO SHARED IDENTIFIERS THAT MUST NOT STAND ALONE AS A CAMERA FLAG:
     //   0x058E  Meta Platforms Technologies (Reality Labs / Oculus) — used by the
@@ -165,14 +164,26 @@ struct DetectionRuleTable: Codable, Equatable, Sendable {
             ),
 
             // ── Display glasses — NO CAMERA. Even Realities G1 / G2. ──────────────
+            // Confirmed on an Even Realities G2 (2026-09-10):
+            //   company prefix 0x5245 (ASCII "ER"), name "Even G2_32_L_5EFC69",
+            //   mfg data = "ERS211GBBE110297" + 7 binary bytes, no service UUIDs.
             DetectionRule(
-                id: "even-realities-g1",
+                id: "even-realities-company",
                 productKey: "even-realities",
                 productName: "Even Realities G1 / G2",
                 vendor: "Even Realities",
                 category: .displayGlasses,
-                match: .nameRegex(#"^G1_\d+_[LR]_"#),
-                note: "Even Realities G1/G2 are display-only glasses with no camera. Each arm advertises separately as G1_<channel>_<L|R>_<id>."
+                match: .companyID(0x5245),
+                note: "The manufacturer-data prefix 0x5245 is ASCII “ER” — Even Realities' own identifier (not a Bluetooth SIG assignment). Even Realities makes display-only glasses; there is no camera. Captured 2026-09-10 on a G2."
+            ),
+            DetectionRule(
+                id: "even-realities-name",
+                productKey: "even-realities",
+                productName: "Even Realities G1 / G2",
+                vendor: "Even Realities",
+                category: .displayGlasses,
+                match: .nameRegex(#"(?i)^even g[12]_\d+_[lr]_"#),
+                note: "The advertised name matches Even Realities' arm pattern — “Even G<1|2>_<channel>_<L|R>_<id>”. Each arm advertises separately. Display-only glasses, no camera."
             ),
 
             // ── Headsets — camera-capable but worn openly. Listed, never flagged. ─

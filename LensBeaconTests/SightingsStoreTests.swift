@@ -125,7 +125,7 @@ struct SightingsStoreTests {
 
         store.record(peripheralKey: "cam", detection: metaGlasses(), rssi: -50, proximity: .near, at: Date())
         store.record(peripheralKey: "disp",
-                     detection: DetectionEngine.classify(.init(localName: "G1_7_L_a1")),
+                     detection: DetectionEngine.classify(.init(localName: "Even G1_7_L_a1")),
                      rssi: -60, proximity: .nearby, at: Date())
 
         #expect(store.filtered(.all, mine: mine).count == 2)

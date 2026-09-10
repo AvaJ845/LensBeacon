@@ -48,7 +48,8 @@ flagged, never an alert. When a device matches rules in more than one category, 
 | `name-spectacles` | name contains `Spectacles` | 3 | camera | product name |
 | `name-heycyan` | name contains `HeyCyan` | 3 | camera | product name |
 | `name-vistaview` | name contains `VistaView` | 3 | camera | product name |
-| `even-realities-g1` | name `^G1_\d+_[LR]_` | 3 | **display (no camera)** | first-party — dual-arm Nordic UART |
+| `even-realities-company` | company `0x5245` ("ER") | 1 | display (no camera) | **captured** on a G2 |
+| `even-realities-name` | name `^Even G[12]_\d+_[LR]_` | 3 | display (no camera) | **captured** on a G2 |
 | `meta-reality-labs-company` | company `0x058E` | 1 | **headset** | shared Meta ID — **captured** on Quest 2 |
 | `meta-feb8-service` | service `0xFEB8` | 2 | **headset** | Meta (Facebook) UUID — **captured** on Quest 2 (list + data `20 01`) |
 | `oculus-service` | service `0xFD5F` | 2 | **headset** | SIG registry (Oculus VR) — not yet captured |
