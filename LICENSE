@@ -1,0 +1,34 @@
+LensBeacon — All Rights Reserved
+
+Copyright (c) 2026 Ava Research LLC. All rights reserved.
+
+This source code is published for transparency and review — so anyone can verify
+exactly what the app does, and confirm that it makes no network connections and
+collects no data.
+
+You MAY:
+  - read, audit, and reference this code;
+  - open issues and submit pull requests to this repository;
+  - build and run it locally for the purpose of evaluating or contributing.
+
+You MAY NOT, without prior written permission from the copyright holder:
+  - redistribute this code or substantial portions of it, modified or not;
+  - publish an app, or any other product or service, derived from it;
+  - use it for any commercial purpose.
+
+Contributions submitted to this repository are licensed to the copyright holder
+for use in the project under these same terms.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+LensBeacon is not affiliated with, endorsed by, or sponsored by Meta Platforms,
+Ray-Ban, EssilorLuxottica, Oakley, or Snap Inc. Product names appear in this
+source only to describe, factually, the device signatures LensBeacon detects.
+A detection is not a claim that any device is recording.

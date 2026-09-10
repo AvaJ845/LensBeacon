@@ -1,0 +1,174 @@
+name: LensBeacon
+
+# NOTE: the xcodegen on this machine is a standalone binary with no SettingPresets
+# resource bundle beside it, so it contributes *no* default build settings — it even
+# leaves SWIFT_VERSION empty. Every setting an iOS app target needs is therefore
+# written out explicitly below. Do not trim these back to the usual short spec
+# assuming Xcode's defaults will fill in; they will not, and the failure mode is a
+# confusing "unable to resolve module dependency" caused by the app building x86_64
+# while a dependency builds arm64.
+
+options:
+  bundleIdPrefix: com.avaresearch
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+configs:
+  Debug: debug
+  Release: release
+
+# Applied to every target. XcodeGen contributes no presets on this machine, so the
+# modern default has to be stated explicitly or the test target warns.
+settings:
+  base:
+    ALWAYS_SEARCH_USER_PATHS: NO
+
+targets:
+  LensBeacon:
+    type: application
+    platform: iOS
+    sources:
+      - path: LensBeacon
+      - path: Shared
+    dependencies:
+      - target: LensBeaconWidget
+    settings:
+      base:
+        PRODUCT_NAME: LensBeacon
+        PRODUCT_BUNDLE_IDENTIFIER: com.avaresearch.lensbeacon
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+
+        SDKROOT: iphoneos
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ARCHS: "$(ARCHS_STANDARD)"
+
+        SWIFT_VERSION: "5.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        SWIFT_EMIT_LOC_STRINGS: YES
+        CLANG_ENABLE_OBJC_ARC: YES
+        CLANG_ENABLE_MODULES: YES
+        ENABLE_PREVIEWS: YES
+        ENABLE_USER_SCRIPT_SANDBOXING: YES
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
+
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: LensBeacon/Info.plist
+
+        # Xcode-managed signing against the AVA Research team. Automatic signing
+        # registers the App IDs (app + widget) and the App Group on first device build
+        # or archive; the Apple ID must be added in Xcode ▸ Settings ▸ Accounts.
+        # For a simulator-only / unsigned build, pass CODE_SIGNING_ALLOWED=NO.
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: "3L683975L8"
+      configs:
+        Debug:
+          ONLY_ACTIVE_ARCH: YES
+          ENABLE_TESTABILITY: YES
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+          GCC_OPTIMIZATION_LEVEL: "0"
+          GCC_PREPROCESSOR_DEFINITIONS: "DEBUG=1 $(inherited)"
+          DEBUG_INFORMATION_FORMAT: dwarf
+        Release:
+          ONLY_ACTIVE_ARCH: NO
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+          SWIFT_COMPILATION_MODE: wholemodule
+          DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
+          VALIDATE_PRODUCT: YES
+    entitlements:
+      path: LensBeacon/LensBeacon.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.avaresearch.lensbeacon
+  LensBeaconWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: LensBeaconWidget
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_NAME: LensBeaconWidget
+        PRODUCT_BUNDLE_IDENTIFIER: com.avaresearch.lensbeacon.widget
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+
+        SDKROOT: iphoneos
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ARCHS: "$(ARCHS_STANDARD)"
+
+        SWIFT_VERSION: "5.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        CLANG_ENABLE_OBJC_ARC: YES
+        CLANG_ENABLE_MODULES: YES
+        ENABLE_USER_SCRIPT_SANDBOXING: YES
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks"
+        SKIP_INSTALL: YES
+
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: LensBeaconWidget/Info.plist
+
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: "3L683975L8"
+      configs:
+        Debug:
+          ONLY_ACTIVE_ARCH: YES
+          ENABLE_TESTABILITY: YES
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+          GCC_OPTIMIZATION_LEVEL: "0"
+          DEBUG_INFORMATION_FORMAT: dwarf
+        Release:
+          ONLY_ACTIVE_ARCH: NO
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+          SWIFT_COMPILATION_MODE: wholemodule
+          DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
+          VALIDATE_PRODUCT: YES
+    entitlements:
+      path: LensBeaconWidget/LensBeaconWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.avaresearch.lensbeacon
+  LensBeaconTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: LensBeaconTests
+      # The tests exercise the pure engines directly. The signature table, confidence
+      # engine and proximity banding all live in Shared/ precisely so they can be
+      # compiled into this bundle with no app host and no CoreBluetooth dependency.
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_NAME: LensBeaconTests
+        PRODUCT_BUNDLE_IDENTIFIER: com.avaresearch.lensbeacon.tests
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: "5.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        GENERATE_INFOPLIST_FILE: YES
+        IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: "3L683975L8"
+
+schemes:
+  LensBeacon:
+    build:
+      targets:
+        LensBeacon: all
+        LensBeaconWidget: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - LensBeaconTests

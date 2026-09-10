@@ -1,0 +1,702 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0062E1089571D806C1F2D855 /* FlagNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD7478BF7C60186F28407FB /* FlagNotifier.swift */; };
+		01167B0D386DE3F948D7EE83 /* ConfidenceLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0188AE43AB62925F840D72 /* ConfidenceLevel.swift */; };
+		027EED3B2B6C106E4A65DA86 /* ConfidenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96D77089966B267E086272F /* ConfidenceEngine.swift */; };
+		0DB043AD22449B209FF96B5B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDE4BF91152CCFCDF1B254 /* Theme.swift */; };
+		1CB6297A41EDE880A2802BD5 /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */; };
+		217CFBBD3CFFCD8544E0A824 /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */; };
+		21D526B1FC6D7CCEB55F90E2 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B092193CD8E17D70DA4B2E /* RootView.swift */; };
+		2431AF6F5CD09C9AF4E8B504 /* ScanCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8CEB71738203F7D7AAD489 /* ScanCoordinator.swift */; };
+		2B097574D261E892A30C01A3 /* ScanActivityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E799770714850A870C69ED8B /* ScanActivityController.swift */; };
+		34EE57220ADB973D873B8099 /* DashboardSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD3B36114475BA0E8B555E6 /* DashboardSnapshot.swift */; };
+		34F41B5E2BFE5E808AC8212A /* ConfidenceLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0188AE43AB62925F840D72 /* ConfidenceLevel.swift */; };
+		36306BDE868B1BF211633CE7 /* ConfidenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96D77089966B267E086272F /* ConfidenceEngine.swift */; };
+		3640B5A5A01419328477CEAB /* SightingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089DE783EDB8AB75AE31AB2D /* SightingsStore.swift */; };
+		3BB64343BC560A82DCF38165 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E60BE93EAF03C62C5A856 /* OnboardingView.swift */; };
+		4157EFA8DAE07D0B1A3CB584 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7B9C4CAC84311671B2B06A /* Components.swift */; };
+		477E7154091124283BAAE4E8 /* ScanLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A620E27E4756C479343E36 /* ScanLiveActivity.swift */; };
+		4ADA3CA80407606C2E3A4745 /* ConfidenceEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F2B72F7EC27330F9764FAA /* ConfidenceEngineTests.swift */; };
+		4E4A620244724E05ADFFA5BB /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF848D94E48D42C1D067FA38 /* DashboardView.swift */; };
+		56369AD023741271CA4D1420 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B4AACE24066B82652057D0 /* Haptics.swift */; };
+		588F5984FC8D686FB9795682 /* MineRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082ECB0547B0DE204893D61D /* MineRegistry.swift */; };
+		59E39D32AC1DED453F30F417 /* BluetoothScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E87AC1D87A4165E88A10E9F /* BluetoothScanner.swift */; };
+		616056CFBDFC49B58273882E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D140401EDC119CDAA24B762 /* SettingsView.swift */; };
+		65019930320F1EA5027B32FD /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDE4BF91152CCFCDF1B254 /* Theme.swift */; };
+		725906B4AA7B5370A153C851 /* UnlockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A24458AA55EBA6FFE8BE96 /* UnlockStore.swift */; };
+		95CE574127FCC2181D590F02 /* CSVDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD2326F43F3C55252CCA7C3 /* CSVDocument.swift */; };
+		99F7FD2274F09E1A9A33F067 /* ProximityBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */; };
+		9B647D8F8CA719D98F3E0EDC /* ProximityBandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4A4B76F13BE4E70DE6E663 /* ProximityBandTests.swift */; };
+		9BC7CDEC35A2C54E9C70519C /* SignatureTableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3A3599C38C70580250A329 /* SignatureTableTests.swift */; };
+		9E5FABA93A417FCB19C7CAD3 /* ScanActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1695A09FEC8475600B27352D /* ScanActivityAttributes.swift */; };
+		A3AFCF7B2919F546180C1469 /* DeviceSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A9517B670756B966ED4FBB /* DeviceSignature.swift */; };
+		A69512C1D522DA6BA687EB08 /* ProximityBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */; };
+		AB37001F52C7E596BE9672C5 /* NearbyLensesWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DEA41C869DAA842B3768D0 /* NearbyLensesWidget.swift */; };
+		ABA0806D5D74C02C1663725A /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */; };
+		ABB32FDC4805F140840A35F4 /* SightingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443F23EFFFA836BD85CC198B /* SightingDetailView.swift */; };
+		ADB216878A98EF00E86D91BF /* ConfidenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96D77089966B267E086272F /* ConfidenceEngine.swift */; };
+		B6D2EC3B8F6063E84905EF9F /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDE4BF91152CCFCDF1B254 /* Theme.swift */; };
+		BB47038A38846029FE93F254 /* ConfidenceLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0188AE43AB62925F840D72 /* ConfidenceLevel.swift */; };
+		C575F826EF61B99A2CD1CDF7 /* LensBeaconWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601C102F57B029CAC84D3C2C /* LensBeaconWidgetBundle.swift */; };
+		C648AA1B89D5D516EA98DDEB /* DashboardSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD3B36114475BA0E8B555E6 /* DashboardSnapshot.swift */; };
+		C6AFADAC3C2E3A4B88AC8165 /* Sighting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7AFD6DE5B42C4A0498351 /* Sighting.swift */; };
+		CC2AE761D062A710AF700840 /* ScanActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1695A09FEC8475600B27352D /* ScanActivityAttributes.swift */; };
+		CD8C65E3F9D7A21EAC0060ED /* UnlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B390A82463EEC7F6AEB2729C /* UnlockView.swift */; };
+		D40678F1EED0E4621103FA94 /* LensBeaconWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2B265E77960BDB535637986F /* LensBeaconWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D5DA8DBDF65E185426B1CD2D /* ProximityBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */; };
+		D7B46DA26674C7D906D862CF /* DeviceSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A9517B670756B966ED4FBB /* DeviceSignature.swift */; };
+		DCEA8DA0FE919C1FE91888A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E1BD3D98116BEEB4640F6C2 /* Assets.xcassets */; };
+		DE7380B2EE71FF795C0BD555 /* DashboardSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD3B36114475BA0E8B555E6 /* DashboardSnapshot.swift */; };
+		DFDCE7C048A9D55896EE7954 /* SightingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B12F3B36B9E2F2F70E6F62 /* SightingsView.swift */; };
+		E692FDFC2DADEEE6624AB5FC /* DeviceSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A9517B670756B966ED4FBB /* DeviceSignature.swift */; };
+		E7B6E6A3FC080DAE83D73A2B /* LensBeaconApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A981769ECFB4ABB7D9E4FC7F /* LensBeaconApp.swift */; };
+		F241AE56E54326DBDC7B0D24 /* ScanActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1695A09FEC8475600B27352D /* ScanActivityAttributes.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		67EB8A5C83658C1C4134E484 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4AC8BA7C4E879B7C70D24494 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BC8B0157AC5468CBBDC66FE0;
+			remoteInfo = LensBeaconWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		08824BD2EF67BF7085C1BD7D /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D40678F1EED0E4621103FA94 /* LensBeaconWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		082ECB0547B0DE204893D61D /* MineRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineRegistry.swift; sourceTree = "<group>"; };
+		089DE783EDB8AB75AE31AB2D /* SightingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingsStore.swift; sourceTree = "<group>"; };
+		1695A09FEC8475600B27352D /* ScanActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanActivityAttributes.swift; sourceTree = "<group>"; };
+		1AFDE4BF91152CCFCDF1B254 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		224E60BE93EAF03C62C5A856 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		2B265E77960BDB535637986F /* LensBeaconWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = LensBeaconWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F8CEB71738203F7D7AAD489 /* ScanCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanCoordinator.swift; sourceTree = "<group>"; };
+		35B092193CD8E17D70DA4B2E /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		3E87AC1D87A4165E88A10E9F /* BluetoothScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothScanner.swift; sourceTree = "<group>"; };
+		4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContainer.swift; sourceTree = "<group>"; };
+		443F23EFFFA836BD85CC198B /* SightingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingDetailView.swift; sourceTree = "<group>"; };
+		4C506331FCCC2C3B616A6D5B /* LensBeaconTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LensBeaconTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		58DEA41C869DAA842B3768D0 /* NearbyLensesWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyLensesWidget.swift; sourceTree = "<group>"; };
+		5C0188AE43AB62925F840D72 /* ConfidenceLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfidenceLevel.swift; sourceTree = "<group>"; };
+		601C102F57B029CAC84D3C2C /* LensBeaconWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensBeaconWidgetBundle.swift; sourceTree = "<group>"; };
+		6DCD3FC54280ABDF99ED4256 /* LensBeacon.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LensBeacon.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E1BD3D98116BEEB4640F6C2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProximityBand.swift; sourceTree = "<group>"; };
+		71F2B72F7EC27330F9764FAA /* ConfidenceEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfidenceEngineTests.swift; sourceTree = "<group>"; };
+		7D140401EDC119CDAA24B762 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		82F7AFD6DE5B42C4A0498351 /* Sighting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sighting.swift; sourceTree = "<group>"; };
+		8B4A4B76F13BE4E70DE6E663 /* ProximityBandTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProximityBandTests.swift; sourceTree = "<group>"; };
+		8FD3B36114475BA0E8B555E6 /* DashboardSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSnapshot.swift; sourceTree = "<group>"; };
+		90A9517B670756B966ED4FBB /* DeviceSignature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSignature.swift; sourceTree = "<group>"; };
+		9A7B9C4CAC84311671B2B06A /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		A5D92E2A25F395B1B1BFB99E /* LensBeacon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LensBeacon.entitlements; sourceTree = "<group>"; };
+		A981769ECFB4ABB7D9E4FC7F /* LensBeaconApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensBeaconApp.swift; sourceTree = "<group>"; };
+		A9F40949F336410DF060196D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		AA3A3599C38C70580250A329 /* SignatureTableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureTableTests.swift; sourceTree = "<group>"; };
+		ACD7478BF7C60186F28407FB /* FlagNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagNotifier.swift; sourceTree = "<group>"; };
+		B2B12F3B36B9E2F2F70E6F62 /* SightingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingsView.swift; sourceTree = "<group>"; };
+		B390A82463EEC7F6AEB2729C /* UnlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockView.swift; sourceTree = "<group>"; };
+		B773ADAAF251D5D8E2CA775E /* LensBeaconWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LensBeaconWidget.entitlements; sourceTree = "<group>"; };
+		CD1AB2344B1D2AA084600D6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D2A24458AA55EBA6FFE8BE96 /* UnlockStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockStore.swift; sourceTree = "<group>"; };
+		D2A620E27E4756C479343E36 /* ScanLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanLiveActivity.swift; sourceTree = "<group>"; };
+		E1B4AACE24066B82652057D0 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
+		E799770714850A870C69ED8B /* ScanActivityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanActivityController.swift; sourceTree = "<group>"; };
+		EF848D94E48D42C1D067FA38 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		F96D77089966B267E086272F /* ConfidenceEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfidenceEngine.swift; sourceTree = "<group>"; };
+		FDD2326F43F3C55252CCA7C3 /* CSVDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVDocument.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		01AFE843B31F54BE84B9DB11 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				082ECB0547B0DE204893D61D /* MineRegistry.swift */,
+				089DE783EDB8AB75AE31AB2D /* SightingsStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		1859F6F893E7C723DA1874EB /* Purchases */ = {
+			isa = PBXGroup;
+			children = (
+				D2A24458AA55EBA6FFE8BE96 /* UnlockStore.swift */,
+			);
+			path = Purchases;
+			sourceTree = "<group>";
+		};
+		188F591919DCB14FD6235393 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9A7B9C4CAC84311671B2B06A /* Components.swift */,
+				EF848D94E48D42C1D067FA38 /* DashboardView.swift */,
+				224E60BE93EAF03C62C5A856 /* OnboardingView.swift */,
+				7D140401EDC119CDAA24B762 /* SettingsView.swift */,
+				443F23EFFFA836BD85CC198B /* SightingDetailView.swift */,
+				B2B12F3B36B9E2F2F70E6F62 /* SightingsView.swift */,
+				B390A82463EEC7F6AEB2729C /* UnlockView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1FC2B15AA19C81C4C94CFA4A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6E1BD3D98116BEEB4640F6C2 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		3175D84FDD596C854F709A66 /* LensBeaconTests */ = {
+			isa = PBXGroup;
+			children = (
+				71F2B72F7EC27330F9764FAA /* ConfidenceEngineTests.swift */,
+				8B4A4B76F13BE4E70DE6E663 /* ProximityBandTests.swift */,
+				AA3A3599C38C70580250A329 /* SignatureTableTests.swift */,
+			);
+			path = LensBeaconTests;
+			sourceTree = "<group>";
+		};
+		5B44C40A71101D8F4109721F /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				F96D77089966B267E086272F /* ConfidenceEngine.swift */,
+				5C0188AE43AB62925F840D72 /* ConfidenceLevel.swift */,
+				8FD3B36114475BA0E8B555E6 /* DashboardSnapshot.swift */,
+				90A9517B670756B966ED4FBB /* DeviceSignature.swift */,
+				6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */,
+				1695A09FEC8475600B27352D /* ScanActivityAttributes.swift */,
+				4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */,
+				1AFDE4BF91152CCFCDF1B254 /* Theme.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		716FD3D2A17EC5481E307089 /* Scanner */ = {
+			isa = PBXGroup;
+			children = (
+				3E87AC1D87A4165E88A10E9F /* BluetoothScanner.swift */,
+			);
+			path = Scanner;
+			sourceTree = "<group>";
+		};
+		7FCFF7F8E841024DA8866DA8 /* LensBeacon */ = {
+			isa = PBXGroup;
+			children = (
+				D20D39ADA2F87BD1E285E803 /* App */,
+				FDE1F4CF9FE4195D7E1A3D44 /* Model */,
+				1859F6F893E7C723DA1874EB /* Purchases */,
+				1FC2B15AA19C81C4C94CFA4A /* Resources */,
+				716FD3D2A17EC5481E307089 /* Scanner */,
+				01AFE843B31F54BE84B9DB11 /* Store */,
+				A5AA18EBBDD454EF973C7075 /* Support */,
+				188F591919DCB14FD6235393 /* Views */,
+				A9F40949F336410DF060196D /* Info.plist */,
+				A5D92E2A25F395B1B1BFB99E /* LensBeacon.entitlements */,
+			);
+			path = LensBeacon;
+			sourceTree = "<group>";
+		};
+		8F5F7E9F395C344E4A91B447 = {
+			isa = PBXGroup;
+			children = (
+				7FCFF7F8E841024DA8866DA8 /* LensBeacon */,
+				3175D84FDD596C854F709A66 /* LensBeaconTests */,
+				C75B90BED04617C3553B9EBB /* LensBeaconWidget */,
+				5B44C40A71101D8F4109721F /* Shared */,
+				CF15387F2398B5D5A9ABC3AC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A5AA18EBBDD454EF973C7075 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				FDD2326F43F3C55252CCA7C3 /* CSVDocument.swift */,
+				ACD7478BF7C60186F28407FB /* FlagNotifier.swift */,
+				E1B4AACE24066B82652057D0 /* Haptics.swift */,
+				E799770714850A870C69ED8B /* ScanActivityController.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		C75B90BED04617C3553B9EBB /* LensBeaconWidget */ = {
+			isa = PBXGroup;
+			children = (
+				CD1AB2344B1D2AA084600D6D /* Info.plist */,
+				B773ADAAF251D5D8E2CA775E /* LensBeaconWidget.entitlements */,
+				601C102F57B029CAC84D3C2C /* LensBeaconWidgetBundle.swift */,
+				58DEA41C869DAA842B3768D0 /* NearbyLensesWidget.swift */,
+				D2A620E27E4756C479343E36 /* ScanLiveActivity.swift */,
+			);
+			path = LensBeaconWidget;
+			sourceTree = "<group>";
+		};
+		CF15387F2398B5D5A9ABC3AC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6DCD3FC54280ABDF99ED4256 /* LensBeacon.app */,
+				4C506331FCCC2C3B616A6D5B /* LensBeaconTests.xctest */,
+				2B265E77960BDB535637986F /* LensBeaconWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D20D39ADA2F87BD1E285E803 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A981769ECFB4ABB7D9E4FC7F /* LensBeaconApp.swift */,
+				35B092193CD8E17D70DA4B2E /* RootView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		FDE1F4CF9FE4195D7E1A3D44 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2F8CEB71738203F7D7AAD489 /* ScanCoordinator.swift */,
+				82F7AFD6DE5B42C4A0498351 /* Sighting.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		613E3BE8EA2D2A00F4EFA185 /* LensBeaconTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49EAAA28C85627C12B0BE1F4 /* Build configuration list for PBXNativeTarget "LensBeaconTests" */;
+			buildPhases = (
+				7688D0DB6E0193F06C385828 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LensBeaconTests;
+			packageProductDependencies = (
+			);
+			productName = LensBeaconTests;
+			productReference = 4C506331FCCC2C3B616A6D5B /* LensBeaconTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		90232068E3F82F3B491A4F32 /* LensBeacon */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 405DA77282ACCB3989D28481 /* Build configuration list for PBXNativeTarget "LensBeacon" */;
+			buildPhases = (
+				6B84AAC4E223C8AB7E71212A /* Sources */,
+				834BA290CD7064FA97545943 /* Resources */,
+				08824BD2EF67BF7085C1BD7D /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4015FCEF212EFC6FF301BD77 /* PBXTargetDependency */,
+			);
+			name = LensBeacon;
+			packageProductDependencies = (
+			);
+			productName = LensBeacon;
+			productReference = 6DCD3FC54280ABDF99ED4256 /* LensBeacon.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BC8B0157AC5468CBBDC66FE0 /* LensBeaconWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0D4CEA1A3E07A806C13DA8EC /* Build configuration list for PBXNativeTarget "LensBeaconWidget" */;
+			buildPhases = (
+				576307AF5AE53B84461D748A /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LensBeaconWidget;
+			packageProductDependencies = (
+			);
+			productName = LensBeaconWidget;
+			productReference = 2B265E77960BDB535637986F /* LensBeaconWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4AC8BA7C4E879B7C70D24494 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					613E3BE8EA2D2A00F4EFA185 = {
+						DevelopmentTeam = 3L683975L8;
+						ProvisioningStyle = Automatic;
+					};
+					90232068E3F82F3B491A4F32 = {
+						DevelopmentTeam = 3L683975L8;
+						ProvisioningStyle = Automatic;
+					};
+					BC8B0157AC5468CBBDC66FE0 = {
+						DevelopmentTeam = 3L683975L8;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 0A51F58DA63D984098B2CC4B /* Build configuration list for PBXProject "LensBeacon" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 8F5F7E9F395C344E4A91B447;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				90232068E3F82F3B491A4F32 /* LensBeacon */,
+				613E3BE8EA2D2A00F4EFA185 /* LensBeaconTests */,
+				BC8B0157AC5468CBBDC66FE0 /* LensBeaconWidget */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		834BA290CD7064FA97545943 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DCEA8DA0FE919C1FE91888A2 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		576307AF5AE53B84461D748A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ADB216878A98EF00E86D91BF /* ConfidenceEngine.swift in Sources */,
+				34F41B5E2BFE5E808AC8212A /* ConfidenceLevel.swift in Sources */,
+				34EE57220ADB973D873B8099 /* DashboardSnapshot.swift in Sources */,
+				A3AFCF7B2919F546180C1469 /* DeviceSignature.swift in Sources */,
+				C575F826EF61B99A2CD1CDF7 /* LensBeaconWidgetBundle.swift in Sources */,
+				AB37001F52C7E596BE9672C5 /* NearbyLensesWidget.swift in Sources */,
+				99F7FD2274F09E1A9A33F067 /* ProximityBand.swift in Sources */,
+				CC2AE761D062A710AF700840 /* ScanActivityAttributes.swift in Sources */,
+				477E7154091124283BAAE4E8 /* ScanLiveActivity.swift in Sources */,
+				217CFBBD3CFFCD8544E0A824 /* SharedContainer.swift in Sources */,
+				65019930320F1EA5027B32FD /* Theme.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6B84AAC4E223C8AB7E71212A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				59E39D32AC1DED453F30F417 /* BluetoothScanner.swift in Sources */,
+				95CE574127FCC2181D590F02 /* CSVDocument.swift in Sources */,
+				4157EFA8DAE07D0B1A3CB584 /* Components.swift in Sources */,
+				36306BDE868B1BF211633CE7 /* ConfidenceEngine.swift in Sources */,
+				01167B0D386DE3F948D7EE83 /* ConfidenceLevel.swift in Sources */,
+				C648AA1B89D5D516EA98DDEB /* DashboardSnapshot.swift in Sources */,
+				4E4A620244724E05ADFFA5BB /* DashboardView.swift in Sources */,
+				D7B46DA26674C7D906D862CF /* DeviceSignature.swift in Sources */,
+				0062E1089571D806C1F2D855 /* FlagNotifier.swift in Sources */,
+				56369AD023741271CA4D1420 /* Haptics.swift in Sources */,
+				E7B6E6A3FC080DAE83D73A2B /* LensBeaconApp.swift in Sources */,
+				588F5984FC8D686FB9795682 /* MineRegistry.swift in Sources */,
+				3BB64343BC560A82DCF38165 /* OnboardingView.swift in Sources */,
+				D5DA8DBDF65E185426B1CD2D /* ProximityBand.swift in Sources */,
+				21D526B1FC6D7CCEB55F90E2 /* RootView.swift in Sources */,
+				F241AE56E54326DBDC7B0D24 /* ScanActivityAttributes.swift in Sources */,
+				2B097574D261E892A30C01A3 /* ScanActivityController.swift in Sources */,
+				2431AF6F5CD09C9AF4E8B504 /* ScanCoordinator.swift in Sources */,
+				616056CFBDFC49B58273882E /* SettingsView.swift in Sources */,
+				1CB6297A41EDE880A2802BD5 /* SharedContainer.swift in Sources */,
+				C6AFADAC3C2E3A4B88AC8165 /* Sighting.swift in Sources */,
+				ABB32FDC4805F140840A35F4 /* SightingDetailView.swift in Sources */,
+				3640B5A5A01419328477CEAB /* SightingsStore.swift in Sources */,
+				DFDCE7C048A9D55896EE7954 /* SightingsView.swift in Sources */,
+				0DB043AD22449B209FF96B5B /* Theme.swift in Sources */,
+				725906B4AA7B5370A153C851 /* UnlockStore.swift in Sources */,
+				CD8C65E3F9D7A21EAC0060ED /* UnlockView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7688D0DB6E0193F06C385828 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				027EED3B2B6C106E4A65DA86 /* ConfidenceEngine.swift in Sources */,
+				4ADA3CA80407606C2E3A4745 /* ConfidenceEngineTests.swift in Sources */,
+				BB47038A38846029FE93F254 /* ConfidenceLevel.swift in Sources */,
+				DE7380B2EE71FF795C0BD555 /* DashboardSnapshot.swift in Sources */,
+				E692FDFC2DADEEE6624AB5FC /* DeviceSignature.swift in Sources */,
+				A69512C1D522DA6BA687EB08 /* ProximityBand.swift in Sources */,
+				9B647D8F8CA719D98F3E0EDC /* ProximityBandTests.swift in Sources */,
+				9E5FABA93A417FCB19C7CAD3 /* ScanActivityAttributes.swift in Sources */,
+				ABA0806D5D74C02C1663725A /* SharedContainer.swift in Sources */,
+				9BC7CDEC35A2C54E9C70519C /* SignatureTableTests.swift in Sources */,
+				B6D2EC3B8F6063E84905EF9F /* Theme.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4015FCEF212EFC6FF301BD77 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BC8B0157AC5468CBBDC66FE0 /* LensBeaconWidget */;
+			targetProxy = 67EB8A5C83658C1C4134E484 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		14F1B48112E03A300B3F8F6C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = LensBeaconWidget/LensBeaconWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3L683975L8;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LensBeaconWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0.0;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.avaresearch.lensbeacon.widget;
+				PRODUCT_NAME = LensBeaconWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3B4FD24CAFB1119EE1F6E538 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = LensBeaconWidget/LensBeaconWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3L683975L8;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LensBeaconWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.avaresearch.lensbeacon.widget;
+				PRODUCT_NAME = LensBeaconWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		51EA87E79A4C6C72BFF4F316 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3L683975L8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.avaresearch.lensbeacon.tests;
+				PRODUCT_NAME = LensBeaconTests;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		523B9D70FC8524C465F7BDD4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = LensBeacon/LensBeacon.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3L683975L8;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1 $(inherited)";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LensBeacon/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.avaresearch.lensbeacon;
+				PRODUCT_NAME = LensBeacon;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		594369BA45CACA38711AFA83 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = LensBeacon/LensBeacon.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3L683975L8;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LensBeacon/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0.0;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.avaresearch.lensbeacon;
+				PRODUCT_NAME = LensBeacon;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		791178241BA24180748B471C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		B978EE5E084DC8CA614562F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		F68C47F6E5A903636280F601 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3L683975L8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.avaresearch.lensbeacon.tests;
+				PRODUCT_NAME = LensBeaconTests;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0A51F58DA63D984098B2CC4B /* Build configuration list for PBXProject "LensBeacon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B978EE5E084DC8CA614562F4 /* Debug */,
+				791178241BA24180748B471C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		0D4CEA1A3E07A806C13DA8EC /* Build configuration list for PBXNativeTarget "LensBeaconWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B4FD24CAFB1119EE1F6E538 /* Debug */,
+				14F1B48112E03A300B3F8F6C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		405DA77282ACCB3989D28481 /* Build configuration list for PBXNativeTarget "LensBeacon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				523B9D70FC8524C465F7BDD4 /* Debug */,
+				594369BA45CACA38711AFA83 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		49EAAA28C85627C12B0BE1F4 /* Build configuration list for PBXNativeTarget "LensBeaconTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F68C47F6E5A903636280F601 /* Debug */,
+				51EA87E79A4C6C72BFF4F316 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4AC8BA7C4E879B7C70D24494 /* Project object */;
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>LensBeacon</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>LensBeacon</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+
+	<!-- CoreBluetooth. Written for the end user and the App Review reader: what the
+	     scan does, and the things it deliberately never does. -->
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>LensBeacon scans Bluetooth for the signatures of nearby camera glasses and shows you what it finds. Scanning is on-device only — nothing is recorded off your iPhone, and LensBeacon never connects to, pairs with, or transmits to any device.</string>
+
+	<!-- Background BLE scanning is an opt-in LensBeacon Unlock feature. The scan is
+	     service-UUID filtered in the background and paired with a visible Live
+	     Activity. Central role only; the app never advertises. -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+	</array>
+
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<!-- The app makes no network requests at all. This is belt-and-braces. -->
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
+
+	<key>NSSupportsLiveActivities</key>
+	<true/>
+
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.avaresearch.lensbeacon</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>lensbeacon</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

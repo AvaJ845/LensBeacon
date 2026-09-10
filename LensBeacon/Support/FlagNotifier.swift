@@ -1,0 +1,79 @@
+import Foundation
+import UserNotifications
+import os
+
+/// Posts the single kind of local notification LensBeacon sends: "a likely/strong
+/// camera-glasses flag appeared while you weren't looking" (an Unlock feature,
+/// gated on the user turning alerts on).
+///
+/// - Local notifications only. No push, no server, no token.
+/// - The body says *what matched*, never a made-up identity or location.
+/// - Rate-limited by the coordinator (`alertedKeys`) so one device alerts once.
+@MainActor
+final class FlagNotifier: NSObject, UNUserNotificationCenterDelegate {
+
+    private let log = Logger(subsystem: "com.avaresearch.lensbeacon", category: "notifier")
+
+    /// Requests permission the first time background alerts are switched on.
+    func requestAuthorizationIfNeeded() async -> Bool {
+        let center = UNUserNotificationCenter.current()
+        let settings = await center.notificationSettings()
+        switch settings.authorizationStatus {
+        case .authorized, .provisional, .ephemeral:
+            return true
+        case .notDetermined:
+            return (try? await center.requestAuthorization(options: [.alert, .sound])) ?? false
+        default:
+            return false
+        }
+    }
+
+    func notify(about sighting: Sighting) {
+        let content = UNMutableNotificationContent()
+        content.title = "\(sighting.confidence?.title ?? "Possible") — \(sighting.title)"
+        content.body = sighting.evidenceBullets.first
+            ?? "A device matching camera glasses is nearby."
+        content.sound = .default
+        content.interruptionLevel = .active   // not time-sensitive, not critical
+        content.userInfo = ["peripheralKey": sighting.peripheralKey]
+
+        let request = UNNotificationRequest(
+            identifier: "flag-\(sighting.peripheralKey)",
+            content: content,
+            trigger: nil                       // deliver now
+        )
+        UNUserNotificationCenter.current().add(request) { [log] error in
+            if let error { log.error("notify failed: \(error.localizedDescription, privacy: .public)") }
+        }
+    }
+
+    /// Route a tapped notification to the sightings tab.
+    nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        let key = response.notification.request.content.userInfo["peripheralKey"] as? String
+        Task { @MainActor in Router.shared.pendingSightingKey = key }
+        completionHandler()
+    }
+
+    /// Show the banner even with the app foregrounded — the user asked to be told.
+    nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        completionHandler([.banner, .sound])
+    }
+}
+
+/// Minimal cross-cutting routing state for notification / widget / deep-link taps.
+@MainActor
+@Observable
+final class Router {
+    static let shared = Router()
+    var pendingSightingKey: String?
+    var selectedTab: RootView.Screen = .dashboard
+    private init() {}
+}
