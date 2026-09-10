@@ -59,8 +59,8 @@ struct WatchRootView: View {
         VStack(alignment: .leading, spacing: 2) {
             Text(model.flags.count == 1 ? "Camera glasses nearby" : "\(model.flags.count) camera glasses nearby")
                 .font(.headline)
-            if let c = model.strongestConfidence, let b = model.nearestBand {
-                Text("\(c.title) confidence · nearest \(b.title)")
+            if let t = model.strongestTier, let b = model.nearestBand {
+                Text("\(t.title) · nearest \(b.title)")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -74,13 +74,14 @@ struct WatchRootView: View {
 
 private struct ScanningState: View {
     let isScanning: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: 8) {
             Image(systemName: "dot.radiowaves.left.and.right")
                 .font(.system(size: 26, weight: .light))
                 .foregroundStyle(WatchPalette.accent)
-                .symbolEffect(.pulse, options: .repeating, isActive: isScanning)
+                .symbolEffect(.pulse, options: .repeating, isActive: isScanning && !reduceMotion)
             Text(isScanning ? "Scanning" : "Not scanning")
                 .font(.headline)
             Text(isScanning
@@ -139,7 +140,7 @@ private struct FlagRow: View {
                 .font(.headline)
                 .lineLimit(1)
             HStack {
-                if let c = flag.confidence { WatchConfidenceBadge(level: c) }
+                if let t = flag.tier { WatchTierBadge(tier: t) }
                 Spacer(minLength: 4)
                 WatchProximityLabel(band: flag.proximity)
             }

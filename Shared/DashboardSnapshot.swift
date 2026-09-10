@@ -8,13 +8,13 @@ import Foundation
 ///
 /// It carries counts and bands only — never a device identifier, never anything
 /// that could correlate a person across time. Even the per-item `productName` is the
-/// matched signature's product family, not a name pulled from the air.
+/// matched rule's product family, not a name pulled from the air.
 struct DashboardSnapshot: Codable, Equatable, Sendable {
 
     struct Item: Codable, Equatable, Sendable, Identifiable {
         var id: String
         var productName: String
-        var confidence: ConfidenceLevel
+        var tier: DetectionTier
         var proximity: ProximityBand
     }
 
@@ -26,7 +26,7 @@ struct DashboardSnapshot: Codable, Equatable, Sendable {
     /// Currently-flagged camera glasses, strongest first, excluding "mine".
     var flagged: [Item]
 
-    var strongestConfidence: ConfidenceLevel? { flagged.map(\.confidence).max() }
+    var strongestTier: DetectionTier? { flagged.map(\.tier).max() }
     var nearestBand: ProximityBand? { flagged.map(\.proximity).max() }
 
     static let empty = DashboardSnapshot(updatedAt: .distantPast, isScanning: false, flagged: [])
@@ -43,6 +43,12 @@ struct DashboardSnapshot: Codable, Equatable, Sendable {
     func save() {
         guard let data = try? JSONEncoder.iso.encode(self) else { return }
         SharedContainer.defaults.set(data, forKey: SharedContainer.Key.dashboardSnapshot)
+    }
+
+    /// Drop the shared snapshot so the widget and Live Activity fall back to their
+    /// empty state. Part of the Settings "erase all data" path.
+    static func clear() {
+        SharedContainer.defaults.removeObject(forKey: SharedContainer.Key.dashboardSnapshot)
     }
 }
 

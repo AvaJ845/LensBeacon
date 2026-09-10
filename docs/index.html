@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LensBeacon — Spot camera glasses. On your terms.</title>
+<meta name="description" content="LensBeacon listens for the Bluetooth signatures camera glasses broadcast and tells you when a known pair is nearby — with the evidence behind every flag. Fully on-device. No account, no server, no analytics.">
+<meta property="og:title" content="LensBeacon">
+<meta property="og:description" content="Camera glasses announce themselves over Bluetooth. LensBeacon listens — and shows its work.">
+<meta property="og:type" content="website">
+<link rel="icon" href="assets/mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0B1F33; --blue:#3B82F6; --cyan:#63C7F2;
+    --ink:#0B1F33; --muted:#475569; --faint:#94A3B8;
+    --hair:#E7ECF3; --bg:#FFFFFF; --wash:#F8FAFC;
+    --maxw:760px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:17px/1.65 "Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--blue); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+  h1,h2,h3{line-height:1.2; letter-spacing:-0.021em; margin:0}
+  h2{font-size:1.6rem; font-weight:700; margin-bottom:.6em}
+  h3{font-size:1.02rem; font-weight:600; margin-bottom:.15em}
+  p{margin:0 0 1em}
+  strong{font-weight:600}
+
+  /* Hero */
+  .hero{background:var(--wash); border-bottom:1px solid var(--hair); text-align:center; padding:76px 0 60px}
+  .hero img.icon{width:112px; height:112px; border-radius:26px; box-shadow:0 20px 44px -18px rgba(11,31,51,.35)}
+  .hero h1{font-size:clamp(2.2rem,6vw,3rem); font-weight:700; margin:26px 0 10px}
+  .hero .tag{font-size:clamp(1.1rem,2.6vw,1.3rem); color:var(--muted); margin:0 auto 4px; max-width:24ch}
+  .hero .blurb{color:var(--muted); max-width:52ch; margin:14px auto 0}
+  .cta{
+    display:inline-block; margin-top:26px; background:var(--navy); color:#fff; font-weight:600;
+    padding:13px 24px; border-radius:12px;
+  }
+  .cta:hover{text-decoration:none; background:#16324c}
+  .pricing{margin-top:16px; font-size:.92rem; color:var(--faint)}
+
+  section{padding:60px 0; border-bottom:1px solid var(--hair)}
+  .kicker{color:var(--muted); margin-bottom:34px; max-width:56ch}
+
+  /* Feature blocks */
+  .feat{display:flex; gap:16px; padding:16px 0; border-top:1px solid var(--hair)}
+  .feat:first-of-type{border-top:0}
+  .feat .em{font-size:1.35rem; line-height:1.5; flex:0 0 30px; text-align:center}
+  .feat p{margin:0; color:var(--muted); font-size:.97rem}
+
+  /* Steps */
+  .step{margin:0 0 20px}
+  .step b{color:var(--ink)}
+  .step p{margin:.2em 0 0; color:var(--muted); font-size:.97rem}
+
+  /* Screens */
+  .shot{margin:34px 0}
+  .shot img{
+    width:100%; max-width:340px; display:block; border-radius:22px;
+    border:1px solid var(--hair); box-shadow:0 20px 44px -22px rgba(11,31,51,.3);
+  }
+  .shot .cap{margin-top:14px; color:var(--muted); font-size:.95rem}
+  .shot .cap b{color:var(--ink)}
+
+  ul.claims{margin:0; padding-left:22px}
+  ul.claims li{margin:.55em 0; color:var(--muted)}
+  ul.claims li b{color:var(--ink)}
+
+  .pledge{background:var(--wash); border:1px solid var(--hair); border-radius:16px; padding:28px 26px; color:var(--muted)}
+  .pledge p:last-child{margin-bottom:0}
+
+  footer{background:var(--bg); padding:44px 0 56px; color:var(--muted); font-size:.9rem; border:0}
+  footer .links a{color:var(--muted); margin-right:16px; white-space:nowrap}
+  footer .copy{margin-top:16px; color:var(--ink)}
+  footer .disclaim{margin-top:10px; font-size:.82rem; color:var(--faint); max-width:74ch}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <img class="icon" src="assets/icon.png" alt="LensBeacon app icon">
+    <h1>LensBeacon</h1>
+    <p class="tag">Spot camera glasses. On your terms.</p>
+    <p class="blurb">Camera glasses announce themselves over Bluetooth. LensBeacon listens for those announcements and tells you when a known pair &mdash; Ray-Ban Meta, Oakley Meta, Snap Spectacles &mdash; is nearby, with the evidence behind every flag.</p>
+    <a class="cta" href="#testflight">Join the TestFlight beta &rarr;</a>
+    <p class="pricing">Free &middot; optional one-time Unlock <strong>$9.99</strong> &middot; no subscription, ever &middot; coming to the App Store</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>Not a hidden-camera gimmick</h2>
+    <p class="kicker">Most &ldquo;detector&rdquo; apps flash a red alert and let you assume the worst. LensBeacon does one honest thing: it reads the advertisements camera glasses broadcast in the open, matches them against a small, sourced signature table, and shows you exactly what matched so you can disagree with it.</p>
+
+    <div class="feat"><div class="em">&#128274;</div><div><h3>Entirely on your iPhone</h3><p>No account, no server, no analytics, zero network requests. Put the phone in Airplane Mode &mdash; every feature still works.</p></div></div>
+    <div class="feat"><div class="em">&#9989;</div><div><h3>Evidence, not a verdict</h3><p>Every flag lists which advertising field matched, the raw bytes on the wire, and the confidence tier. See why, and say if it&rsquo;s wrong.</p></div></div>
+    <div class="feat"><div class="em">&#9678;</div><div><h3>Tiered by signal, not by drama</h3><p>A manufacturer signature is High confidence. A name alone is Low, and never interrupts you. Colour is never the only cue.</p></div></div>
+    <div class="feat"><div class="em">&#128065;&#65039;</div><div><h3>Knows a display from a camera</h3><p>Display-only glasses like Even Realities are labelled &ldquo;no camera&rdquo; and never counted as one.</p></div></div>
+    <div class="feat"><div class="em">&#128455;</div><div><h3>Doesn&rsquo;t cry wolf on a headset</h3><p>A Meta Quest or Apple Vision Pro is camera-capable but worn openly. LensBeacon lists it for what it is &mdash; never a covert-camera flag.</p></div></div>
+    <div class="feat"><div class="em">&#128204;</div><div><h3>Mark your own, once</h3><p>Own a pair? Mark them and they stop raising alerts &mdash; keyed to the signature, so it survives Bluetooth address rotation and a relaunch.</p></div></div>
+    <div class="feat"><div class="em">&#9202;</div><div><h3>Everywhere you look</h3><p>A Control Centre control, a &ldquo;scan for camera glasses&rdquo; Siri phrase, a Lock Screen Live Activity, a Home Screen widget, and an Apple Watch app.</p></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>How it works</h2>
+    <p class="kicker">A passive listen &mdash; LensBeacon never connects, pairs, or transmits to anything.</p>
+
+    <div class="step"><b>It listens for advertisements.</b><p>Every Bluetooth device broadcasts small packets to any nearby phone. LensBeacon reads only those &mdash; the manufacturer identifier, a service UUID, the advertised name.</p></div>
+    <div class="step"><b>It matches against a sourced table.</b><p>A short, versioned rule table maps those fields to a product and a confidence tier. Shared identifiers &mdash; the ones a Quest and Meta glasses both use &mdash; can&rsquo;t stand alone as a flag.</p></div>
+    <div class="step"><b>It shows you the evidence.</b><p>Each flag opens to the exact fields that matched, the raw bytes, and the rule &mdash; so you can judge it, not just trust it.</p></div>
+    <div class="step"><b>It stays on the device.</b><p>Your log of recognised glasses lives only on this iPhone, encrypted at rest. One tap in Settings erases all of it. There is no cloud copy.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>What you&rsquo;ll see</h2>
+    <p class="kicker">Two screens. That&rsquo;s the whole app.</p>
+
+    <div class="step"><b>Nearby.</b><p>A calm status line, then the flagged glasses &mdash; each a single row with a confidence tier and a three-bar proximity meter. Name-only matches, display glasses, and headsets worn openly are tucked into one &ldquo;seen, not flagged&rdquo; group. No full-bleed red, no siren.</p></div>
+    <div class="step"><b>The evidence, on tap.</b><p>Which advertising field matched, the value, the raw bytes on the wire, the rule, and whether it&rsquo;s a High, Medium or Low signal. Read it, and turn it off if you disagree.</p></div>
+    <div class="step"><b>Sightings.</b><p>A log of recognised glasses only, newest first. The anonymous phones and tags LensBeacon also hears are shown live on Nearby &mdash; never written down. One tap in Settings erases the lot.</p></div>
+
+    <p class="cap" style="color:var(--faint)">Screenshots go up when the TestFlight build is live.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>The claim we can make</h2>
+    <p class="kicker">Not &ldquo;we&rsquo;ll tell you who&rsquo;s recording.&rdquo; We can&rsquo;t, and neither can anyone else. What LensBeacon actually does:</p>
+    <ul class="claims">
+      <li><b>Flags camera glasses by manufacturer signature</b>, not by guesswork &mdash; and shows the signature.</li>
+      <li><b>Separates a covert camera from a headset</b> worn openly, and from a display-only pair with no camera at all.</li>
+      <li><b>Logs nothing anonymous.</b> Only recognised glasses are written down; everything else is a live view.</li>
+      <li><b>Never claims a direction, a distance in metres, or a name</b> &mdash; the signal can&rsquo;t support any of them.</li>
+      <li><b>Costs $9.99 once.</b> No subscription, no trial countdown, no renewal, no account.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="testflight">
+  <div class="wrap">
+    <h2>The honesty pledge</h2>
+    <div class="pledge">
+      <p>A detection is not proof that anyone is recording, and quiet is not proof that no one is. Most camera glasses keep broadcasting while worn, so they&rsquo;re usually detectable &mdash; but a few standalone models can stay silent.</p>
+      <p>The subject of LensBeacon is a device announcing itself publicly to any nearby phone &mdash; never a person, and never their behaviour. Signal strength gives a rough sense of distance only.</p>
+    </div>
+    <p style="margin-top:24px">LensBeacon is in private testing ahead of the App Store. BLE scanning needs a real iPhone on iOS&nbsp;18 or later.</p>
+    <a class="cta" href="#">Join the TestFlight beta &rarr;</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="links">
+      <a href="https://github.com/AvaJ845/LensBeacon">Source</a>
+      <a href="https://github.com/AvaJ845/LensBeacon/blob/main/PRIVACY.md">Privacy</a>
+      <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Terms of Use</a>
+    </div>
+    <p class="copy">&copy; AvaResearch&nbsp;LLC &middot; LensBeacon &middot; Awareness of a device, not a person.</p>
+    <p class="disclaim">LensBeacon is not affiliated with, authorised, sponsored, or endorsed by Meta Platforms, EssilorLuxottica, Ray-Ban, Oakley, Snap Inc., or Even Realities. Product names are used only to describe the Bluetooth signatures LensBeacon looks for.</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,10 +1,28 @@
 # LensBeacon — Consolidated Punch List (Phase 3)
 
-**BLUF:** The MVP builds clean (0 warnings, strict concurrency complete), 16 unit
-tests pass, and the privacy hard-gate passes (no networking, no location,
-central-role only). It is **TestFlight-ready after 3 blockers**, most of which are
-data/listing work rather than code. It is **not ready to pitch for Apple editorial**
-until the signature data is verified and Dynamic Type is fixed.
+> **Phase 5 (Fellows verdict — Reshape everything flagged).** Detection is a
+> versioned data-driven rule table ([`RULES.md`](RULES.md)) feeding a tiered,
+> evidence-producing engine. This pass acted on every Reshape/Cut verdict from the
+> Fellows roast: **tier derived from match kind** (no stored field to drift),
+> `classify` keeps `(rule, evidence)`, the regex lock is **cut** (compile-once
+> `let`), **Dashboard collapsed** to one "seen, not flagged" disclosure, the
+> "not-accusation" copy deduped across the detail screen, onboarding shortened,
+> `SightingsStore` **migrates** instead of wiping on a schema bump, the **watchOS
+> complication** ships (launcher), an in-app **Airplane-Mode proof** screen, the
+> alt icons regenerated (still need a human at 40 pt), stale landing-page
+> screenshots removed, `Fellow_Brief/` folded into `docs/BRAND.md`, and the ASO
+> frame builder moved to `Tools/`. Builds clean (0 warnings), tests pass, iOS +
+> widget + watch app + watch complication build.
+>
+> **Still open — the one blocker:** first-party hardware capture of the Meta / Snap
+> / Even Realities advertisements ([`DEVICE-TESTING.md`](DEVICE-TESTING.md)). The
+> table cross-references a competitor + the SIG registry and has never been
+> confirmed against a real pair. Also open: AR-1 (App Review notes), the alt-icon
+> 40 pt review, an App Preview video.
+
+**BLUF:** Builds clean (0 warnings, strict concurrency complete), 38 unit tests
+pass, privacy hard-gate passes. **Not editorial-ready until the signature table is
+verified on hardware.**
 
 Severity key: 🔴 blocker (before TestFlight) · 🟠 before public beta · 🟢 v1.1
 

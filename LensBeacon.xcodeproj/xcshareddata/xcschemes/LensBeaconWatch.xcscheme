@@ -20,6 +20,20 @@
                ReferencedContainer = "container:LensBeacon.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "96D571400A4325474254E4F2"
+               BuildableName = "LensBeaconWatchWidget.appex"
+               BlueprintName = "LensBeaconWatchWidget"
+               ReferencedContainer = "container:LensBeacon.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

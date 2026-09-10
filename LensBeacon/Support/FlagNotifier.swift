@@ -14,6 +14,21 @@ final class FlagNotifier: NSObject, UNUserNotificationCenterDelegate {
 
     private let log = Logger(subsystem: "com.avaresearch.lensbeacon", category: "notifier")
 
+    private static let categoryID = "FLAG"
+    private enum Action { static let mine = "MARK_MINE"; static let evidence = "SHOW_EVIDENCE" }
+
+    /// Registers the flag-notification category and its two actions. Call once at
+    /// launch, alongside setting the delegate.
+    func registerCategories() {
+        let mine = UNNotificationAction(identifier: Action.mine, title: "This is mine", options: [])
+        let evidence = UNNotificationAction(identifier: Action.evidence, title: "Show evidence", options: [.foreground])
+        let category = UNNotificationCategory(
+            identifier: Self.categoryID, actions: [evidence, mine],
+            intentIdentifiers: [], options: []
+        )
+        UNUserNotificationCenter.current().setNotificationCategories([category])
+    }
+
     /// Requests permission the first time background alerts are switched on.
     func requestAuthorizationIfNeeded() async -> Bool {
         let center = UNUserNotificationCenter.current()
@@ -30,12 +45,17 @@ final class FlagNotifier: NSObject, UNUserNotificationCenterDelegate {
 
     func notify(about sighting: Sighting) {
         let content = UNMutableNotificationContent()
-        content.title = "\(sighting.confidence?.title ?? "Possible") — \(sighting.title)"
-        content.body = sighting.evidenceBullets.first
-            ?? "A device matching camera glasses is nearby."
+        content.title = "\(sighting.title) nearby"
+        content.body = sighting.evidence.first.map {
+            "\($0.adType.label) matched: \($0.matchedValue) · \($0.tier.title). Tap to see the full evidence."
+        } ?? "A device matching camera glasses is nearby."
         content.sound = .default
         content.interruptionLevel = .active   // not time-sensitive, not critical
-        content.userInfo = ["peripheralKey": sighting.peripheralKey]
+        content.categoryIdentifier = Self.categoryID
+        content.userInfo = [
+            "peripheralKey": sighting.peripheralKey,
+            "productKey": sighting.productKey ?? "",
+        ]
 
         let request = UNNotificationRequest(
             identifier: "flag-\(sighting.peripheralKey)",
@@ -53,8 +73,18 @@ final class FlagNotifier: NSObject, UNUserNotificationCenterDelegate {
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
-        let key = response.notification.request.content.userInfo["peripheralKey"] as? String
-        Task { @MainActor in Router.shared.pendingSightingKey = key }
+        let info = response.notification.request.content.userInfo
+        let peripheralKey = info["peripheralKey"] as? String
+        let productKey = (info["productKey"] as? String).flatMap { $0.isEmpty ? nil : $0 }
+        let action = response.actionIdentifier
+        Task { @MainActor in
+            switch action {
+            case Action.mine:
+                Router.shared.pendingMineKey = productKey
+            default:               // SHOW_EVIDENCE, default tap
+                Router.shared.pendingSightingKey = peripheralKey
+            }
+        }
         completionHandler()
     }
 
@@ -74,6 +104,8 @@ final class FlagNotifier: NSObject, UNUserNotificationCenterDelegate {
 final class Router {
     static let shared = Router()
     var pendingSightingKey: String?
+    /// A device the user chose "This is mine" on from a notification action.
+    var pendingMineKey: String?
     var selectedTab: RootView.Screen = .dashboard
 
     /// A screen to present once at launch. Set only by the `-screen <name>`

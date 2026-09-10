@@ -3,7 +3,7 @@ import SwiftUI
 /// LensBeacon's visual language: calm, factual, closer to a field notebook than a
 /// security console.
 ///
-/// The palette is the Apple Fellow brand kit (`Fellow_Brief/LENSBEACON_BRAND_SPEC.md`
+/// The palette is the Apple Fellow brand kit (`docs/BRAND.md`
 /// / `Icon_Source/LensBeaconBrandTokens.json`): a Beacon Blue accent on a near-white
 /// canvas in light mode, lifted to Lens Cyan on a Deep Navy canvas in dark mode.
 /// Status colours are a single muted blue ramp — never red, never a "go" green —
@@ -59,24 +59,30 @@ enum Palette {
 
     // MARK: - Status colours (always paired with text + symbol in the UI)
 
-    /// Confidence bands as one calm blue ramp:
-    /// - `possible` — a quiet grey; the "one weak signal" state, should not draw the eye.
-    /// - `likely`   — Beacon Blue; two signals agree.
-    /// - `strong`   — a deeper, more saturated blue; reads as *settled*, not urgent.
-    static func confidence(_ level: ConfidenceLevel) -> Color {
-        switch level {
-        case .possible:
-            return Color(uiColor: UIColor { t in t.userInterfaceStyle == .dark
-                ? UIColor(red: 0.64, green: 0.69, blue: 0.78, alpha: 1)      // AA on the navy card
-                : UIColor(red: 0.40, green: 0.45, blue: 0.53, alpha: 1) })
-        case .likely:
-            return Color(uiColor: UIColor { t in t.userInterfaceStyle == .dark
-                ? UIColor(red: 0.478, green: 0.706, blue: 1.00, alpha: 1)
-                : UIColor(red: 0.231, green: 0.510, blue: 0.965, alpha: 1) }) // #3B82F6
-        case .strong:
-            return Color(uiColor: UIColor { t in t.userInterfaceStyle == .dark
-                ? UIColor(red: 0.62, green: 0.84, blue: 0.98, alpha: 1)
-                : UIColor(red: 0.13, green: 0.31, blue: 0.62, alpha: 1) })    // deep settled blue
+    /// Detection tiers as one calm blue ramp — never red, never a "go" green, because
+    /// a strong signal should read as *settled*, not as danger:
+    /// - low (name only) — a quiet slate; must not draw the eye.
+    /// - medium (service UUID) — Beacon Blue.
+    /// - high (manufacturer ID) — a deeper, more saturated blue.
+    ///
+    /// Built once (each `UIColor { traits in }` closure allocates) and reused —
+    /// `tier(_:)` is called per row, per render, inside lists that re-render on any
+    /// scan change. Contrast is ≥ AA 4.5:1 on the card in both appearances.
+    private static let lowColor = Color(uiColor: UIColor { t in t.userInterfaceStyle == .dark
+        ? UIColor(red: 0.72, green: 0.78, blue: 0.88, alpha: 1)
+        : UIColor(red: 0.34, green: 0.39, blue: 0.47, alpha: 1) })
+    private static let mediumColor = Color(uiColor: UIColor { t in t.userInterfaceStyle == .dark
+        ? UIColor(red: 0.478, green: 0.706, blue: 1.00, alpha: 1)
+        : UIColor(red: 0.231, green: 0.510, blue: 0.965, alpha: 1) }) // #3B82F6
+    private static let highColor = Color(uiColor: UIColor { t in t.userInterfaceStyle == .dark
+        ? UIColor(red: 0.62, green: 0.84, blue: 0.98, alpha: 1)
+        : UIColor(red: 0.13, green: 0.31, blue: 0.62, alpha: 1) })
+
+    static func tier(_ tier: DetectionTier) -> Color {
+        switch tier {
+        case .name:         return lowColor
+        case .serviceUUID:  return mediumColor
+        case .manufacturer: return highColor
         }
     }
 

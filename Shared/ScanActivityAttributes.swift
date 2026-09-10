@@ -14,8 +14,8 @@ struct ScanActivityAttributes: ActivityAttributes {
     struct ContentState: Codable, Hashable {
         /// Number of currently-flagged camera glasses, excluding "mine".
         var flaggedCount: Int
-        /// Strongest confidence among them, if any.
-        var strongestConfidence: ConfidenceLevel?
+        /// Strongest detection tier among them, if any.
+        var strongestTier: DetectionTier?
         /// Nearest proximity band among them, if any.
         var nearestBand: ProximityBand?
         /// Last time the app refreshed this state.

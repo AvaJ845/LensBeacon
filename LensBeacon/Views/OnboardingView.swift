@@ -15,20 +15,20 @@ struct OnboardingView: View {
             TabView(selection: $page) {
                 Panel(
                     symbol: "dot.radiowaves.left.and.right",
-                    title: "See the cameras around you",
-                    text: "LensBeacon listens for the Bluetooth signatures of camera glasses — like Ray-Ban Meta, Oakley Meta and Snap Spectacles — and shows you what’s nearby, with a confidence rating for each."
+                    title: "Awareness, not accusation",
+                    text: "Camera glasses announce themselves over Bluetooth. LensBeacon listens for a known pair nearby — never for a person."
                 ).tag(0)
 
                 Panel(
                     symbol: "checkmark.seal",
                     title: "Every flag shows its evidence",
-                    text: "A flag isn’t a guess you have to trust. LensBeacon tells you exactly which signals matched — the manufacturer, a service identifier, the device name — so you can judge it yourself. It can’t see a device that’s gone quiet, and a match never means someone is recording."
+                    text: "See the exact signal behind each flag and disagree with it. A detection is not proof anyone is recording, and quiet is not proof no one is."
                 ).tag(1)
 
                 Panel(
                     symbol: "iphone",
                     title: "Nothing leaves your iPhone",
-                    text: "No account. No servers. No analytics. LensBeacon makes zero network connections. Your sightings history is stored only on this device, encrypted at rest."
+                    text: "No account, no server, no analytics — zero network connections. Your log is on this device only, and Settings ▸ Data erases it any time."
                 ).tag(2)
             }
             .tabViewStyle(.page)

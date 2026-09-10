@@ -10,9 +10,9 @@ struct WatchDetailView: View {
                 Text(flag.title)
                     .font(.headline)
 
-                if let c = flag.confidence {
-                    WatchConfidenceBadge(level: c)
-                    Text(c.explanation)
+                if let t = flag.tier {
+                    WatchTierBadge(tier: t)
+                    Text(t.explanation)
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
@@ -24,20 +24,27 @@ struct WatchDetailView: View {
                         .foregroundStyle(.secondary)
                 }
 
-                if !flag.evidenceBullets.isEmpty {
+                if !flag.evidence.isEmpty {
                     Divider().overlay(WatchPalette.hairline)
                     Text("Evidence")
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.secondary)
-                    ForEach(Array(flag.evidenceBullets.enumerated()), id: \.offset) { _, bullet in
-                        Label(bullet, systemImage: "checkmark.seal")
-                            .font(.caption2)
+                    ForEach(flag.evidence) { e in
+                        VStack(alignment: .leading, spacing: 1) {
+                            Label("\(e.adType.label): \(e.matchedValue)", systemImage: "checkmark.seal")
+                                .font(.caption2)
+                            Text("raw \(e.rawBytes) · \(e.tier.shortTitle)")
+                                .font(.system(.caption2, design: .monospaced))
+                                .foregroundStyle(.secondary)
+                        }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(e.accessibilityLabel)
                     }
                 }
 
-                Text("A match means a Bluetooth signature looks like camera glasses — not that anyone is recording. Open LensBeacon on iPhone for the full history.")
+                Text(Copy.notAccusation + " Open LensBeacon on iPhone for the full history.")
                     .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(.secondary)
                     .padding(.top, 4)
             }
             .frame(maxWidth: .infinity, alignment: .leading)

@@ -30,7 +30,7 @@ final class ScanActivityController {
         }
         let attributes = ScanActivityAttributes(startedAt: Date())
         let initial = ScanActivityAttributes.ContentState(
-            flaggedCount: 0, strongestConfidence: nil, nearestBand: nil, updatedAt: Date()
+            flaggedCount: 0, strongestTier: nil, nearestBand: nil, updatedAt: Date()
         )
         do {
             activity = try Activity.request(
@@ -43,11 +43,18 @@ final class ScanActivityController {
         }
     }
 
+    /// Whether a Live Activity we started is still live (not ended by the user or the
+    /// system). Lets the coordinator notice a swipe-dismiss and reconcile.
+    var isRunning: Bool {
+        guard let activity else { return false }
+        return activity.activityState == .active || activity.activityState == .stale
+    }
+
     func update(with snapshot: DashboardSnapshot) {
         guard activity != nil else { return }
         let state = ScanActivityAttributes.ContentState(
             flaggedCount: snapshot.flagged.count,
-            strongestConfidence: snapshot.strongestConfidence,
+            strongestTier: snapshot.strongestTier,
             nearestBand: snapshot.nearestBand,
             updatedAt: snapshot.updatedAt
         )

@@ -17,6 +17,8 @@ struct LensBeaconApp: App {
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage(SharedContainer.Key.onboarded, store: SharedContainer.defaults)
     private var onboarded = false
+    @AppStorage(SharedContainer.Key.appearance, store: SharedContainer.defaults)
+    private var appearanceRaw = AppAppearance.system.rawValue
 
     init() {
         let sightings = SightingsStore()
@@ -50,8 +52,10 @@ struct LensBeaconApp: App {
             .environment(coordinator)
             .environment(router)
             .tint(Palette.accent)
+            .preferredColorScheme((AppAppearance(rawValue: appearanceRaw) ?? .system).colorScheme)
             .task {
                 UNUserNotificationCenter.current().delegate = notifier
+                notifier.registerCategories()
                 coordinator.onNewFlag = { sighting in
                     Haptics.firstFlag()
                     notifier.notify(about: sighting)
@@ -66,6 +70,11 @@ struct LensBeaconApp: App {
             .onChange(of: scenePhase) { _, phase in
                 coordinator.applyScenePhase(active: phase == .active)
                 if phase == .background { sightings.saveNow() }
+            }
+            .onChange(of: router.pendingMineKey) { _, key in
+                guard let key else { return }
+                mine.setMine(true, productKey: key)
+                router.pendingMineKey = nil
             }
         }
     }

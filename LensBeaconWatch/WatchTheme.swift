@@ -12,12 +12,12 @@ enum WatchPalette {
     static let card     = Color(red: 0.071, green: 0.231, blue: 0.365)   // lifted navy (#123B5D)
     static let hairline = Color.white.opacity(0.12)
 
-    /// The same calm blue confidence ramp as iOS, tuned for the dark watch field.
-    static func confidence(_ level: ConfidenceLevel) -> Color {
-        switch level {
-        case .possible: return Color(red: 0.66, green: 0.71, blue: 0.80)
-        case .likely:   return Color(red: 0.478, green: 0.706, blue: 1.00)
-        case .strong:   return Color(red: 0.62, green: 0.84, blue: 0.98)
+    /// The same calm blue tier ramp as iOS, tuned for the dark watch field.
+    static func tier(_ tier: DetectionTier) -> Color {
+        switch tier {
+        case .name:         return Color(red: 0.72, green: 0.78, blue: 0.88)
+        case .serviceUUID:  return Color(red: 0.478, green: 0.706, blue: 1.00)
+        case .manufacturer: return Color(red: 0.62, green: 0.84, blue: 0.98)
         }
     }
 

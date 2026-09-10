@@ -15,6 +15,9 @@ options:
   createIntermediateGroups: true
   groupSortPosition: top
 
+fileGroups:
+  - LensBeacon.storekit
+
 configs:
   Debug: debug
   Release: release
@@ -44,6 +47,8 @@ targets:
         CURRENT_PROJECT_VERSION: "1"
 
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: "AppIcon-Midnight AppIcon-Mono"
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
 
         SDKROOT: iphoneos
@@ -148,12 +153,17 @@ targets:
   LensBeaconWatch:
     type: application
     platform: watchOS
+    dependencies:
+      - target: LensBeaconWatchWidget
+        embed: true
     sources:
       - path: LensBeaconWatch
-      - path: Shared/ConfidenceEngine.swift
-      - path: Shared/ConfidenceLevel.swift
-      - path: Shared/DeviceSignature.swift
+      - path: Shared/Detection.swift
+      - path: Shared/DetectionRules.swift
+      - path: Shared/DetectionEngine.swift
       - path: Shared/ProximityBand.swift
+      - path: Shared/Copy.swift
+      - path: Shared/PrivacyInfo.xcprivacy
       - path: LensBeacon/Scanner/BluetoothScanner.swift
     settings:
       base:
@@ -201,6 +211,51 @@ targets:
           DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
           VALIDATE_PRODUCT: YES
 
+  # watchOS complication — a one-tap launcher for the scanner from the watch face.
+  # No live data (watchOS gives a central-role app no background BLE), so it stays a
+  # launcher rather than a stale count.
+  LensBeaconWatchWidget:
+    type: app-extension
+    platform: watchOS
+    sources:
+      - path: LensBeaconWatchWidget
+      - path: Shared/PrivacyInfo.xcprivacy
+    settings:
+      base:
+        PRODUCT_NAME: LensBeaconWatchWidget
+        PRODUCT_BUNDLE_IDENTIFIER: com.avaresearch.lensbeacon.watch.widget
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SDKROOT: watchos
+        SUPPORTED_PLATFORMS: "watchos watchsimulator"
+        WATCHOS_DEPLOYMENT_TARGET: "11.0"
+        TARGETED_DEVICE_FAMILY: "4"
+        ARCHS: "$(ARCHS_STANDARD)"
+        SWIFT_VERSION: "5.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        CLANG_ENABLE_OBJC_ARC: YES
+        CLANG_ENABLE_MODULES: YES
+        ENABLE_USER_SCRIPT_SANDBOXING: YES
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks"
+        SKIP_INSTALL: YES
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: LensBeaconWatchWidget/Info.plist
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: "3L683975L8"
+      configs:
+        Debug:
+          ONLY_ACTIVE_ARCH: YES
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+          GCC_OPTIMIZATION_LEVEL: "0"
+          DEBUG_INFORMATION_FORMAT: dwarf
+        Release:
+          ONLY_ACTIVE_ARCH: NO
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+          SWIFT_COMPILATION_MODE: wholemodule
+          DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
+          VALIDATE_PRODUCT: YES
+
   LensBeaconTests:
     type: bundle.unit-test
     platform: iOS
@@ -210,6 +265,15 @@ targets:
       # engine and proximity banding all live in Shared/ precisely so they can be
       # compiled into this bundle with no app host and no CoreBluetooth dependency.
       - path: Shared
+        excludes:
+          # App Intents surface — not unit-tested, and pulling AppIntents into the
+          # test bundle triggers a spurious metadata-processor warning.
+          - "ScanControlIntents.swift"
+      # The durable-log types are pure Foundation (no CoreBluetooth, no UIKit), so the
+      # store's retention, cap and CSV logic can be compiled in and tested directly.
+      - path: LensBeacon/Model/Sighting.swift
+      - path: LensBeacon/Store/SightingsStore.swift
+      - path: LensBeacon/Store/MineRegistry.swift
     settings:
       base:
         PRODUCT_NAME: LensBeaconTests
@@ -233,13 +297,16 @@ schemes:
         LensBeaconWatch: all
     run:
       config: Debug
+      storeKitConfiguration: LensBeacon.storekit
     test:
       config: Debug
+      gatherCoverageData: true
       targets:
         - LensBeaconTests
   LensBeaconWatch:
     build:
       targets:
         LensBeaconWatch: all
+        LensBeaconWatchWidget: all
     run:
       config: Debug

@@ -8,9 +8,17 @@ glasses — Ray-Ban Meta, Oakley Meta, Snap Spectacles and other BLE-broadcastin
 wearables — by fingerprinting their Bluetooth Low Energy advertisements, and shows
 each one with a confidence rating and the exact signals that matched.
 
-> **Status:** Phase 1 MVP complete. Builds clean, 16 unit tests pass, privacy
-> hard-gate passes. See [`docs/PUNCHLIST.md`](docs/PUNCHLIST.md) for what stands
-> between here and TestFlight.
+> **Status:** MVP + tiered detection engine. Builds clean (0 warnings), unit tests
+> pass, privacy hard-gate passes. Landing page: **[lensbeacon site](https://avaj845.github.io/LensBeacon/)**.
+> See [`docs/PUNCHLIST.md`](docs/PUNCHLIST.md) for what stands between here and
+> TestFlight, [`docs/RULES.md`](docs/RULES.md) for the detection rule table,
+> [`AppStore/METADATA.md`](AppStore/METADATA.md) for App Store metadata, and
+> [`docs/DEVICE-TESTING.md`](docs/DEVICE-TESTING.md) for how to test on a real
+> iPhone.
+
+GitHub Pages: enable Pages for this repo with **Source: Deploy from a branch →
+`main` / `/docs`**. The site is `docs/index.html`; `docs/.nojekyll` keeps the
+engineering `.md` files out of the published site.
 
 ---
 
@@ -40,7 +48,8 @@ Every build decision serves **both** of these:
 ## Free vs. LensBeacon Unlock
 
 **Free, forever:** full scanning, live Dashboard, evidence-per-flag, 7-day history,
-"mark as mine".
+"mark as mine", pause/resume scanning, a Control Center control and a "scan for
+camera glasses" Siri phrase, and one-tap data erase in Settings.
 
 **LensBeacon Unlock — $9.99, one-time, non-consumable.** No subscription, no trial
 countdown, no renewal: background scanning, a Live Activity, a Home Screen widget,
@@ -107,7 +116,7 @@ docs/
   PUNCHLIST.md   Phase 3 — consolidated, prioritised
 ```
 
-See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the design rationale and
+See [`ARCHITECTURE.md`](ARCHITECTURE.md) and [`docs/BRAND.md`](docs/BRAND.md) for the design rationale and
 [`PRIVACY.md`](PRIVACY.md) for the full privacy posture.
 
 ## Verifying the privacy claims

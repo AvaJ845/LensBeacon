@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// The history: every BLE device LensBeacon has seen, newest activity first,
-/// filterable to just camera glasses or just the devices you've marked as yours.
+/// The history: the camera and display glasses LensBeacon has recognised, newest
+/// first, each with its evidence — filterable to just the ones you've marked yours.
 /// The free tier shows the last 7 days; Unlock shows everything.
 struct SightingsView: View {
 
@@ -10,23 +10,36 @@ struct SightingsView: View {
     @Environment(UnlockStore.self) private var unlock
     @Environment(Router.self) private var router
 
-    @State private var filter: SightingsStore.Filter = .glasses
+    @Environment(\.dynamicTypeSize) private var typeSize
+
+    @State private var filter: SightingsStore.Filter = .all
     @State private var exportDocument: CSVDocument?
     @State private var showClearConfirm = false
     @State private var path: [UUID] = []
 
     private var rows: [Sighting] { store.filtered(filter, mine: mine) }
 
+    /// A segmented control overflows past .xxLarge; fall back to a menu at
+    /// accessibility text sizes (HIG-1).
+    @ViewBuilder
+    private var filterPicker: some View {
+        let picker = Picker("Filter", selection: $filter) {
+            ForEach(SightingsStore.Filter.allCases) { Text($0.rawValue).tag($0) }
+        }
+        if typeSize.isAccessibilitySize {
+            picker.pickerStyle(.menu)
+        } else {
+            picker.pickerStyle(.segmented)
+        }
+    }
+
     var body: some View {
         NavigationStack(path: $path) {
             List {
                 Section {
-                    Picker("Filter", selection: $filter) {
-                        ForEach(SightingsStore.Filter.allCases) { Text($0.rawValue).tag($0) }
-                    }
-                    .pickerStyle(.segmented)
-                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                    .listRowBackground(Color.clear)
+                    filterPicker
+                        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                        .listRowBackground(Color.clear)
                 }
 
                 if rows.isEmpty {
@@ -42,7 +55,7 @@ struct SightingsView: View {
                     Section {
                         ForEach(rows) { sighting in
                             NavigationLink(value: sighting.id) {
-                                SightingRow(sighting: sighting, isMine: mine.contains(sighting.peripheralKey))
+                                SightingRow(sighting: sighting, isMine: mine.contains(productKey: sighting.productKey))
                             }
                         }
                     } footer: {
@@ -88,7 +101,7 @@ struct SightingsView: View {
                 // for App Store capture. Screenshot tooling only.
                 if router.launchScreen == .sightingDetail {
                     router.launchScreen = nil
-                    if let first = store.filtered(.glasses, mine: mine).first {
+                    if let first = store.filtered(.all, mine: mine).first {
                         path = [first.id]
                     }
                 }
@@ -118,17 +131,15 @@ struct SightingsView: View {
 
     private var emptyTitle: String {
         switch filter {
-        case .glasses: return "No camera glasses seen yet"
-        case .all:     return "Nothing seen yet"
-        case .mine:    return "No devices marked as yours"
+        case .all:  return "No glasses seen yet"
+        case .mine: return "No glasses marked as yours"
         }
     }
 
     private var emptyMessage: String {
         switch filter {
-        case .glasses: return "When LensBeacon spots a device matching camera glasses, it will appear here with its evidence."
-        case .all:     return "Open the Nearby tab and let LensBeacon scan for a moment."
-        case .mine:    return "Open a sighting and tap “This is mine” to stop LensBeacon flagging your own glasses."
+        case .all:  return "When LensBeacon recognises a pair of camera or display glasses, it appears here with the evidence. Anonymous phones and tags are shown live on the Nearby tab but never logged."
+        case .mine: return "Open a pair of glasses and turn on “These are mine” to stop LensBeacon flagging them."
         }
     }
 }
@@ -140,7 +151,7 @@ private struct SightingRow: View {
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
-                .foregroundStyle(sighting.isCameraFlag ? Palette.confidence(sighting.confidence ?? .possible) : .secondary)
+                .foregroundStyle(iconColor)
                 .frame(width: 26)
             VStack(alignment: .leading, spacing: 3) {
                 Text(sighting.title).font(.subheadline.weight(.medium))
@@ -150,7 +161,11 @@ private struct SightingRow: View {
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 4) {
-                if let c = sighting.confidence { ConfidenceBadge(level: c, compact: true) }
+                if sighting.isDisplayGlasses {
+                    NoCameraChip()
+                } else if let t = sighting.tier {
+                    TierBadge(tier: t, compact: true)
+                }
                 if isMine {
                     Text("Mine").font(.caption2.weight(.semibold)).foregroundStyle(Palette.accent)
                 }
@@ -161,9 +176,15 @@ private struct SightingRow: View {
 
     private var icon: String {
         switch sighting.category {
-        case .cameraGlasses: return "eyeglasses"
-        case .headset:       return "visionpro"
-        case .other:         return "dot.radiowaves.right"
+        case .cameraGlasses:  return "eyeglasses"
+        case .displayGlasses: return "eyeglasses"
+        case .headset:        return "visionpro"
+        case .unknown:        return "dot.radiowaves.right"
         }
+    }
+
+    private var iconColor: Color {
+        guard sighting.isCameraFlag, let t = sighting.tier else { return .secondary }
+        return Palette.tier(t)
     }
 }

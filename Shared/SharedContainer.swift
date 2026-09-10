@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 /// The one folder and preference suite the app, the widget and the Live Activity
 /// all read.
@@ -28,12 +29,32 @@ enum SharedContainer {
         static let alertsEnabled = "flagAlertsEnabled"
         /// Snapshot the widget/Live Activity render from — see `DashboardSnapshot`.
         static let dashboardSnapshot = "dashboardSnapshot"
+        /// User has switched scanning off from the Dashboard or the Live Activity's
+        /// "Stop" button. Honoured across scene changes and relaunches.
+        static let scanningPaused = "scanningPaused"
+        /// Appearance override — "system" / "light" / "dark".
+        static let appearance = "appAppearance"
     }
 
+    /// WidgetKit kind for the Home Screen widget. Shared so the app can target it in
+    /// `WidgetCenter.reloadTimelines` without importing the extension.
+    static let widgetKind = "NearbyLenses"
+
+    private static let log = Logger(subsystem: "com.avaresearch.lensbeacon", category: "container")
+    /// Best-effort one-shot log guard; a race only costs a duplicate log line.
+    nonisolated(unsafe) private static var didWarnAboutFallback = false
+
     /// App Group suite when the entitlement is honoured; otherwise the process
-    /// defaults, so the app still runs in an unsigned simulator.
+    /// defaults, so the app still runs in an unsigned simulator. A fallback in a
+    /// *signed* build means the app and its extensions are reading different stores —
+    /// that must not pass silently, so it is logged once.
     static var defaults: UserDefaults {
-        UserDefaults(suiteName: appGroupID) ?? .standard
+        if let suite = UserDefaults(suiteName: appGroupID) { return suite }
+        if !didWarnAboutFallback {
+            didWarnAboutFallback = true
+            log.error("App Group \(appGroupID, privacy: .public) unavailable — falling back to standard defaults. Widget/Live Activity will not see app data.")
+        }
+        return .standard
     }
 
     static var containerURL: URL? {

@@ -9,7 +9,7 @@ import SwiftUI
 /// Without LensBeacon Unlock it shows a calm locked state instead of data.
 struct NearbyLensesWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "NearbyLenses", provider: SnapshotProvider()) { entry in
+        StaticConfiguration(kind: SharedContainer.widgetKind, provider: SnapshotProvider()) { entry in
             NearbyLensesView(entry: entry)
                 .containerBackground(Palette.widgetBackground, for: .widget)
         }
@@ -78,9 +78,12 @@ struct NearbyLensesView: View {
             Text("\(count)")
                 .font(.system(size: 40, weight: .semibold, design: .rounded))
                 .contentTransition(.numericText())
-            Text(count == 1 ? "camera glasses nearby" : "camera glasses nearby")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("camera glasses nearby")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
+                .lineLimit(2)
             Spacer(minLength: 0)
             ageLine
         }
@@ -91,7 +94,9 @@ struct NearbyLensesView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("\(count)")
                     .font(.system(size: 44, weight: .semibold, design: .rounded))
-                Text(count == 1 ? "nearby" : "nearby")
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                Text("nearby")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 ageLine
@@ -105,7 +110,7 @@ struct NearbyLensesView: View {
                 } else {
                     ForEach(snapshot.flagged.prefix(3)) { item in
                         HStack(spacing: 6) {
-                            Image(systemName: item.confidence.symbolName)
+                            Image(systemName: item.tier.symbolName)
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
                             Text(item.productName).font(.caption).lineLimit(1)
@@ -150,11 +155,11 @@ struct NearbyLensesView: View {
     @ViewBuilder
     private var ageLine: some View {
         if snapshot.updatedAt == .distantPast {
-            Text("Open LensBeacon to scan").font(.caption2).foregroundStyle(.tertiary)
+            Text("Open LensBeacon to scan").font(.caption2).foregroundStyle(.secondary)
         } else {
             Text("as of \(snapshot.updatedAt, style: .relative) ago")
                 .font(.caption2)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(.secondary)
         }
     }
 

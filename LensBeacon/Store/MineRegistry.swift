@@ -1,13 +1,15 @@
 import Foundation
 import Observation
 
-/// The set of devices the user has marked "This is mine" so LensBeacon stops
+/// The set of *products* the user has marked "This is mine" so LensBeacon stops
 /// flagging them.
 ///
-/// Stored as a sorted list of the app's opaque peripheral keys in the App Group,
-/// so the widget and a background scan honour the same suppressions. There is no
-/// naming, no grouping, no cloud sync — marking a device mine is a purely local
-/// "hide this from me" switch.
+/// Keyed on the resolved product identity (`Detection.productKey`, e.g.
+/// `meta-glasses`), **not** on the rotating peripheral address — so marking your own
+/// Ray-Ban Metas once keeps them quiet across the OS rotating their Bluetooth
+/// address and across a relaunch. Stored as a sorted list in the App Group so a
+/// background scan and the widget honour the same suppressions. No naming, no
+/// grouping, no cloud sync.
 @MainActor
 @Observable
 final class MineRegistry {
@@ -15,28 +17,37 @@ final class MineRegistry {
     private(set) var keys: Set<String>
 
     init() {
-        let stored = SharedContainer.defaults.stringArray(forKey: SharedContainer.Key.mineDeviceKeys) ?? []
-        keys = Set(stored)
+        keys = Set(SharedContainer.defaults.stringArray(forKey: SharedContainer.Key.mineDeviceKeys) ?? [])
     }
 
-    func contains(_ key: String) -> Bool { keys.contains(key) }
+    func contains(productKey: String?) -> Bool {
+        guard let productKey else { return false }
+        return keys.contains(productKey)
+    }
 
-    func setMine(_ isMine: Bool, key: String) {
-        if isMine { keys.insert(key) } else { keys.remove(key) }
+    func setMine(_ isMine: Bool, productKey: String?) {
+        guard let productKey else { return }
+        if isMine { keys.insert(productKey) } else { keys.remove(productKey) }
         persist()
     }
 
-    func toggle(_ key: String) {
-        setMine(!keys.contains(key), key: key)
+    func toggle(productKey: String?) {
+        guard let productKey else { return }
+        setMine(!keys.contains(productKey), productKey: productKey)
     }
 
-    private func persist() {
-        SharedContainer.defaults.set(keys.sorted(), forKey: SharedContainer.Key.mineDeviceKeys)
+    /// Forget every product the user marked as theirs.
+    func wipeAll() {
+        keys.removeAll()
+        SharedContainer.defaults.removeObject(forKey: SharedContainer.Key.mineDeviceKeys)
     }
 
     /// Folds in any change a background scan made while the app was suspended.
     func reload() {
-        let stored = SharedContainer.defaults.stringArray(forKey: SharedContainer.Key.mineDeviceKeys) ?? []
-        keys = Set(stored)
+        keys = Set(SharedContainer.defaults.stringArray(forKey: SharedContainer.Key.mineDeviceKeys) ?? [])
+    }
+
+    private func persist() {
+        SharedContainer.defaults.set(keys.sorted(), forKey: SharedContainer.Key.mineDeviceKeys)
     }
 }
