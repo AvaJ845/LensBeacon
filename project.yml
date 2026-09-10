@@ -34,6 +34,8 @@ targets:
       - path: Shared
     dependencies:
       - target: LensBeaconWidget
+      - target: LensBeaconWatch
+        embed: true
     settings:
       base:
         PRODUCT_NAME: LensBeacon
@@ -139,6 +141,66 @@ targets:
       properties:
         com.apple.security.application-groups:
           - group.com.avaresearch.lensbeacon
+  # Single-target watchOS app, embedded in the iOS app. It reuses the pure engine
+  # files from Shared/ and the central-only BluetoothScanner verbatim; it does NOT
+  # pull in Theme.swift (UIKit) or the ActivityKit/StoreKit surfaces, which don't
+  # belong on the watch. Its own calm palette lives in LensBeaconWatch/WatchTheme.swift.
+  LensBeaconWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - path: LensBeaconWatch
+      - path: Shared/ConfidenceEngine.swift
+      - path: Shared/ConfidenceLevel.swift
+      - path: Shared/DeviceSignature.swift
+      - path: Shared/ProximityBand.swift
+      - path: LensBeacon/Scanner/BluetoothScanner.swift
+    settings:
+      base:
+        PRODUCT_NAME: LensBeacon
+        PRODUCT_BUNDLE_IDENTIFIER: com.avaresearch.lensbeacon.watch
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+
+        SDKROOT: watchos
+        SUPPORTED_PLATFORMS: "watchos watchsimulator"
+        WATCHOS_DEPLOYMENT_TARGET: "11.0"
+        TARGETED_DEVICE_FAMILY: "4"
+        ARCHS: "$(ARCHS_STANDARD)"
+
+        SWIFT_VERSION: "5.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        SWIFT_EMIT_LOC_STRINGS: YES
+        CLANG_ENABLE_OBJC_ARC: YES
+        CLANG_ENABLE_MODULES: YES
+        ENABLE_PREVIEWS: YES
+        ENABLE_USER_SCRIPT_SANDBOXING: YES
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
+        SKIP_INSTALL: YES
+
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: LensBeaconWatch/Info.plist
+
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: "3L683975L8"
+      configs:
+        Debug:
+          ONLY_ACTIVE_ARCH: YES
+          ENABLE_TESTABILITY: YES
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+          GCC_OPTIMIZATION_LEVEL: "0"
+          DEBUG_INFORMATION_FORMAT: dwarf
+        Release:
+          ONLY_ACTIVE_ARCH: NO
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+          SWIFT_COMPILATION_MODE: wholemodule
+          DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
+          VALIDATE_PRODUCT: YES
+
   LensBeaconTests:
     type: bundle.unit-test
     platform: iOS
@@ -155,8 +217,10 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         SWIFT_VERSION: "5.0"
         SWIFT_STRICT_CONCURRENCY: complete
-        GENERATE_INFOPLIST_FILE: YES
+        SDKROOT: iphoneos
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
         IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+        TARGETED_DEVICE_FAMILY: "1,2"
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: "3L683975L8"
 
@@ -166,9 +230,16 @@ schemes:
       targets:
         LensBeacon: all
         LensBeaconWidget: all
+        LensBeaconWatch: all
     run:
       config: Debug
     test:
       config: Debug
       targets:
         - LensBeaconTests
+  LensBeaconWatch:
+    build:
+      targets:
+        LensBeaconWatch: all
+    run:
+      config: Debug

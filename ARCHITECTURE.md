@@ -117,9 +117,22 @@ LensBeaconTests ──uses──▶ Shared/ (compiled in directly, no app host)
 
 LensBeacon (app) ──▶ Shared/
         │
-        └──embeds──▶ LensBeaconWidget ──▶ Shared/
+        ├──embeds──▶ LensBeaconWidget ──▶ Shared/
+        │
+        └──embeds──▶ LensBeaconWatch (watchOS) ──▶ Shared/{ConfidenceEngine,
+                          ConfidenceLevel, DeviceSignature, ProximityBand}.swift
+                          + LensBeacon/Scanner/BluetoothScanner.swift
 ```
 
-`Shared/` is compiled into all three targets. It is the reason the pure logic has no
-UIKit-only dependencies — `Theme.swift` imports SwiftUI, which is fine everywhere,
-but the engines import only `Foundation`.
+`Shared/` is compiled into the iOS app, the widget and the tests. It is the reason
+the pure logic has no UIKit-only dependencies — `Theme.swift` imports SwiftUI, which
+is fine everywhere, but the engines import only `Foundation`.
+
+The **watch app** compiles in only the four pure engine files plus `BluetoothScanner`
+(CoreBluetooth is available on watchOS; central role only, same as iOS). It does not
+take `Theme.swift` (its own `WatchTheme` avoids the `UIColor` trait closures) or the
+ActivityKit / StoreKit surfaces — a watch is a glance, not a record. It has its own
+`WatchScanModel` (the iOS `ScanCoordinator` stripped of the durable log, Live
+Activity, notifications and any background story) and scans only while its screen is
+showing. The app icon and palette come from the Apple Fellow brand kit vendored in
+`Icon_Source/` — see `docs/reviews/07-brand-icon-integration.md`.

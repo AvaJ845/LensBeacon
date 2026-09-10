@@ -14,37 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "90232068E3F82F3B491A4F32"
-               BuildableName = "LensBeacon.app"
-               BlueprintName = "LensBeacon"
-               ReferencedContainer = "container:LensBeacon.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "6080DA826CEC34CB07D043F0"
                BuildableName = "LensBeacon.app"
                BlueprintName = "LensBeaconWatch"
-               ReferencedContainer = "container:LensBeacon.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BC8B0157AC5468CBBDC66FE0"
-               BuildableName = "LensBeaconWidget.appex"
-               BlueprintName = "LensBeaconWidget"
                ReferencedContainer = "container:LensBeacon.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -58,24 +30,13 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "90232068E3F82F3B491A4F32"
+            BlueprintIdentifier = "6080DA826CEC34CB07D043F0"
             BuildableName = "LensBeacon.app"
-            BlueprintName = "LensBeacon"
+            BlueprintName = "LensBeaconWatch"
             ReferencedContainer = "container:LensBeacon.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "613E3BE8EA2D2A00F4EFA185"
-               BuildableName = "LensBeaconTests.xctest"
-               BlueprintName = "LensBeaconTests"
-               ReferencedContainer = "container:LensBeacon.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -92,9 +53,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "90232068E3F82F3B491A4F32"
+            BlueprintIdentifier = "6080DA826CEC34CB07D043F0"
             BuildableName = "LensBeacon.app"
-            BlueprintName = "LensBeacon"
+            BlueprintName = "LensBeaconWatch"
             ReferencedContainer = "container:LensBeacon.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -109,9 +70,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "90232068E3F82F3B491A4F32"
+            BlueprintIdentifier = "6080DA826CEC34CB07D043F0"
             BuildableName = "LensBeacon.app"
-            BlueprintName = "LensBeacon"
+            BlueprintName = "LensBeaconWatch"
             ReferencedContainer = "container:LensBeacon.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

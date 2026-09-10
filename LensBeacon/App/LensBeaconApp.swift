@@ -24,6 +24,9 @@ struct LensBeaconApp: App {
         _sightings = State(initialValue: sightings)
         _mine = State(initialValue: mine)
         _coordinator = State(initialValue: ScanCoordinator(sightings: sightings, mine: mine))
+        // Applied synchronously, before any view renders, so a view's `.task` that
+        // consumes `router.launchScreen` always sees it. Screenshot tooling only.
+        Router.shared.applyLaunchArguments()
     }
 
     /// QA / screenshot launch arguments (Release-safe — they only skip the intro or
@@ -55,6 +58,7 @@ struct LensBeaconApp: App {
                 }
                 coordinator.bootstrap()
                 await unlock.load()
+                DemoSeed.apply(to: sightings, mine: mine)
                 applyRetention()
                 if onboarded { coordinator.startScanning() }
             }

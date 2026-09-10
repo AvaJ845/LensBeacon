@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#0B1F33"/>
+    <stop offset="100%" stop-color="#123B5D"/>
+  </linearGradient>
+  <linearGradient id="arc" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#3B82F6"/>
+    <stop offset="50%" stop-color="#63C7F2"/>
+    <stop offset="100%" stop-color="#10B981"/>
+  </linearGradient>
+  <radialGradient id="lens" cx="45%" cy="38%" r="65%">
+    <stop offset="0%" stop-color="#DDF6FF"/>
+    <stop offset="35%" stop-color="#8DD8F7"/>
+    <stop offset="70%" stop-color="#3B82F6"/>
+    <stop offset="100%" stop-color="#173E67"/>
+  </radialGradient>
+</defs>
+
+<!-- Full-bleed background. Let the system apply the platform mask. -->
+<rect width="1024" height="1024" fill="url(#bg)"/>
+
+<!-- Lens/beacon arcs -->
+<path d="M145 478 C 275 270, 430 194, 512 194 C 594 194, 749 270, 879 478"
+      fill="none" stroke="url(#arc)" stroke-width="78" stroke-linecap="round"/>
+<path d="M145 546 C 275 754, 430 830, 512 830 C 594 830, 749 754, 879 546"
+      fill="none" stroke="url(#arc)" stroke-width="78" stroke-linecap="round"/>
+
+<!-- Optical center -->
+<circle cx="512" cy="512" r="155" fill="#071827" opacity="0.88"/>
+<circle cx="512" cy="512" r="132" fill="url(#lens)"/>
+<circle cx="512" cy="512" r="62" fill="#0B1F33"/>
+<circle cx="486" cy="478" r="22" fill="#FFFFFF" opacity="0.92"/>
+<circle cx="548" cy="544" r="9" fill="#FFFFFF" opacity="0.42"/>
+</svg>

@@ -9,6 +9,7 @@ struct DashboardView: View {
     @Environment(ScanCoordinator.self) private var coordinator
     @Environment(MineRegistry.self) private var mine
     @Environment(UnlockStore.self) private var unlock
+    @Environment(Router.self) private var router
 
     @State private var showAllDevices = false
     @State private var showSettings = false
@@ -68,6 +69,20 @@ struct DashboardView: View {
             }
             .sheet(isPresented: $showSettings) { SettingsView() }
             .sheet(isPresented: $showUnlock) { UnlockView() }
+            .task {
+                // `-screen settings|unlock` launch argument — App Store screenshot
+                // capture only; never set in normal operation.
+                switch router.launchScreen {
+                case .settings:
+                    showSettings = true
+                    router.launchScreen = nil
+                case .unlock:
+                    showUnlock = true
+                    router.launchScreen = nil
+                default:
+                    break
+                }
+            }
         }
     }
 

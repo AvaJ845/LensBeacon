@@ -13,11 +13,12 @@ struct SightingsView: View {
     @State private var filter: SightingsStore.Filter = .glasses
     @State private var exportDocument: CSVDocument?
     @State private var showClearConfirm = false
+    @State private var path: [UUID] = []
 
     private var rows: [Sighting] { store.filtered(filter, mine: mine) }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
                 Section {
                     Picker("Filter", selection: $filter) {
@@ -81,6 +82,16 @@ struct SightingsView: View {
                 Button("Cancel", role: .cancel) {}
             } message: {
                 Text("This removes every recorded sighting from this iPhone. It cannot be undone.")
+            }
+            .task {
+                // `-screen detail` launch argument — push the first flagged record
+                // for App Store capture. Screenshot tooling only.
+                if router.launchScreen == .sightingDetail {
+                    router.launchScreen = nil
+                    if let first = store.filtered(.glasses, mine: mine).first {
+                        path = [first.id]
+                    }
+                }
             }
             .onChange(of: router.pendingSightingKey) { _, key in
                 guard let key, let sighting = store.sightings.first(where: { $0.peripheralKey == key }) else { return }

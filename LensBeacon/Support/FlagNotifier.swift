@@ -75,5 +75,25 @@ final class Router {
     static let shared = Router()
     var pendingSightingKey: String?
     var selectedTab: RootView.Screen = .dashboard
+
+    /// A screen to present once at launch. Set only by the `-screen <name>`
+    /// launch argument (QA / App Store screenshot capture); never used in normal
+    /// operation. Consumed and cleared by the presenting view.
+    enum LaunchScreen: String { case settings, unlock, privacy, sightingDetail }
+    var launchScreen: LaunchScreen?
+
     private init() {}
+
+    /// Applies `-screen <name>` if present. `sightings` / `detail` also switch tab.
+    func applyLaunchArguments(_ arguments: [String] = ProcessInfo.processInfo.arguments) {
+        guard let i = arguments.firstIndex(of: "-screen"), i + 1 < arguments.count else { return }
+        switch arguments[i + 1] {
+        case "sightings":     selectedTab = .sightings
+        case "detail":        selectedTab = .sightings; launchScreen = .sightingDetail
+        case "settings":      launchScreen = .settings
+        case "unlock":        launchScreen = .unlock
+        case "privacy":       launchScreen = .privacy
+        default:              break
+        }
+    }
 }
