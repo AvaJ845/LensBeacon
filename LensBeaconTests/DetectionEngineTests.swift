@@ -69,6 +69,25 @@ struct DetectionEngineTests {
         #expect(d.evidence.first?.adType == .serviceData16)
     }
 
+    @Test func quest2FullCapture_resolvesToHeadsetHighConfidence() {
+        // Exactly what a Meta Quest 2 broadcasts (captured 2026-09-10):
+        // company 0x058E, service 0xFEB8 (list + data), name "Quest 2".
+        let d = DetectionEngine.classify(.init(
+            manufacturerData: Data([0x8E, 0x05, 0x31, 0x57, 0x4D, 0x48]),
+            serviceUUIDs16: ["FEB8"],
+            serviceDataUUIDs16: ["FEB8"],
+            localName: "Quest 2"
+        ))
+        #expect(d.category == .headset)
+        #expect(d.bestTier == .manufacturer)          // "High"
+        #expect(d.isCameraFlag == false)
+        #expect(d.canNotifyInBackground == false)
+    }
+
+    @Test func feb8AloneIsAHeadsetSignal() {
+        #expect(DetectionEngine.classify(.init(serviceUUIDs16: ["FEB8"])).category == .headset)
+    }
+
     // MARK: - Tier 3 — names
 
     @Test func spectaclesNameIsTier3() {

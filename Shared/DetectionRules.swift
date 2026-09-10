@@ -78,11 +78,14 @@ struct DetectionRuleTable: Codable, Equatable, Sendable {
     // SIGNATURE SET.  See docs/RULES.md for how to add one from a capture.
     //
     // CONFIRMED ON HARDWARE (first-party BLE captures):
-    //   0x058E + name "Quest 2"        Meta Quest 2  (2026-09-10, two devices)
-    //   0x0075 + name "[TV] Samsung…"  Samsung TV    — the reason 0x0075 is excluded
+    //   0x058E + "Quest 2" + service 0xFEB8 (list + data "20 01")   Meta Quest 2
+    //     (2026-09-10, two devices; mfg data = 8E 05 + an ASCII serial)
+    //   0x0075 + "[TV] Samsung…"                                    Samsung TV
+    //     — the reason 0x0075 is on the exclusion list
     //
     // SOURCED, NOT YET CAPTURED (SIG registry + the public ZuckOff detector):
-    //   0x0D53 Luxottica · 0x03C2 Snap · 0xFD5F Oculus · every name pattern.
+    //   0x0D53 Luxottica · 0x03C2 Snap · 0xFD5F Oculus · every name pattern ·
+    //   the Even Realities company ID (missing entirely).
     //
     // TWO SHARED IDENTIFIERS THAT MUST NOT STAND ALONE AS A CAMERA FLAG:
     //   0x058E  Meta Platforms Technologies (Reality Labs / Oculus) — used by the
@@ -183,13 +186,22 @@ struct DetectionRuleTable: Codable, Equatable, Sendable {
                 note: "Manufacturer identifier 0x058E is Meta Platforms Technologies (Reality Labs / Oculus) — shared by the Quest and the Meta glasses. On its own it is treated as a headset; a Luxottica ID or a glasses name upgrades it to camera glasses."
             ),
             DetectionRule(
+                id: "meta-feb8-service",
+                productKey: "meta-headset",
+                productName: "Meta wearable",
+                vendor: "Meta Platforms",
+                category: .headset,
+                match: .serviceUUID16("FEB8"),
+                note: "Bluetooth service 0xFEB8 is registered to Meta (Facebook). Captured on a Meta Quest 2 (2026-09-10). Shared across Meta wearables, so it is a headset signal on its own; a glasses name or the Luxottica ID upgrades it."
+            ),
+            DetectionRule(
                 id: "oculus-service",
                 productKey: "meta-headset",
                 productName: "Meta Quest",
                 vendor: "Meta Platforms",
                 category: .headset,
                 match: .serviceUUID16("FD5F"),
-                note: "Bluetooth service 0xFD5F is registered to Oculus VR — a Meta Quest headset."
+                note: "Bluetooth service 0xFD5F is registered to Oculus VR — a Meta Quest headset. (Sourced from the SIG registry; not yet seen in a first-party capture.)"
             ),
             DetectionRule(
                 id: "name-quest",

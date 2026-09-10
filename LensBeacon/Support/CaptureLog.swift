@@ -89,10 +89,18 @@ final class CaptureLog: NSObject {
     ]
 
     func start() {
-        guard central == nil else { central?.scanForPeripherals(withServices: nil, options: [CBCentralManagerScanOptionAllowDuplicatesKey: true]); isRunning = true; return }
-        central = CBCentralManager(delegate: self, queue: .main,
-                                   options: [CBCentralManagerOptionShowPowerAlertKey: false])
         isRunning = true
+        if let central {
+            if central.state == .poweredOn { beginScan(central) }
+        } else {
+            central = CBCentralManager(delegate: self, queue: .main,
+                                       options: [CBCentralManagerOptionShowPowerAlertKey: false])
+        }
+    }
+
+    private func beginScan(_ central: CBCentralManager) {
+        central.scanForPeripherals(withServices: nil,
+                                   options: [CBCentralManagerScanOptionAllowDuplicatesKey: true])
     }
 
     func stop() {
@@ -164,6 +172,16 @@ final class CaptureLog: NSObject {
         device.engineVerdict = verdict
 
         byID[id] = device
+
+        // A busy RF environment is a lot of devices. Cap it — keep tagged devices and
+        // the most-recently-heard ones. The user can Clear to reset.
+        if byID.count > 250 {
+            let keep = Set(byID.values
+                .sorted { ($0.userTag != nil ? 1 : 0, $0.lastSeen) > ($1.userTag != nil ? 1 : 0, $1.lastSeen) }
+                .prefix(200).map(\.id))
+            byID = byID.filter { keep.contains($0.key) }
+        }
+
         dirty = true
         schedulePublish()
     }
@@ -227,14 +245,14 @@ final class CaptureLog: NSObject {
 
 extension CaptureLog: CBCentralManagerDelegate {
     nonisolated func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        let poweredOn = central.state == .poweredOn
-        if poweredOn {
+        let running = MainActor.assumeIsolated { self.isRunning }
+        if central.state == .poweredOn, running {
             central.scanForPeripherals(withServices: nil,
                                        options: [CBCentralManagerScanOptionAllowDuplicatesKey: true])
         }
         let mapped: BluetoothScanner.State
         switch central.state {
-        case .poweredOn:    mapped = .scanning
+        case .poweredOn:    mapped = running ? .scanning : .idle
         case .poweredOff:   mapped = .poweredOff
         case .unauthorized: mapped = .unauthorized
         case .unsupported:  mapped = .unsupported
