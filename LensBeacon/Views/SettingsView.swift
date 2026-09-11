@@ -78,7 +78,7 @@ struct SettingsView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Get LensBeacon Unlock — \(unlock.displayPrice) once")
                             .font(.body.weight(.medium))
-                        Text("Background scanning, widget, Live Activity, unlimited history, CSV export. No subscription.")
+                        Text("Background scanning, widget, watch complication, unlimited history, CSV export. No subscription.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }

@@ -451,7 +451,7 @@ private struct UnlockPromoCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 Label("LensBeacon Unlock", systemImage: "lock.open")
                     .font(.headline)
-                Text("Background scanning, a Home Screen widget, a Live Activity, unlimited history and CSV export. One payment, no subscription.")
+                Text("Background scanning, a Home Screen widget, a live watch complication, unlimited history and CSV export. One payment, no subscription.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Button("See what’s included", action: action)

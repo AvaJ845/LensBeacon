@@ -22,10 +22,8 @@ final class WatchRelayReceiver: NSObject {
         session.activate()
     }
 
-    private func store(_ context: [String: Any]) {
-        guard let data = context["dashboardSnapshot"] as? Data,
-              let snapshot = try? JSONDecoder.iso.decode(DashboardSnapshot.self, from: data)
-        else { return }
+    private func store(_ data: Data) {
+        guard let snapshot = try? JSONDecoder.iso.decode(DashboardSnapshot.self, from: data) else { return }
         snapshot.save()
         WidgetCenter.shared.reloadTimelines(ofKind: "LensBeaconComplication")
     }
@@ -38,7 +36,11 @@ extension WatchRelayReceiver: WCSessionDelegate {
         }
     }
 
+    /// Extracts the one `Sendable` value (`Data`) before hopping to the main actor —
+    /// `applicationContext` itself is `[String: Any]`, which strict concurrency
+    /// correctly refuses to send across the actor boundary as a whole.
     nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
-        Task { @MainActor in self.store(applicationContext) }
+        guard let data = applicationContext["dashboardSnapshot"] as? Data else { return }
+        Task { @MainActor in self.store(data) }
     }
 }
