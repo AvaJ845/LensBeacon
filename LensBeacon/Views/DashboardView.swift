@@ -336,7 +336,9 @@ private struct FlagRow: View {
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
-                SignalDetailRow(band: flag.proximity, rssi: Int(flag.smoother.value.rounded()))
+                // Signal strength (dBm) lives in the detail screen only — this card
+                // already states proximity once, via the meter above. Fellows'
+                // verdict: showing it twice in a "quiet" card is the loud thing.
                 if let first = flag.detection.evidence.first {
                     HStack(spacing: 5) {
                         Image(systemName: "checkmark.seal.fill")
