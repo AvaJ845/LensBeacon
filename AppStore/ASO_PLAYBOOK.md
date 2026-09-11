@@ -21,12 +21,19 @@ Metadata block: [`METADATA.md`](METADATA.md).
 ## 2 · The tap — conversion (3–5 second window)
 
 - [x] Icon is a legible mark at home-screen size (Apple Fellow brand kit — beacon arcs + lens)
-- [ ] **Fresh screenshots on the current UI** — the committed set in
-  `../Screenshots/AppStore/` predates the redesign. Recapture on device with
-  `-demo-data`; the raw-capture list is at the bottom of [`Tools/screenshot-frames.html`](../Tools/screenshot-frames.html).
+- [x] **Fresh, captioned screenshots — rendered, not hand-screenshotted.**
+  `AppStore/screenshots/{iphone-6.5,ipad-13,watch-ultra3,watch-s11,watch-s9,watch-s6}/NN.png`,
+  built headlessly by `Tools/render_screenshots.py` from real simulator/device
+  captures at each size App Store Connect actually accepts (1284×2778,
+  2064×2752, 422×514, 416×496, 396×484, 368×448). iPhone frame 1 is the real
+  device capture (Nearby, two seen-not-flagged devices); the rest run
+  `-demo-data`/`-screen`/`-detail-key` against the real `DetectionEngine`, so
+  every tier badge and evidence row on screen is genuine, not mocked up.
 - [x] Captioned frame builder: [`Tools/screenshot-frames.html`](../Tools/screenshot-frames.html) — brand-styled, correct
   aspect ratios (1320×2868 iPhone, 422×514 Watch), captions final. Drop raw
-  captures into `AppStore/raw/` (git-ignored) and screenshot each frame.
+  captures into `AppStore/raw/` (git-ignored) and screenshot each frame. Superseded
+  for the actual upload set by `render_screenshots.py` above, kept as the
+  manual/browser fallback.
 - [ ] No frame opens on onboarding/permission
 - [ ] Optional: 15–20 s App Preview of one real scan → flag → evidence loop
 - [ ] Product-page A/B test after launch: frame 1 order first

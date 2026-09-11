@@ -113,11 +113,20 @@ final class Router {
     /// operation. Consumed and cleared by the presenting view.
     enum LaunchScreen: String { case settings, unlock, privacy, sightingDetail }
     var launchScreen: LaunchScreen?
+    /// Which demo record `-screen detail` should open, by its seeded opaque key
+    /// (see `DemoSeed`) — set by `-detail-key <key>`. Falls back to the most
+    /// recent record when absent. Screenshot tooling only.
+    var launchDetailKey: String?
 
     private init() {}
 
     /// Applies `-screen <name>` if present. `sightings` / `detail` also switch tab.
+    /// `-detail-key <key>` (with `-screen detail`) picks a specific seeded demo
+    /// record instead of the most recent one.
     func applyLaunchArguments(_ arguments: [String] = ProcessInfo.processInfo.arguments) {
+        if let i = arguments.firstIndex(of: "-detail-key"), i + 1 < arguments.count {
+            launchDetailKey = arguments[i + 1]
+        }
         guard let i = arguments.firstIndex(of: "-screen"), i + 1 < arguments.count else { return }
         switch arguments[i + 1] {
         case "sightings":     selectedTab = .sightings

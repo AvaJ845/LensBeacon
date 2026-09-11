@@ -36,7 +36,7 @@ enum DemoSeed {
             (.init(localName: "Spectacles 7C"),
              "demo-t3", -79, ago(30), ago(22), false),
             // Display glasses, no camera — Even Realities G1.
-            (.init(localName: "G1_7_L_a1b2"),
+            (.init(localName: "Even G1_7_L_a1b2"),
              "demo-display", -66, ago(50), ago(44), false),
             // The user's own glasses, marked mine — suppressed from flags. A distinct
             // product from the others so the demo shows a flag AND a "mine" row.

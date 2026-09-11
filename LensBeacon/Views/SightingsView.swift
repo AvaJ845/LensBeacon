@@ -101,8 +101,12 @@ struct SightingsView: View {
                 // for App Store capture. Screenshot tooling only.
                 if router.launchScreen == .sightingDetail {
                     router.launchScreen = nil
-                    if let first = store.filtered(.all, mine: mine).first {
-                        path = [first.id]
+                    let all = store.filtered(.all, mine: mine)
+                    let match = router.launchDetailKey.flatMap { key in
+                        all.first { $0.peripheralKey == key }
+                    }
+                    if let record = match ?? all.first {
+                        path = [record.id]
                     }
                 }
             }

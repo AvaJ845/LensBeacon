@@ -336,6 +336,7 @@ private struct FlagRow: View {
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
+                SignalDetailRow(band: flag.proximity, rssi: Int(flag.smoother.value.rounded()))
                 if let first = flag.detection.evidence.first {
                     HStack(spacing: 5) {
                         Image(systemName: "checkmark.seal.fill")

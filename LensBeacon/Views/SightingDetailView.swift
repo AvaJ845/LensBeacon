@@ -53,7 +53,10 @@ struct SightingDetailView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
-                if let band = liveBand { ProximityMeter(band: band) }
+                if let band = displayBand {
+                    ProximityMeter(band: band)
+                    SignalDetailRow(band: band, rssi: displayRSSI)
+                }
                 Label(seenRange, systemImage: "clock")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -163,9 +166,21 @@ struct SightingDetailView: View {
     private var evidence: [DetectionEvidence] { detection.evidence }
     private var productKey: String? { detection.productKey }
 
-    private var liveBand: ProximityBand? {
-        if case .live(let s) = source { return s.proximity }
-        return nil
+    /// The band to show under the header: the live smoothed reading for a device
+    /// still in range, or the last reading on file for a stored record. A record's
+    /// number is clearly a *past* one (it sits above "last seen …"), so showing it
+    /// is a history fact, not a claim that this is happening right now.
+    private var displayBand: ProximityBand? {
+        switch source {
+        case .live(let s):   return s.proximity
+        case .record(let s): return s.timeline.last?.proximity
+        }
+    }
+    private var displayRSSI: Int? {
+        switch source {
+        case .live(let s):   return Int(s.smoother.value.rounded())
+        case .record(let s): return s.timeline.last?.rssi
+        }
     }
     private var seenRange: String {
         let (first, last): (Date, Date)

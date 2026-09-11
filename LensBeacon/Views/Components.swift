@@ -81,6 +81,47 @@ struct ProximityMeter: View {
     }
 }
 
+/// The number behind the band, always in view right under `ProximityMeter` —
+/// not tucked behind a tap, because this *is* the feature. No metres, no
+/// feet: RSSI through a real body, pocket, or wall can't support a distance
+/// claim, so this pairs the honest raw number (dBm) with one plain-English
+/// sentence instead of a fabricated range like "1.6 to 4.0 m".
+struct SignalDetailRow: View {
+    let band: ProximityBand
+    /// Smoothed dBm reading, when one is available (live devices always have
+    /// one; a stored record shows its last known reading).
+    var rssi: Int?
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 6) {
+            Image(systemName: "antenna.radiowaves.left.and.right")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            if let rssi {
+                Text("\(rssi) dBm")
+                    .font(.caption.monospacedDigit().weight(.medium))
+                    .foregroundStyle(.secondary)
+                Text("·")
+                    .foregroundStyle(.tertiary)
+            }
+            Text(band.roughDistanceHint.prefixedUppercase)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(rssi.map { "Signal strength \($0) dBm. \(band.roughDistanceHint)." } ?? band.roughDistanceHint)
+    }
+}
+
+private extension String {
+    /// Capitalizes just the first letter, for turning a hint written to
+    /// finish a sentence ("roughly arm's length…") into a standalone line.
+    var prefixedUppercase: String {
+        guard let first else { return self }
+        return first.uppercased() + dropFirst()
+    }
+}
+
 /// A calm, reusable empty state — icon, one line of title, one line of detail.
 struct EmptyStateView: View {
     let symbol: String
