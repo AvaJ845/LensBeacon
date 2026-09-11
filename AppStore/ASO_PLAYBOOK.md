@@ -17,6 +17,10 @@ Metadata block: [`METADATA.md`](METADATA.md).
 - [ ] Enter metadata in App Store Connect
 - [ ] Localize Name/Subtitle/Keywords for at least en-GB, de, fr, es, ja
 - [ ] Baseline keyword ranks recorded on submission day
+- [x] App Review notes + the "LensBeacon Unlock" IAP review screenshot —
+  [`REVIEW_NOTES.md`](REVIEW_NOTES.md) / `iap-unlock-review.jpg`. States the
+  "not a surveillance tool" case up front and gives the reviewer a way to
+  verify scanning works without owning camera-glasses hardware.
 
 ## 2 · The tap — conversion (3–5 second window)
 
