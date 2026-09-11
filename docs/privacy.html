@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy — LensBeacon</title>
+<meta name="description" content="LensBeacon's privacy claims, verifiable from the source tree: no account, no server, no network connections, no location, no tracking.">
+<link rel="canonical" href="https://avaj845.github.io/LensBeacon/privacy.html">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#F8FAFC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1F33" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="assets/mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --navy:#0B1F33; --navy2:#1b3a57; --blue:#3B82F6; --cyan:#63C7F2;
+  --bg:#FFFFFF; --wash:#F8FAFC; --panel:#FFFFFF;
+  --ink:#0B1F33; --muted:#475569; --faint:#94A3B8; --hair:#E7ECF3; --tint:#EEF4FC;
+  --accent:var(--blue);
+  --maxw:840px; --maxw-legal:680px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0B1F33; --wash:#0E2438; --panel:#123B5D;
+    --ink:#EAF2FB; --muted:#B9C7D9; --faint:#7E93AC; --hair:rgba(255,255,255,.10); --tint:rgba(99,199,242,.12);
+    --accent:var(--cyan);
+  }
+}
+html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:17px/1.62 "Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent); text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+h1,h2,h3{
+  font-family:"Fraunces",ui-serif,Georgia,serif; font-weight:600;
+  letter-spacing:-0.015em; line-height:1.2; margin:0 0 .4em;
+}
+p{margin:0 0 1em}
+strong{font-weight:600}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.86em; background:var(--tint); padding:.12em .4em; border-radius:.35em}
+
+.topbar{border-bottom:1px solid var(--hair)}
+.topbar .wrap{display:flex; align-items:center; gap:10px; height:64px}
+.topbar img{width:28px; height:28px; border-radius:7px}
+.topbar .brand{font-family:"Fraunces",ui-serif,Georgia,serif; font-weight:600; font-size:1.05rem; color:var(--ink)}
+.topbar .brand:hover{text-decoration:none}
+.topbar .back{margin-left:auto; font-size:.9rem; color:var(--muted)}
+
+.legal{max-width:var(--maxw-legal); margin:0 auto; padding:48px 24px 64px}
+.legal h1{font-size:clamp(1.9rem,5vw,2.4rem); margin-bottom:.15em}
+.legal .updated{color:var(--faint); font-size:.85rem; margin-bottom:28px}
+.legal h2{font-size:1.15rem; margin:36px 0 .5em}
+.legal p, .legal li{color:var(--muted); font-size:.97rem}
+.legal ul, .legal ol{padding-left:1.3em; margin:0 0 1em}
+.legal li{margin:.4em 0}
+.legal li b, .legal li strong{color:var(--ink)}
+.legal pre{
+  background:var(--tint); border:1px solid var(--hair); border-radius:12px;
+  padding:16px 18px; overflow-x:auto; font-size:.82rem; line-height:1.55;
+}
+.legal pre code{background:none; padding:0}
+
+.claim{
+  background:var(--panel); border:1px solid var(--hair); border-radius:16px;
+  padding:22px 24px; margin:0 0 10px;
+}
+.claim p{margin:0; color:var(--muted)}
+.claim b{color:var(--ink)}
+
+table{width:100%; border-collapse:collapse; font-size:.9rem; margin:8px 0 1em}
+th,td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--hair); color:var(--muted); vertical-align:top}
+th{color:var(--ink); font-weight:600}
+.tablewrap{overflow-x:auto; margin:0 0 1em}
+
+footer{background:var(--bg); padding:44px 0 56px; color:var(--muted); font-size:.88rem; border-top:1px solid var(--hair); text-align:center; margin-top:20px}
+footer .links{display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-bottom:14px}
+footer .links a{color:var(--muted)}
+footer .copy{margin-top:4px; color:var(--ink); font-weight:500}
+footer .fine{margin:12px auto 0; font-size:.78rem; color:var(--faint); max-width:64ch}
+
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html" style="display:flex; align-items:center; gap:10px">
+      <img src="assets/icon.png" alt="">LensBeacon
+    </a>
+    <a class="back" href="index.html">&larr; Back</a>
+  </div>
+</div>
+
+<div class="legal">
+  <h1>Privacy</h1>
+  <p class="updated">LensBeacon is built so these claims are verifiable from the source tree, not taken on trust. Source: <a href="https://github.com/AvaJ845/LensBeacon">github.com/AvaJ845/LensBeacon</a>.</p>
+
+  <div class="claim"><p><b>Everything happens on your device.</b> There is no LensBeacon account and no LensBeacon server. The app makes no network connections of any kind. Put your iPhone in Airplane Mode &mdash; every feature still works.</p></div>
+  <div class="claim"><p><b>LensBeacon listens; it never speaks.</b> It uses CoreBluetooth in central role only, to scan for the advertisements nearby devices broadcast. It never connects, never pairs, never reads or writes a device&rsquo;s data, and never advertises itself.</p></div>
+  <div class="claim"><p><b>No location, ever.</b> Proximity is estimated only from Bluetooth signal strength, in three coarse bands. LensBeacon requests no location permission and does not link CoreLocation.</p></div>
+  <div class="claim"><p><b>Your history stays on your iPhone.</b> The Sightings log is a single file, encrypted at rest and excluded from iCloud and device backups.</p></div>
+  <div class="claim"><p><b>LensBeacon does not track devices or people.</b> Bluetooth identifiers are rotated by iOS on both ends. LensBeacon stores the rotating identifier as an opaque local key and makes no attempt to re-identify a device across that rotation &mdash; no fuzzy matching on signal patterns, timing, or anything else.</p></div>
+  <div class="claim"><p><b>A detection is not an accusation.</b> A flag means a Bluetooth signature resembles camera glasses. It is not evidence that any device is recording, and LensBeacon never says it is.</p></div>
+
+  <h2>How to verify it yourself</h2>
+  <p>These claims aren&rsquo;t marketing copy &mdash; they&rsquo;re checkable in a clone of the repo:</p>
+  <pre><code># No networking, no location, no peripheral/connect APIs.
+grep -rnE "URLSession|URLRequest|URLConnection|NWConnection|CFStream|Network\.framework|CoreLocation|CLLocationManager|startAdvertising|CBPeripheralManager|writeValue|readValue|\.connect\(" --include="*.swift" .
+
+# No analytics or crash SDKs.
+grep -rniE "firebase|amplitude|mixpanel|sentry|bugsnag|segment|appsflyer|adjust|facebook|googleanalytics" --include="*.swift" .
+cat project.yml   # no packages / dependencies section
+
+# App Transport Security blocks arbitrary loads anyway.
+plutil -p LensBeacon/Info.plist | grep -A2 NSAppTransportSecurity</code></pre>
+
+  <h2>Data, by the App Store privacy taxonomy</h2>
+  <p><b style="color:var(--ink)">Data Not Collected.</b> LensBeacon collects no data and transmits no data. The following stay on the device and are never sent anywhere:</p>
+  <div class="tablewrap">
+    <table>
+      <tr><th>On-device only</th><th>Notes</th></tr>
+      <tr><td>Sightings log</td><td>Opaque per-app device keys, timestamps, matched-signature evidence, capped signal-strength samples. Encrypted at rest, excluded from backup.</td></tr>
+      <tr><td>&ldquo;Mine&rdquo; list</td><td>Opaque keys you chose to suppress.</td></tr>
+      <tr><td>Preferences</td><td>Onboarding done, scan toggles, purchase state mirror.</td></tr>
+      <tr><td>CSV export</td><td>Only when you export, to a location you pick. Every column is named in the header.</td></tr>
+    </table>
+  </div>
+
+  <h2>Permissions LensBeacon requests</h2>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Permission</th><th>Why</th><th>If you decline</th></tr>
+      <tr><td>Bluetooth</td><td>To scan for camera-glasses advertisements. Central role only.</td><td>The app explains it can&rsquo;t scan; nothing else breaks.</td></tr>
+      <tr><td>Notifications <em>(optional, Unlock)</em></td><td>A local alert when a likely/strong flag appears while you&rsquo;re not looking.</td><td>Background scanning still works silently; no alert.</td></tr>
+    </table>
+  </div>
+  <p>LensBeacon does <b style="color:var(--ink)">not</b> request: Location, Contacts, Photos, Camera, Microphone, Local Network, or Tracking &mdash; there is no App Tracking Transparency prompt, because there is nothing to track.</p>
+
+  <h2>Contact</h2>
+  <p>Security or privacy concerns: open an issue at <a href="https://github.com/AvaJ845/LensBeacon/blob/main/SECURITY.md">github.com/AvaJ845/LensBeacon</a>.</p>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="links">
+      <a href="privacy.html">Privacy</a>
+      <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Terms of Use</a>
+    </div>
+    <p class="copy">&copy; AvaResearch&nbsp;LLC &middot; LensBeacon &middot; Awareness of a device, not a person.</p>
+    <p class="fine">LensBeacon is not affiliated with, authorised, sponsored, or endorsed by Meta Platforms, EssilorLuxottica, Ray-Ban, Oakley, Snap Inc., or Even Realities. Product names are used only to describe the Bluetooth signatures LensBeacon looks for.</p>
+  </div>
+</footer>
+
+</body>
+</html>
