@@ -44,7 +44,7 @@ targets:
         PRODUCT_NAME: LensBeacon
         PRODUCT_BUNDLE_IDENTIFIER: com.avaresearch.lensbeacon
         MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "1"
+        CURRENT_PROJECT_VERSION: "2"
 
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: "AppIcon-Midnight AppIcon-Mono"
@@ -107,7 +107,7 @@ targets:
         PRODUCT_NAME: LensBeaconWidget
         PRODUCT_BUNDLE_IDENTIFIER: com.avaresearch.lensbeacon.widget
         MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "1"
+        CURRENT_PROJECT_VERSION: "2"
 
         SDKROOT: iphoneos
         SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
@@ -165,13 +165,21 @@ targets:
       - path: Shared/ProximityBand.swift
       - path: Shared/Copy.swift
       - path: Shared/PrivacyInfo.xcprivacy
+      - path: Shared/SharedContainer.swift
+      - path: Shared/DashboardSnapshot.swift
+      - path: Shared/QuietHours.swift
       - path: LensBeacon/Scanner/BluetoothScanner.swift
+    entitlements:
+      path: LensBeaconWatch/LensBeaconWatch.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.avaresearch.lensbeacon
     settings:
       base:
         PRODUCT_NAME: LensBeacon
         PRODUCT_BUNDLE_IDENTIFIER: com.avaresearch.lensbeacon.watch
         MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "1"
+        CURRENT_PROJECT_VERSION: "2"
 
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
@@ -221,12 +229,22 @@ targets:
     sources:
       - path: LensBeaconWatchWidget
       - path: Shared/PrivacyInfo.xcprivacy
+      - path: Shared/SharedContainer.swift
+      - path: Shared/DashboardSnapshot.swift
+      - path: Shared/QuietHours.swift
+      - path: Shared/Detection.swift
+      - path: Shared/ProximityBand.swift
+    entitlements:
+      path: LensBeaconWatchWidget/LensBeaconWatchWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.avaresearch.lensbeacon
     settings:
       base:
         PRODUCT_NAME: LensBeaconWatchWidget
         PRODUCT_BUNDLE_IDENTIFIER: com.avaresearch.lensbeacon.watch.widget
         MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "1"
+        CURRENT_PROJECT_VERSION: "2"
         SDKROOT: watchos
         SUPPORTED_PLATFORMS: "watchos watchsimulator"
         WATCHOS_DEPLOYMENT_TARGET: "11.0"

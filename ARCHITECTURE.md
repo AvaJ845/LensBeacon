@@ -107,6 +107,34 @@ individual records still decode and only drops the ones that don't.
 - `CBCentralManagerOptionRestoreIdentifierKey` + `willRestoreState` resume the scan
   after a CoreBluetooth background relaunch. Nothing to reconnect — this app never
   connects.
+- **Quiet hours** (`Shared/QuietHours.swift`) mute new-flag alerts on a daily
+  schedule — time only, never a place; a location-based version would be the one
+  exception to "no location, ever," so it isn't on the table. Pure, wraparound-aware
+  window check (`QuietHours.window(_:start:end:)`), gated in `ScanCoordinator
+  .maybeAlert` alongside the existing alerts/unlock checks.
+
+## Watch complication relay (LensBeacon Unlock)
+
+The complication shows real counts without the watch ever scanning on its own —
+relay only, never a second scanner:
+
+- `LensBeacon/Support/WatchRelay.swift` (phone) calls `WCSession
+  .updateApplicationContext(_:)` with the same `DashboardSnapshot` already written
+  for the Home Screen widget, from the same ≤1 Hz debounced call site in
+  `ScanCoordinator.writeSnapshot()` — no new timer. `updateApplicationContext` is
+  the deliberate choice over `sendMessage`/`transferUserInfo`: it's OS-coalesced
+  and latest-value-wins, so it never queues or retries if the watch is
+  unreachable, matching data where only the current state is ever meaningful.
+- `LensBeaconWatch/WatchRelayReceiver.swift` (watch) receives it, saves it via the
+  same `DashboardSnapshot.save()` into the watch's own App Group container
+  (`group.com.avaresearch.lensbeacon`, shared between `LensBeaconWatch` and
+  `LensBeaconWatchWidget` only — a separate container instance from the phone's),
+  and calls `WidgetCenter.shared.reloadTimelines(ofKind:)` so the complication
+  redraws. watchOS's own complication-refresh budget still applies on top of
+  this — "live" means "as fresh as the system allows a complication to be."
+- Without Unlock, or before the first relay ever arrives, the complication falls
+  back to the original honest launcher (the mark, tap to open the scanner) — see
+  `LensBeaconWatchWidget/LensBeaconComplication.swift`.
 
 ## StoreKit
 
@@ -126,10 +154,12 @@ LensBeacon (app) ──▶ Shared/
         ├──embeds──▶ LensBeaconWidget ──▶ Shared/         (Home Screen widget, Live Activity, Control Center control)
         │
         └──embeds──▶ LensBeaconWatch (watchOS) ──▶ Shared/{Detection, DetectionRules,
-                          DetectionEngine, ProximityBand}.swift
+                          DetectionEngine, ProximityBand, SharedContainer,
+                          DashboardSnapshot, QuietHours}.swift
                           + LensBeacon/Scanner/BluetoothScanner.swift
                           │
-                          └──embeds──▶ LensBeaconWatchWidget  (launcher-only complication, no live data)
+                          └──embeds──▶ LensBeaconWatchWidget  (complication — relayed
+                                            snapshot when Unlocked, launcher otherwise)
 ```
 
 `Shared/` is compiled into the iOS app, the widget and the tests. It is the reason

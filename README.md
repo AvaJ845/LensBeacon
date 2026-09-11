@@ -56,7 +56,8 @@ camera glasses" Siri phrase, and one-tap data erase in Settings.
 
 **LensBeacon Unlock — $9.99, one-time, non-consumable.** No subscription, no trial
 countdown, no renewal: background scanning, a Live Activity, a Home Screen widget,
-new-flag alerts, unlimited history, and CSV export.
+a live Apple Watch complication, new-flag alerts with quiet hours, unlimited
+history, CSV export, and a shareable session report.
 
 ## Build & run
 
@@ -102,18 +103,21 @@ borrowed pair of camera glasses / a Quest headset.
 ```
 Shared/            Pure, testable logic + types shared by app, widget, and watch
   Detection, DetectionRules, DetectionEngine, ProximityBand (+ RSSISmoother),
-  DashboardSnapshot, ScanActivityAttributes, SharedContainer, Theme, Copy, Legal
+  DashboardSnapshot, ScanActivityAttributes, SharedContainer, QuietHours,
+  ContributionReport, Theme, Copy, Legal
 LensBeacon/
   App/           App entry, RootView (two tabs)
   Scanner/       BluetoothScanner (CBCentralManager wrapper — the only CB code)
   Model/         Sighting, LiveSighting, ScanCoordinator (@MainActor @Observable)
   Store/         SightingsStore (durable log), MineRegistry
   Purchases/     UnlockStore (StoreKit 2 non-consumable + Restore)
-  Support/       FlagNotifier, Haptics, Appearance, DemoSeed, CaptureLog (#if DEBUG)
+  Support/       FlagNotifier, Haptics, Appearance, DemoSeed, WatchRelay,
+                 CaptureLog (#if DEBUG)
   Views/         Dashboard, Sightings, SightingDetail, Onboarding, Settings, Unlock
 LensBeaconWidget/     Home Screen widget, scan Live Activity, Control Center control
 LensBeaconWatch/      watchOS companion app
-LensBeaconWatchWidget/ watchOS complication (launcher only, no live data)
+LensBeaconWatchWidget/ watchOS complication — relayed live counts (Unlock), a
+                        launcher otherwise
 LensBeaconTests/      Unit tests for the pure engines
 docs/                 GitHub Pages site (index.html, privacy.html) + engineering docs
 AppStore/             Metadata, ASO plan, App Review notes, screenshots

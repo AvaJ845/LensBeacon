@@ -285,7 +285,8 @@ final class ScanCoordinator {
               record.detection.canNotifyInBackground,
               !alertedKeys.contains(key),
               SharedContainer.defaults.bool(forKey: SharedContainer.Key.alertsEnabled),
-              SharedContainer.isUnlocked
+              SharedContainer.isUnlocked,
+              !SharedContainer.quietHours.isActive()
         else { return }
         alertedKeys.insert(key)
         onNewFlag?(record)
@@ -391,5 +392,8 @@ final class ScanCoordinator {
         if changed || force {
             WidgetCenter.shared.reloadTimelines(ofKind: SharedContainer.widgetKind)
         }
+        // Relay-only: never a second scan. Rides this same ≤1Hz debounced write —
+        // no new timer, no watch-side scanning (Unlock feature).
+        WatchRelay.shared.send(snapshot)
     }
 }

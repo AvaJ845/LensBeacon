@@ -63,6 +63,29 @@ struct SightingsStoreTests {
         #expect(!csv.contains("\"="))
     }
 
+    @Test func sessionReportListsEachDeviceWithItsTierAndTheHonestyLine() {
+        let (store, url) = makeStore()
+        defer { try? FileManager.default.removeItem(at: url) }
+
+        store.record(peripheralKey: "a", detection: metaGlasses(), rssi: -50, proximity: .near, at: Date())
+        let mine = MineRegistry()
+
+        let report = store.sessionReport(mine: mine)
+        #expect(report.hasPrefix("LensBeacon — Session Report"))
+        #expect(report.contains("1 recognised device:"))
+        #expect(report.contains("Ray-Ban / Oakley Meta"))
+        #expect(report.contains("High confidence"))
+        #expect(report.contains(Copy.notAccusation))
+    }
+
+    @Test func sessionReportSaysSoWhenThereIsNothingToReport() {
+        let (store, url) = makeStore()
+        defer { try? FileManager.default.removeItem(at: url) }
+
+        let report = store.sessionReport(mine: MineRegistry())
+        #expect(report.contains("No recognised camera or display glasses in this period."))
+    }
+
     @Test func wipeEmptiesMemoryAndDeletesTheFile() {
         let (store, url) = makeStore()
         defer { try? FileManager.default.removeItem(at: url) }

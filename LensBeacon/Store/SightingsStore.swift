@@ -156,6 +156,41 @@ final class SightingsStore {
         return rows.joined(separator: "\n")
     }
 
+    // MARK: - Session report (Unlock feature)
+
+    /// A plain-language summary of the current log — for saying what you saw, not
+    /// analysing a spreadsheet. Same retention window as CSV export, same "yours
+    /// to share" pattern: handed to `ShareLink`, never sent anywhere by the app.
+    func sessionReport(mine: MineRegistry) -> String {
+        let visible = sightings.filter { withinRetention($0) }.sorted { $0.lastSeen > $1.lastSeen }
+        var lines = [
+            "LensBeacon — Session Report",
+            "Generated \(Date().formatted(date: .abbreviated, time: .shortened))",
+            "",
+        ]
+
+        if visible.isEmpty {
+            lines.append("No recognised camera or display glasses in this period.")
+        } else {
+            lines.append("\(visible.count) recognised \(visible.count == 1 ? "device" : "devices"):")
+            lines.append("")
+            for (index, s) in visible.enumerated() {
+                let tierText = s.tier?.title ?? "Unrated"
+                let mineTag = mine.contains(productKey: s.productKey) ? " (marked mine)" : ""
+                lines.append("\(index + 1). \(s.title) — \(tierText)\(mineTag)")
+                lines.append("   First seen \(s.firstSeen.formatted(date: .abbreviated, time: .shortened)) · "
+                    + "last seen \(s.lastSeen.formatted(.relative(presentation: .named)))")
+                if let top = s.evidence.first {
+                    lines.append("   Evidence: \(top.adType.label) \(top.matchedValue)")
+                }
+                lines.append("")
+            }
+        }
+
+        lines.append(Copy.notAccusation)
+        return lines.joined(separator: "\n")
+    }
+
     private static func csvEscape(_ value: String) -> String {
         // Defuse spreadsheet formula injection: a field a device controls (its
         // advertised name flows into `productName` / the evidence bullets) that

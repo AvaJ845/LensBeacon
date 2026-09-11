@@ -16,6 +16,12 @@ struct SettingsView: View {
     private var backgroundScanning = false
     @AppStorage(SharedContainer.Key.alertsEnabled, store: SharedContainer.defaults)
     private var alertsEnabled = false
+    @AppStorage(SharedContainer.Key.quietHoursEnabled, store: SharedContainer.defaults)
+    private var quietHoursEnabled = false
+    @AppStorage(SharedContainer.Key.quietHoursStartMinutes, store: SharedContainer.defaults)
+    private var quietHoursStartMinutes = QuietHours.disabled.startMinutes
+    @AppStorage(SharedContainer.Key.quietHoursEndMinutes, store: SharedContainer.defaults)
+    private var quietHoursEndMinutes = QuietHours.disabled.endMinutes
     @AppStorage(SharedContainer.Key.appearance, store: SharedContainer.defaults)
     private var appearanceRaw = AppAppearance.system.rawValue
 
@@ -132,13 +138,38 @@ struct SettingsView: View {
                 .onChange(of: alertsEnabled) { _, on in
                     if on { Task { _ = await notifier.requestAuthorizationIfNeeded() } }
                 }
+            Toggle("Quiet hours", isOn: $quietHoursEnabled)
+                .disabled(!unlock.isUnlocked || !alertsEnabled)
+            if quietHoursEnabled {
+                DatePicker("From", selection: dateBinding(for: $quietHoursStartMinutes), displayedComponents: .hourAndMinute)
+                    .disabled(!unlock.isUnlocked || !alertsEnabled)
+                DatePicker("To", selection: dateBinding(for: $quietHoursEndMinutes), displayedComponents: .hourAndMinute)
+                    .disabled(!unlock.isUnlocked || !alertsEnabled)
+            }
         } header: {
             Text("Scanning")
         } footer: {
             Text("Turn listening off and LensBeacon detects and logs nothing until you turn it back on — the setting sticks across relaunches. " + (unlock.isUnlocked
-                 ? "Background scanning uses a filtered Bluetooth scan and shows a Live Activity so it’s always visible. LensBeacon still never connects to anything."
+                 ? "Background scanning uses a filtered Bluetooth scan and shows a Live Activity so it’s always visible. LensBeacon still never connects to anything. Quiet hours mutes alerts on a schedule — by time only, never by place."
                  : "Background scanning is part of LensBeacon Unlock."))
         }
+    }
+
+    /// Minutes-since-midnight ↔ `Date` for the quiet-hours pickers. Only the time
+    /// of day is ever stored; the date's day component is thrown away on read.
+    private func dateBinding(for minutes: Binding<Int>) -> Binding<Date> {
+        Binding(
+            get: {
+                var comps = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+                comps.hour = minutes.wrappedValue / 60
+                comps.minute = minutes.wrappedValue % 60
+                return Calendar.current.date(from: comps) ?? Date()
+            },
+            set: { newDate in
+                let comps = Calendar.current.dateComponents([.hour, .minute], from: newDate)
+                minutes.wrappedValue = (comps.hour ?? 0) * 60 + (comps.minute ?? 0)
+            }
+        )
     }
 
     // MARK: - Data
@@ -184,9 +215,11 @@ struct SettingsView: View {
             statement("Scans Bluetooth for camera-glasses signatures", yes: true)
             statement("Shows the evidence behind every flag", yes: true)
             statement("Stores your history only on this iPhone", yes: true)
+            statement("Matches against a transparent, versioned rule table", yes: true)
             statement("Connects to, pairs with, or transmits to any device", yes: false)
             statement("Uses GPS or any location service", yes: false)
             statement("Sends analytics or makes any network request", yes: false)
+            statement("Uses AI or a black-box model to decide what's nearby", yes: false)
             NavigationLink("Privacy details") { PrivacyDetailView() }
             #if DEBUG
             NavigationLink("BLE capture (dev only)") { CaptureView() }
@@ -266,6 +299,7 @@ struct SettingsView: View {
             DashboardSnapshot.clear()
             backgroundScanning = false
             alertsEnabled = false
+            quietHoursEnabled = false
             SharedContainer.defaults.removeObject(forKey: SharedContainer.Key.scanningPaused)
             coordinator.setPaused(false)
         }
@@ -297,9 +331,11 @@ struct PrivacyDetailView: View {
                 Group {
                     para("LensBeacon works entirely on your device.", "There is no LensBeacon account and no LensBeacon server. The app makes no network connections of any kind — you can verify this by putting the phone in Airplane Mode; every feature still works.")
                     para("It listens; it never speaks.", "LensBeacon uses Bluetooth in central role only. It scans for the advertisements that nearby devices broadcast. It never connects, never pairs, never reads or writes a device’s data, and never advertises itself.")
+                    para("Nearby devices are read, briefly.", "While something is in range, LensBeacon holds its advertised name and manufacturer data in memory only — the same fields the Nearby tab already shows for it. That's dropped the moment it leaves range; none of it is written to disk unless it's a recognised pair of glasses.")
                     para("No location, ever.", "Proximity is estimated only from Bluetooth signal strength, in three coarse bands. LensBeacon requests no location permission and links no location framework.")
+                    para("No AI, no black box.", "Every match comes from a small, versioned rule table you can read yourself — a manufacturer ID, a service UUID, a name pattern. Nothing here is a model's guess; every flag traces back to a specific rule.")
                     para("Your history stays here.", "The Sightings log is a single file on this device, encrypted at rest and excluded from iCloud/device backups. Bluetooth identifiers rotate on their own; LensBeacon stores the rotating identifier as an opaque key and makes no attempt to track a device or person across that rotation. Settings ▸ Data erases it all at any time.")
-                    para("CSV export is yours alone.", "When you export, you choose where the file goes. The header names every column so you can see exactly what’s in it.")
+                    para("Exports are yours alone.", "CSV export and \"Suggest what this is\" both work the same way: when you export or share, you choose where it goes. Nothing is sent unless you send it.")
                 }
                 Text(Legal.nonAffiliation)
                     .font(.footnote)

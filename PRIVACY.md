@@ -51,6 +51,8 @@ following stay on the device and are never sent anywhere:
 | Preferences | Onboarding done, scan toggles, purchase state mirror. |
 | CSV export | Only when *you* export, to a location *you* pick. Every column is named in the header. |
 | "Suggest what this is" report | Only when *you* share it, to a destination *you* pick (Mail, Messages, AirDrop, ...). Contains a device's advertisement fields and your optional guess at what it is — never your name, location, or anything else about your phone. |
+| Session report | Only when *you* share it, same as CSV export — a plain-language summary of the recognised devices in your current history. |
+| Watch complication (Unlock) | The same non-identifying summary (counts, tier, age) already written for the Home Screen widget, relayed to your own paired Apple Watch over WatchConnectivity. The watch never scans on its own to produce this; nothing leaves your two devices. |
 
 ## Permissions LensBeacon requests
 

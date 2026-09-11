@@ -10,7 +10,10 @@ struct LensBeaconWatchApp: App {
         WindowGroup {
             WatchRootView()
                 .environment(model)
-                .task { model.start() }
+                .task {
+                    model.start()
+                    WatchRelayReceiver.shared.activate()
+                }
                 .onChange(of: scenePhase) { _, phase in
                     // The watch only scans while its screen is showing LensBeacon —
                     // there is no background-scan story here, and that is the honest

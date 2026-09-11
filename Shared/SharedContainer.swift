@@ -34,6 +34,11 @@ enum SharedContainer {
         static let scanningPaused = "scanningPaused"
         /// Appearance override — "system" / "light" / "dark".
         static let appearance = "appAppearance"
+        /// Quiet hours (Unlock feature) — mute new-flag alerts on a daily schedule.
+        /// Time-based only; see `QuietHours`.
+        static let quietHoursEnabled = "quietHoursEnabled"
+        static let quietHoursStartMinutes = "quietHoursStartMinutes"
+        static let quietHoursEndMinutes = "quietHoursEndMinutes"
     }
 
     /// WidgetKit kind for the Home Screen widget. Shared so the app can target it in
@@ -83,5 +88,22 @@ enum SharedContainer {
     static var didCompleteOnboarding: Bool {
         get { defaults.bool(forKey: Key.onboarded) }
         set { defaults.set(newValue, forKey: Key.onboarded) }
+    }
+
+    static var quietHours: QuietHours {
+        get {
+            let d = defaults
+            guard d.object(forKey: Key.quietHoursStartMinutes) != nil else { return .disabled }
+            return QuietHours(
+                startMinutes: d.integer(forKey: Key.quietHoursStartMinutes),
+                endMinutes: d.integer(forKey: Key.quietHoursEndMinutes),
+                isEnabled: d.bool(forKey: Key.quietHoursEnabled)
+            )
+        }
+        set {
+            defaults.set(newValue.isEnabled, forKey: Key.quietHoursEnabled)
+            defaults.set(newValue.startMinutes, forKey: Key.quietHoursStartMinutes)
+            defaults.set(newValue.endMinutes, forKey: Key.quietHoursEndMinutes)
+        }
     }
 }

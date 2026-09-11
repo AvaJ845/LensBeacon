@@ -76,6 +76,11 @@ struct SightingsView: View {
                     Menu {
                         Button("Export CSV", systemImage: "square.and.arrow.up") { prepareExport() }
                             .disabled(rows.isEmpty)
+                        ShareLink(
+                            "Share session report",
+                            item: store.sessionReport(mine: mine)
+                        )
+                        .disabled(!unlock.isUnlocked || rows.isEmpty)
                         Button("Clear history", systemImage: "trash", role: .destructive) {
                             showClearConfirm = true
                         }
