@@ -44,6 +44,18 @@ enum ProximityBand: Int, Comparable, Codable, Sendable, CaseIterable {
         default:                   return .far
         }
     }
+
+    /// A plain-English translation of the band for the curious reader who taps
+    /// into "Signal details" — never a number of metres or feet, because RSSI
+    /// through a real body, pocket, or wall can't support one. Lowercase, meant
+    /// to complete a sentence like "Near — \(roughDistanceHint)".
+    var roughDistanceHint: String {
+        switch self {
+        case .near:   return "roughly arm's length to a few steps away"
+        case .nearby: return "roughly the same room"
+        case .far:    return "across the room, through a wall, or farther"
+        }
+    }
 }
 
 /// Exponential moving average over RSSI samples for one device.

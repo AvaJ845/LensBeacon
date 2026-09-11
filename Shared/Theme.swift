@@ -1,29 +1,57 @@
 import SwiftUI
 
 /// LensBeacon's visual language: calm, factual, closer to a field notebook than a
-/// security console. The palette is deliberately quiet — a single teal accent, warm
-/// neutral surfaces, and status colours that are muted rather than siren-bright.
+/// security console.
 ///
-/// Every status colour has a text label and an SF Symbol beside it in the UI, so the
-/// colour is reinforcement, never the sole carrier of meaning (HIG accessibility).
+/// The palette is the Apple Fellow brand kit (`docs/BRAND.md`
+/// / `Icon_Source/LensBeaconBrandTokens.json`): a Beacon Blue accent on a near-white
+/// canvas in light mode, lifted to Lens Cyan on a Deep Navy canvas in dark mode.
+/// Status colours are a single muted blue ramp — never red, never a "go" green —
+/// because "strong" should read as *certain*, not as *danger*.
+///
+/// Every status colour is paired with an SF Symbol and a text label in the UI, so
+/// the colour is reinforcement, never the sole carrier of meaning (HIG:
+/// accessibility — do not rely on colour alone).
 enum Palette {
 
-    /// Interactive tint. A deep teal in light mode; lifted for contrast on dark.
+    // MARK: - Brand tokens (fixed, appearance-independent)
+
+    /// #0B1F33 — icon field, dark-mode canvas.
+    static let deepNavy   = Color(red: 0.043, green: 0.122, blue: 0.200)
+    /// #3B82F6 — the interactive Beacon Blue.
+    static let beaconBlue = Color(red: 0.231, green: 0.510, blue: 0.965)
+    /// #63C7F2 — the lighter Lens Cyan, used as the dark-mode accent.
+    static let lensCyan   = Color(red: 0.388, green: 0.780, blue: 0.949)
+    /// #10B981 — reserved teal. Deliberately not used for status (avoids a
+    /// "safe / all-clear" reading of a colour).
+    static let teal       = Color(red: 0.063, green: 0.725, blue: 0.506)
+    /// #E5EAF2
+    static let coolGray   = Color(red: 0.898, green: 0.918, blue: 0.949)
+    /// #64748B
+    static let secondaryText = Color(red: 0.392, green: 0.455, blue: 0.545)
+
+    // MARK: - Adaptive surfaces
+
+    /// Interactive tint. Beacon Blue in light mode; Lens Cyan on dark for contrast
+    /// against the navy canvas. Kept in exact sync with `AccentColor.colorset`.
     static let accent = Color(uiColor: UIColor { traits in
         traits.userInterfaceStyle == .dark
-            ? UIColor(red: 0.42, green: 0.78, blue: 0.76, alpha: 1)
-            : UIColor(red: 0.10, green: 0.42, blue: 0.42, alpha: 1)
+            ? UIColor(red: 0.388, green: 0.780, blue: 0.949, alpha: 1)   // #63C7F2
+            : UIColor(red: 0.231, green: 0.510, blue: 0.965, alpha: 1)   // #3B82F6
     })
 
+    /// Screen background. #F8FAFC light, Deep Navy #0B1F33 dark.
     static let canvas = Color(uiColor: UIColor { traits in
         traits.userInterfaceStyle == .dark
-            ? UIColor(red: 0.06, green: 0.07, blue: 0.08, alpha: 1)
-            : UIColor(red: 0.97, green: 0.96, blue: 0.94, alpha: 1)
+            ? UIColor(red: 0.043, green: 0.122, blue: 0.200, alpha: 1)
+            : UIColor(red: 0.973, green: 0.980, blue: 0.988, alpha: 1)
     })
 
+    /// Card / raised surface. White light; a lifted navy (the icon gradient's high
+    /// end, #123B5D) on dark so cards never sit black-on-black.
     static let card = Color(uiColor: UIColor { traits in
         traits.userInterfaceStyle == .dark
-            ? UIColor(red: 0.14, green: 0.15, blue: 0.17, alpha: 1)
+            ? UIColor(red: 0.071, green: 0.231, blue: 0.365, alpha: 1)
             : UIColor.white
     })
 
@@ -31,36 +59,44 @@ enum Palette {
 
     // MARK: - Status colours (always paired with text + symbol in the UI)
 
-    /// Confidence bands. Muted amber → clay, never red. "Strong" must still not read
-    /// as danger — it reads as *certain*, which is a calm thing to be.
-    static func confidence(_ level: ConfidenceLevel) -> Color {
-        switch level {
-        case .possible:
-            return Color(uiColor: UIColor { t in t.userInterfaceStyle == .dark
-                ? UIColor(red: 0.70, green: 0.70, blue: 0.74, alpha: 1)
-                : UIColor(red: 0.45, green: 0.45, blue: 0.48, alpha: 1) })
-        case .likely:
-            return Color(uiColor: UIColor { t in t.userInterfaceStyle == .dark
-                ? UIColor(red: 0.92, green: 0.74, blue: 0.42, alpha: 1)
-                : UIColor(red: 0.72, green: 0.52, blue: 0.16, alpha: 1) })
-        case .strong:
-            return Color(uiColor: UIColor { t in t.userInterfaceStyle == .dark
-                ? UIColor(red: 0.86, green: 0.56, blue: 0.42, alpha: 1)
-                : UIColor(red: 0.68, green: 0.36, blue: 0.24, alpha: 1) })
+    /// Detection tiers as one calm blue ramp — never red, never a "go" green, because
+    /// a strong signal should read as *settled*, not as danger:
+    /// - low (name only) — a quiet slate; must not draw the eye.
+    /// - medium (service UUID) — Beacon Blue.
+    /// - high (manufacturer ID) — a deeper, more saturated blue.
+    ///
+    /// Built once (each `UIColor { traits in }` closure allocates) and reused —
+    /// `tier(_:)` is called per row, per render, inside lists that re-render on any
+    /// scan change. Contrast is ≥ AA 4.5:1 on the card in both appearances.
+    private static let lowColor = Color(uiColor: UIColor { t in t.userInterfaceStyle == .dark
+        ? UIColor(red: 0.72, green: 0.78, blue: 0.88, alpha: 1)
+        : UIColor(red: 0.34, green: 0.39, blue: 0.47, alpha: 1) })
+    private static let mediumColor = Color(uiColor: UIColor { t in t.userInterfaceStyle == .dark
+        ? UIColor(red: 0.478, green: 0.706, blue: 1.00, alpha: 1)
+        : UIColor(red: 0.231, green: 0.510, blue: 0.965, alpha: 1) }) // #3B82F6
+    private static let highColor = Color(uiColor: UIColor { t in t.userInterfaceStyle == .dark
+        ? UIColor(red: 0.62, green: 0.84, blue: 0.98, alpha: 1)
+        : UIColor(red: 0.13, green: 0.31, blue: 0.62, alpha: 1) })
+
+    static func tier(_ tier: DetectionTier) -> Color {
+        switch tier {
+        case .name:         return lowColor
+        case .serviceUUID:  return mediumColor
+        case .manufacturer: return highColor
         }
     }
 
     static func proximity(_ band: ProximityBand) -> Color {
         switch band {
         case .near:   return accent
-        case .nearby: return accent.opacity(0.7)
+        case .nearby: return accent.opacity(0.65)
         case .far:    return Color.secondary
         }
     }
 }
 
 extension View {
-    /// Standard screen chrome: quiet canvas, teal tint, hidden default list background.
+    /// Standard screen chrome: quiet canvas, brand tint, hidden default list background.
     func lensChrome() -> some View {
         self
             .tint(Palette.accent)

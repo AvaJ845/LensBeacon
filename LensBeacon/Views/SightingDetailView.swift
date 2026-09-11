@@ -1,7 +1,8 @@
 import SwiftUI
 
-/// One device, in full: what it is, how sure we are, the exact signals that matched,
-/// a simple RSSI timeline, and the "This is mine" switch that suppresses it.
+/// One device, in full: what it is, the detection tier and why, the exact AD fields
+/// that matched with their raw bytes, a simple RSSI timeline, and the "This is mine"
+/// switch that suppresses the whole product.
 ///
 /// It accepts either a live in-range device or a stored record, so the Dashboard and
 /// the Sightings log can both push to the same screen.
@@ -22,7 +23,7 @@ struct SightingDetailView: View {
             headerSection
             evidenceSection
             timelineSection
-            mineSection
+            if productKey != nil { mineSection }
             explainerSection
         }
         .listStyle(.insetGrouped)
@@ -36,54 +37,91 @@ struct SightingDetailView: View {
     private var headerSection: some View {
         Section {
             VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Text(title).font(.title3.weight(.semibold))
-                    Spacer()
-                    if let c = confidence { ConfidenceBadge(level: c) }
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .firstTextBaseline) {
+                        Text(title).font(.title3.weight(.semibold))
+                        Spacer(minLength: 8)
+                        headerChip
+                    }
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(title).font(.title3.weight(.semibold))
+                        headerChip
+                    }
                 }
-                if let c = confidence {
-                    Text(c.explanation)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                } else if category == .headset {
-                    Text("This is a headset — worn openly and obviously. LensBeacon lists it but never flags it as a hidden camera.")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-                HStack(spacing: 14) {
-                    if let band = liveBand { ProximityChip(band: band) }
-                    Label(seenRange, systemImage: "clock")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
-        }
-    }
 
-    private var evidenceSection: some View {
-        Section("Evidence") {
-            if bullets.isEmpty {
-                Text("No signature clauses matched — this device is here only as a general Bluetooth sighting.")
+                Text(headerExplanation)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-            } else {
-                ForEach(Array(bullets.enumerated()), id: \.offset) { _, bullet in
-                    Label(bullet, systemImage: "checkmark.seal")
-                        .font(.subheadline)
+
+                if let band = displayBand {
+                    ProximityMeter(band: band)
+                    SignalDetailRow(band: band, rssi: displayRSSI)
                 }
+                Label(seenRange, systemImage: "clock")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
     }
 
     @ViewBuilder
+    private var headerChip: some View {
+        if isDisplayGlasses {
+            NoCameraChip()
+        } else if detection.isHeadset {
+            Label("Worn openly", systemImage: "eye").font(.caption2.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .padding(.horizontal, 6).padding(.vertical, 2)
+                .background(Color.secondary.opacity(0.12), in: Capsule())
+        } else if let tier {
+            TierBadge(tier: tier)
+        }
+    }
+
+    private var headerExplanation: String {
+        if isDisplayGlasses { return Copy.displayGlasses }
+        if detection.isHeadset {
+            return "This is a headset — a Meta Quest or an Apple Vision Pro. It carries cameras but is worn openly and obviously. LensBeacon lists it so you know it's here; it is never a covert-camera flag and never raises an alert."
+        }
+        if let tier { return tier.explanation }
+        return "Nothing in the rule table matched. This device is here only as a general Bluetooth sighting."
+    }
+
+    private var evidenceSection: some View {
+        Section {
+            if evidence.isEmpty {
+                Text("No rule matched. Logged as a nearby Bluetooth device.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(evidence) { row in
+                    EvidenceRow(evidence: row)
+                }
+            }
+        } header: {
+            Text("Evidence")
+        } footer: {
+            Text(Copy.notAccusation)
+        }
+    }
+
+    @ViewBuilder
     private var timelineSection: some View {
-        if !samples.isEmpty {
-            Section("Signal timeline") {
+        if samples.count >= 2 {
+            Section {
                 RSSISparkline(samples: samples)
                     .frame(height: 64)
                     .padding(.vertical, 4)
-                Text("Signal strength over the last \(samples.count) readings. Higher means closer. LensBeacon makes no directional claim.")
+                Text("Signal strength over the last \(samples.count) readings. \(Copy.proximityOnly)")
                     .font(.caption2)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text("Signal timeline")
+            }
+        } else if samples.count == 1 {
+            Section("Signal timeline") {
+                Text("Seen once, briefly — not enough readings yet to show a trend.")
+                    .font(.caption)
                     .foregroundStyle(.secondary)
             }
         }
@@ -92,12 +130,12 @@ struct SightingDetailView: View {
     private var mineSection: some View {
         Section {
             Toggle(isOn: Binding(
-                get: { mine.contains(peripheralKey) },
-                set: { mine.setMine($0, key: peripheralKey) }
+                get: { mine.contains(productKey: productKey) },
+                set: { mine.setMine($0, productKey: productKey) }
             )) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("This is mine")
-                    Text("Stop flagging this device and hide it from alerts.")
+                    Text("These are mine")
+                    Text("Stop flagging \(title) and hide it from background alerts. Applies wherever this signature appears.")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
@@ -108,7 +146,7 @@ struct SightingDetailView: View {
 
     private var explainerSection: some View {
         Section {
-            Text("LensBeacon identifies devices only by the Bluetooth advertisements they broadcast. It never connects, never pairs, and never reads anything from a device. The identifier shown to the system rotates on its own — there is nothing here that tracks a person.")
+            Text("LensBeacon only reads advertisements — it never connects, pairs, or requests anything from a device. The identifier the system shows here rotates on its own, so it cannot be followed over time.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -116,39 +154,33 @@ struct SightingDetailView: View {
 
     // MARK: - Source adapters
 
-    private var title: String {
+    private var detection: Detection {
         switch source {
-        case .live(let s):   return s.title
-        case .record(let s): return s.title
+        case .live(let s):   return s.detection
+        case .record(let s): return s.detection
         }
     }
-    private var confidence: ConfidenceLevel? {
+    private var title: String { detection.displayTitle() }
+    private var tier: DetectionTier? { detection.bestTier }
+    private var isDisplayGlasses: Bool { detection.isDisplayGlasses }
+    private var evidence: [DetectionEvidence] { detection.evidence }
+    private var productKey: String? { detection.productKey }
+
+    /// The band to show under the header: the live smoothed reading for a device
+    /// still in range, or the last reading on file for a stored record. A record's
+    /// number is clearly a *past* one (it sits above "last seen …"), so showing it
+    /// is a history fact, not a claim that this is happening right now.
+    private var displayBand: ProximityBand? {
         switch source {
-        case .live(let s):   return s.confidence
-        case .record(let s): return s.confidence
+        case .live(let s):   return s.proximity
+        case .record(let s): return s.timeline.last?.proximity
         }
     }
-    private var category: DeviceCategory {
+    private var displayRSSI: Int? {
         switch source {
-        case .live(let s):   return s.classification.category ?? .other
-        case .record(let s): return s.category
+        case .live(let s):   return Int(s.smoother.value.rounded())
+        case .record(let s): return s.timeline.last?.rssi
         }
-    }
-    private var peripheralKey: String {
-        switch source {
-        case .live(let s):   return s.peripheralKey
-        case .record(let s): return s.peripheralKey
-        }
-    }
-    private var bullets: [String] {
-        switch source {
-        case .live(let s):   return s.classification.evidence.flatMap(\.bullets)
-        case .record(let s): return s.evidenceBullets
-        }
-    }
-    private var liveBand: ProximityBand? {
-        if case .live(let s) = source { return s.proximity }
-        return nil
     }
     private var seenRange: String {
         let (first, last): (Date, Date)
@@ -165,6 +197,38 @@ struct SightingDetailView: View {
         case .live(let s):
             return store.sightings.first { $0.peripheralKey == s.peripheralKey }?.timeline ?? []
         }
+    }
+}
+
+/// One AD field that matched a rule, with its raw bytes. Fully labelled for VoiceOver.
+private struct EvidenceRow: View {
+    let evidence: DetectionEvidence
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline) {
+                Label(evidence.adType.label, systemImage: "dot.radiowaves.left.and.right")
+                    .font(.subheadline.weight(.medium))
+                Spacer(minLength: 8)
+                TierBadge(tier: evidence.tier, compact: true)
+            }
+            // The value + raw bytes ARE the evidence — the app's central promise is
+            // that you can read them, so they get primary ink and a legible size.
+            Text(evidence.matchedValue)
+                .font(.callout.monospaced().weight(.medium))
+                .textSelection(.enabled)
+            Text("AD \(evidence.adType.hexCode)  ·  raw \(evidence.rawBytes)")
+                .font(.footnote.monospaced())
+                .textSelection(.enabled)
+                .fixedSize(horizontal: false, vertical: true)
+            Text(evidence.ruleTitle)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.vertical, 2)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(evidence.accessibilityLabel)
     }
 }
 
@@ -190,6 +254,18 @@ private struct RSSISparkline: View {
             }
             .stroke(Palette.accent, style: StrokeStyle(lineWidth: 2, lineJoin: .round))
         }
-        .accessibilityLabel("Signal strength trend over \(samples.count) readings")
+        .accessibilityElement()
+        .accessibilityLabel("Signal strength trend")
+        .accessibilityValue(axValue)
+    }
+
+    private var axValue: String {
+        let values = samples.map(\.rssi)
+        guard let first = values.first, let last = values.last,
+              let low = values.min(), let high = values.max() else {
+            return "No readings yet"
+        }
+        let direction = last > first + 3 ? "rising" : (last < first - 3 ? "falling" : "steady")
+        return "\(samples.count) readings, \(direction). From \(first) to \(last) dBm, ranging \(low) to \(high). Higher is closer."
     }
 }

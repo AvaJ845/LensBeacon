@@ -17,6 +17,8 @@ struct LensBeaconApp: App {
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage(SharedContainer.Key.onboarded, store: SharedContainer.defaults)
     private var onboarded = false
+    @AppStorage(SharedContainer.Key.appearance, store: SharedContainer.defaults)
+    private var appearanceRaw = AppAppearance.system.rawValue
 
     init() {
         let sightings = SightingsStore()
@@ -24,6 +26,9 @@ struct LensBeaconApp: App {
         _sightings = State(initialValue: sightings)
         _mine = State(initialValue: mine)
         _coordinator = State(initialValue: ScanCoordinator(sightings: sightings, mine: mine))
+        // Applied synchronously, before any view renders, so a view's `.task` that
+        // consumes `router.launchScreen` always sees it. Screenshot tooling only.
+        Router.shared.applyLaunchArguments()
     }
 
     /// QA / screenshot launch arguments (Release-safe — they only skip the intro or
@@ -47,14 +52,17 @@ struct LensBeaconApp: App {
             .environment(coordinator)
             .environment(router)
             .tint(Palette.accent)
+            .preferredColorScheme((AppAppearance(rawValue: appearanceRaw) ?? .system).colorScheme)
             .task {
                 UNUserNotificationCenter.current().delegate = notifier
+                notifier.registerCategories()
                 coordinator.onNewFlag = { sighting in
                     Haptics.firstFlag()
                     notifier.notify(about: sighting)
                 }
                 coordinator.bootstrap()
                 await unlock.load()
+                DemoSeed.apply(to: sightings, mine: mine)
                 applyRetention()
                 if onboarded { coordinator.startScanning() }
             }
@@ -62,6 +70,11 @@ struct LensBeaconApp: App {
             .onChange(of: scenePhase) { _, phase in
                 coordinator.applyScenePhase(active: phase == .active)
                 if phase == .background { sightings.saveNow() }
+            }
+            .onChange(of: router.pendingMineKey) { _, key in
+                guard let key else { return }
+                mine.setMine(true, productKey: key)
+                router.pendingMineKey = nil
             }
         }
     }

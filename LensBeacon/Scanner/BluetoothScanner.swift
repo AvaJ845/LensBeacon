@@ -11,7 +11,7 @@ struct ScanEvent: Sendable {
     /// identifier. LensBeacon treats it as an opaque local key and never tries to
     /// resolve it to anything else.
     let peripheralKey: String
-    let advertisement: ConfidenceEngine.Advertisement
+    let advertisement: AdvertisementFields
     let rssi: Double
     let timestamp: Date
 }
@@ -52,8 +52,7 @@ final class BluetoothScanner: NSObject, @unchecked Sendable {
     /// scan filter. A filtered scan is the only kind iOS keeps servicing while the
     /// app is backgrounded; a `nil`-services scan there is dropped almost immediately.
     private let knownServiceUUIDs: [CBUUID] = {
-        let strings = SignatureTable.all.flatMap { $0.serviceUUIDs }
-        return Set(strings).map { CBUUID(string: $0) }
+        Set(DetectionRuleTable.current.serviceUUIDs16).map { CBUUID(string: $0) }
     }()
 
     private var wantsBackgroundMode = false
@@ -94,9 +93,23 @@ final class BluetoothScanner: NSObject, @unchecked Sendable {
         }
     }
 
+    /// Stops the scan and releases the manager and its delegate. Only meaningful if
+    /// the owning coordinator is ever torn down and recreated; today it is
+    /// app-lifetime. Breaks the scanner ⇄ `CBCentralManager` retain cycle (DE-5).
+    func teardown() {
+        queue.async { [self] in
+            central?.stopScan()
+            central?.delegate = nil
+            central = nil
+            onEvent = nil
+            onStateChange = nil
+        }
+    }
+
     // MARK: - Scan control (queue-isolated)
 
     private func beginScanLocked() {
+        dispatchPrecondition(condition: .onQueue(queue))
         guard let central, central.state == .poweredOn else { emitState(); return }
 
         let services: [CBUUID]? = wantsBackgroundMode ? knownServiceUUIDs : nil
@@ -114,6 +127,7 @@ final class BluetoothScanner: NSObject, @unchecked Sendable {
     }
 
     private func emitState() {
+        dispatchPrecondition(condition: .onQueue(queue))
         onStateChange?(currentState)
     }
 
@@ -167,33 +181,41 @@ extension BluetoothScanner: CBCentralManagerDelegate {
 
     // MARK: - Advertisement parsing
 
-    /// Extracts only the four fields the confidence engine uses. Everything else in
-    /// `advertisementData` is ignored — we do not want it and do not keep it.
-    static func parse(_ data: [String: Any]) -> ConfidenceEngine.Advertisement {
-        var company: UInt16?
-        if let mfg = data[CBAdvertisementDataManufacturerDataKey] as? Data, mfg.count >= 2 {
-            // Company identifier is the little-endian 16-bit prefix.
-            company = UInt16(mfg[mfg.startIndex]) | (UInt16(mfg[mfg.index(after: mfg.startIndex)]) << 8)
+    /// Extracts only the fields the detection engine uses — manufacturer bytes,
+    /// 16-bit service UUIDs (both the list form and the service-data form), the local
+    /// name, and connectability. Everything else in `advertisementData` is ignored.
+    static func parse(_ data: [String: Any]) -> AdvertisementFields {
+        let mfg = data[CBAdvertisementDataManufacturerDataKey] as? Data
+
+        var list16: Set<String> = []
+        for key in [CBAdvertisementDataServiceUUIDsKey, CBAdvertisementDataOverflowServiceUUIDsKey] {
+            if let uuids = data[key] as? [CBUUID] {
+                list16.formUnion(uuids.compactMap { short16($0) })
+            }
         }
 
-        var services: Set<String> = []
-        if let uuids = data[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] {
-            services.formUnion(uuids.map { $0.uuidString.uppercased() })
-        }
-        if let overflow = data[CBAdvertisementDataOverflowServiceUUIDsKey] as? [CBUUID] {
-            services.formUnion(overflow.map { $0.uuidString.uppercased() })
+        var data16: Set<String> = []
+        if let serviceData = data[CBAdvertisementDataServiceDataKey] as? [CBUUID: Data] {
+            data16.formUnion(serviceData.keys.compactMap { short16($0) })
         }
 
         let name = (data[CBAdvertisementDataLocalNameKey] as? String)?
             .trimmingCharacters(in: .whitespacesAndNewlines)
-
         let connectable = (data[CBAdvertisementDataIsConnectable] as? NSNumber)?.boolValue ?? false
 
-        return ConfidenceEngine.Advertisement(
-            companyIdentifier: company,
-            serviceUUIDs: services,
-            localName: name?.isEmpty == true ? nil : name,
+        return AdvertisementFields(
+            manufacturerData: mfg,
+            serviceUUIDs16: list16,
+            serviceDataUUIDs16: data16,
+            localName: (name?.isEmpty == false) ? name : nil,
             isConnectable: connectable
         )
+    }
+
+    /// The 4-hex-digit short form of a 16-bit Bluetooth SIG UUID, or `nil` for a
+    /// 128-bit vendor UUID (which no current rule matches on).
+    private static func short16(_ uuid: CBUUID) -> String? {
+        let s = uuid.uuidString.uppercased()
+        return s.count == 4 ? s : nil
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 /// Without LensBeacon Unlock it shows a calm locked state instead of data.
 struct NearbyLensesWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "NearbyLenses", provider: SnapshotProvider()) { entry in
+        StaticConfiguration(kind: SharedContainer.widgetKind, provider: SnapshotProvider()) { entry in
             NearbyLensesView(entry: entry)
                 .containerBackground(Palette.widgetBackground, for: .widget)
         }
@@ -71,17 +71,22 @@ struct NearbyLensesView: View {
     // MARK: - Families
 
     private var small: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Label("LensBeacon", systemImage: "dot.radiowaves.left.and.right")
-                .font(.caption2.weight(.semibold))
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                BeaconMark(tint: count > 0 ? Palette.tier(.serviceUUID) : Palette.accent)
+                    .frame(width: 26, height: 26)
+                Spacer()
+                Text("\(count)")
+                    .font(.system(size: 34, weight: .semibold, design: .rounded))
+                    .contentTransition(.numericText())
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+            }
+            Spacer(minLength: 4)
+            Text(count == 0 ? "Nothing flagged" : "camera glasses nearby")
+                .font(.caption2.weight(.medium))
                 .foregroundStyle(.secondary)
-            Text("\(count)")
-                .font(.system(size: 40, weight: .semibold, design: .rounded))
-                .contentTransition(.numericText())
-            Text(count == 1 ? "camera glasses nearby" : "camera glasses nearby")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-            Spacer(minLength: 0)
+                .lineLimit(2)
             ageLine
         }
     }
@@ -91,7 +96,9 @@ struct NearbyLensesView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("\(count)")
                     .font(.system(size: 44, weight: .semibold, design: .rounded))
-                Text(count == 1 ? "nearby" : "nearby")
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                Text("nearby")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 ageLine
@@ -105,7 +112,7 @@ struct NearbyLensesView: View {
                 } else {
                     ForEach(snapshot.flagged.prefix(3)) { item in
                         HStack(spacing: 6) {
-                            Image(systemName: item.confidence.symbolName)
+                            Image(systemName: item.tier.symbolName)
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
                             Text(item.productName).font(.caption).lineLimit(1)
@@ -150,11 +157,11 @@ struct NearbyLensesView: View {
     @ViewBuilder
     private var ageLine: some View {
         if snapshot.updatedAt == .distantPast {
-            Text("Open LensBeacon to scan").font(.caption2).foregroundStyle(.tertiary)
+            Text("Open LensBeacon to scan").font(.caption2).foregroundStyle(.secondary)
         } else {
             Text("as of \(snapshot.updatedAt, style: .relative) ago")
                 .font(.caption2)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(.secondary)
         }
     }
 

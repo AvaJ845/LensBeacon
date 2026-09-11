@@ -1,12 +1,18 @@
 import Foundation
 
-/// One persisted row in the Sightings log: everything LensBeacon has ever seen a
-/// given BLE device do, aggregated by the app's opaque peripheral key.
+/// One persisted row in the Sightings log, keyed by the app's opaque peripheral key.
 ///
-/// There is exactly one record per `peripheralKey`. Re-seeing a device updates
+/// There is one record per `peripheralKey`, and re-seeing that key updates
 /// `lastSeen`, appends to the capped `timeline`, and keeps the *strongest*
-/// classification observed — a device that was `possible` once and `strong` later
-/// stays `strong` in the log, because that is the honest high-water mark.
+/// `Detection` observed — a device seen at Tier 3 once and Tier 1 later stays at
+/// Tier 1, because that is the honest high-water mark.
+///
+/// **The key is not a stable device identity.** iOS rotates the per-app peripheral
+/// UUID along with the hardware address (often every 15 minutes), and LensBeacon
+/// makes no attempt to defeat that. So one physical pair of glasses seen across a
+/// long session becomes several rows — that is the privacy design working, not a
+/// bug. "This is mine" suppression keys on the resolved product (`detection.productKey`),
+/// not on this rotating key, so it survives the rotation and a relaunch.
 struct Sighting: Identifiable, Codable, Equatable, Sendable {
 
     /// A single RSSI reading, for the per-device signal timeline. Capped hard
@@ -14,7 +20,7 @@ struct Sighting: Identifiable, Codable, Equatable, Sendable {
     struct Sample: Codable, Equatable, Sendable {
         var at: Date
         var rssi: Int
-        var confidence: ConfidenceLevel?
+        var tier: DetectionTier?
         var proximity: ProximityBand
     }
 
@@ -25,61 +31,39 @@ struct Sighting: Identifiable, Codable, Equatable, Sendable {
     var firstSeen: Date
     var lastSeen: Date
 
-    var category: DeviceCategory
-    /// Strongest confidence ever observed for this device (camera glasses only).
-    var confidence: ConfidenceLevel?
-    var productName: String?
-    var vendor: String?
-    /// Evidence bullets for the strongest classification — what actually matched.
-    var evidenceBullets: [String]
+    /// The strongest detection observed for this key, with all its evidence.
+    var detection: Detection
 
     var timeline: [Sample]
 
     static let maxTimelineSamples = 60
 
-    var isCameraFlag: Bool { category == .cameraGlasses && confidence != nil }
+    // MARK: - Derived
 
-    /// A short, stable label for lists. Falls back through product → vendor → generic.
-    var title: String {
-        if let productName { return productName }
-        if let vendor { return "\(vendor) device" }
-        switch category {
-        case .cameraGlasses: return "Camera glasses"
-        case .headset:       return "Headset"
-        case .other:         return "Bluetooth device"
-        }
-    }
+    var category: DetectionCategory { detection.category }
+    var tier: DetectionTier? { detection.bestTier }
+    var isCameraFlag: Bool { detection.isCameraFlag }
+    var isDisplayGlasses: Bool { detection.isDisplayGlasses }
+    var productKey: String? { detection.productKey }
+    var evidence: [DetectionEvidence] { detection.evidence }
 
-    /// Folds a fresh classification + reading into this record.
+    /// A short, stable label for lists.
+    var title: String { detection.displayTitle() }
+
+    // MARK: - Mutation
+
+    /// Folds a fresh detection + reading into this record.
     mutating func update(
-        with classification: ConfidenceEngine.Classification,
+        with detection: Detection,
         rssi: Double,
         proximity: ProximityBand,
         at date: Date
     ) {
         lastSeen = date
-
-        // Keep the strongest classification seen so far.
-        let incomingConfidence = classification.confidence
-        let isStronger: Bool = {
-            switch (confidence, incomingConfidence) {
-            case (nil, .some): return true
-            case let (.some(a), .some(b)): return b > a
-            default: return false
-            }
-        }()
-        if isStronger || category == .other {
-            if let cat = classification.category { category = cat }
-            confidence = incomingConfidence ?? confidence
-            productName = classification.productName ?? productName
-            vendor = classification.vendor ?? vendor
-            let bullets = classification.evidence.flatMap(\.bullets)
-            if !bullets.isEmpty { evidenceBullets = bullets }
-        }
+        self.detection = self.detection.merged(with: detection)
 
         timeline.append(
-            Sample(at: date, rssi: Int(rssi.rounded()),
-                   confidence: incomingConfidence, proximity: proximity)
+            Sample(at: date, rssi: Int(rssi.rounded()), tier: detection.bestTier, proximity: proximity)
         )
         if timeline.count > Self.maxTimelineSamples {
             timeline.removeFirst(timeline.count - Self.maxTimelineSamples)
@@ -88,7 +72,7 @@ struct Sighting: Identifiable, Codable, Equatable, Sendable {
 
     static func make(
         peripheralKey: String,
-        classification: ConfidenceEngine.Classification,
+        detection: Detection,
         rssi: Double,
         proximity: ProximityBand,
         at date: Date
@@ -98,15 +82,8 @@ struct Sighting: Identifiable, Codable, Equatable, Sendable {
             peripheralKey: peripheralKey,
             firstSeen: date,
             lastSeen: date,
-            category: classification.category ?? .other,
-            confidence: classification.confidence,
-            productName: classification.productName,
-            vendor: classification.vendor,
-            evidenceBullets: classification.evidence.flatMap(\.bullets),
-            timeline: [
-                Sample(at: date, rssi: Int(rssi.rounded()),
-                       confidence: classification.confidence, proximity: proximity)
-            ]
+            detection: detection,
+            timeline: [Sample(at: date, rssi: Int(rssi.rounded()), tier: detection.bestTier, proximity: proximity)]
         )
     }
 }
@@ -117,19 +94,18 @@ struct LiveSighting: Identifiable, Equatable, Sendable {
     var id: String { peripheralKey }
     let peripheralKey: String
 
-    var classification: ConfidenceEngine.Classification
+    var detection: Detection
     var smoother: RSSISmoother
     var firstSeen: Date
     var lastSeen: Date
+    /// The user marked this product "mine" — suppressed from flags and alerts.
     var isMine: Bool
 
     var proximity: ProximityBand { smoother.band }
-    var confidence: ConfidenceLevel? { classification.confidence }
-    var isCameraFlag: Bool { classification.isCameraFlag }
+    var tier: DetectionTier? { detection.bestTier }
+    var isCameraFlag: Bool { detection.isCameraFlag }
+    var isDisplayGlasses: Bool { detection.isDisplayGlasses }
+    var productKey: String? { detection.productKey }
 
-    var title: String {
-        classification.productName
-            ?? classification.vendor.map { "\($0) device" }
-            ?? "Bluetooth device"
-    }
+    var title: String { detection.displayTitle() }
 }

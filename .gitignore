@@ -26,3 +26,6 @@ LensBeacon.xcodeproj/project.xcworkspace/
 *.cer
 AuthKey_*.p8
 .env
+
+# Local raw screenshot captures for the App Store frame builder
+AppStore/raw/

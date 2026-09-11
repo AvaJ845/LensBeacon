@@ -9,10 +9,12 @@ import StoreKit
 struct UnlockView: View {
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
     @Environment(UnlockStore.self) private var unlock
 
     @State private var message: String?
     @State private var working = false
+    @State private var showPrivacy = false
 
     var body: some View {
         NavigationStack {
@@ -44,6 +46,8 @@ struct UnlockView: View {
                     }
 
                     buttons
+
+                    legalFooter
                 }
                 .padding(20)
             }
@@ -53,8 +57,27 @@ struct UnlockView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) { Button("Close") { dismiss() } }
             }
+            .sheet(isPresented: $showPrivacy) {
+                NavigationStack { PrivacyDetailView() }
+            }
         }
         .task { if unlock.product == nil { await unlock.load() } }
+    }
+
+    private var legalFooter: some View {
+        VStack(spacing: 6) {
+            HStack(spacing: 4) {
+                Button("Terms of Use (EULA)") { openURL(Legal.termsURL) }
+                Text("·").foregroundStyle(.secondary)
+                Button("Privacy") { showPrivacy = true }
+            }
+            .font(.caption)
+            Text("One payment unlocks LensBeacon Unlock permanently for your Apple ID. No subscription, no auto-renew.")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.top, 4)
     }
 
     private var header: some View {

@@ -1,98 +1,105 @@
 #!/usr/bin/env python3
-"""Generates LensBeacon's app icon and the in-app mark.
+"""Installs the LensBeacon brand icon into the Xcode asset catalogs and derives the
+in-app mark.
 
-Design brief: calm, privacy-first, editorial. A single "beacon lens" — a lens
-aperture at the centre with three concentric detection rings opening to the
-upper-right, the way a real scan fans out from a point. Warm cream on a deep teal
-field, no gloss, no siren colours. Rendered at 4x and downsampled for clean edges.
+The canonical artwork is the Apple Fellow brand kit, vendored in `Icon_Source/`:
+
+    Icon_Source/LensBeacon_iOS_iPadOS_1024.png   iOS / iPadOS master, 1024x1024
+    Icon_Source/LensBeacon_watchOS_1088.png      watchOS master, 1088x1088
+    Icon_Source/LensBeacon_Master_1024.svg       editable master (arcs + optical centre)
+    Icon_Source/IconComposer_Background.svg      layered-icon background (navy gradient)
+    Icon_Source/IconComposer_Foreground.svg      layered-icon foreground (the mark)
+
+This script does NOT redraw the mark. It:
+  1. copies the iOS master into `LensBeacon/Resources/Assets.xcassets/AppIcon.appiconset`
+  2. proportionally scales the watchOS master to 1024 for
+     `LensBeaconWatch/Assets.xcassets/AppIcon.appiconset`
+  3. renders the transparent in-app glyph (`Mark.imageset`) from the same arc/lens
+     geometry as the SVG master, flat Beacon Blue, for onboarding / About.
+
+The layered Icon Composer `.icon` is the intended final form on Xcode 26; producing
+it needs the Icon Composer GUI (File ▸ New ▸ Icon, drop in the two IconComposer
+SVGs). Until then the flat master below is App Store-valid and preserves the mark
+exactly.
 """
 
+from __future__ import annotations
+
+import shutil
+from pathlib import Path
+
 from PIL import Image, ImageDraw
-import math
 
-S = 1024
-SS = 4  # supersample factor
-W = S * SS
+ROOT = Path(__file__).resolve().parent.parent
+SRC = ROOT / "Icon_Source"
 
-TEAL_TOP = (18, 78, 78)
-TEAL_BOT = (10, 48, 50)
-CREAM = (244, 240, 230)
-CREAM_DIM = (244, 240, 230, 90)
+IOS_MASTER = SRC / "LensBeacon_iOS_iPadOS_1024.png"
+WATCH_MASTER = SRC / "LensBeacon_watchOS_1088.png"
 
+IOS_APPICON = ROOT / "LensBeacon/Resources/Assets.xcassets/AppIcon.appiconset/icon-1024.png"
+WATCH_APPICON = ROOT / "LensBeaconWatch/Assets.xcassets/AppIcon.appiconset/watch-icon-1024.png"
+MARK = ROOT / "LensBeacon/Resources/Assets.xcassets/Mark.imageset/mark.png"
 
-def lerp(a, b, t):
-    return tuple(round(x + (y - x) * t) for x, y in zip(a, b))
+BEACON_BLUE = (59, 130, 246, 255)  # #3B82F6 — matches Palette.accent / brand token
 
 
-def background():
-    img = Image.new("RGB", (W, W))
-    px = img.load()
-    for y in range(W):
-        row = lerp(TEAL_TOP, TEAL_BOT, y / (W - 1))
-        for x in range(W):
-            px[x, y] = row
-    return img
+def install_app_icons() -> None:
+    IOS_APPICON.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(IOS_MASTER, IOS_APPICON)
+    print(f"iOS   <- {IOS_MASTER.name} (1024)")
+
+    WATCH_APPICON.parent.mkdir(parents=True, exist_ok=True)
+    watch = Image.open(WATCH_MASTER).convert("RGB").resize((1024, 1024), Image.LANCZOS)
+    watch.save(WATCH_APPICON)
+    print(f"watch <- {WATCH_MASTER.name} scaled 1088->1024")
 
 
-def draw_mark(img, inset_ratio=0.0):
-    d = ImageDraw.Draw(img, "RGBA")
-    cx = cy = W / 2
-    # Optical centre sits a touch low-left so the rings have room to open up-right.
-    cx -= W * 0.06
-    cy += W * 0.06
-
-    # Concentric detection rings, opening toward the upper-right quadrant.
-    ring_widths = [W * 0.028, W * 0.030, W * 0.032]
-    radii = [W * 0.20, W * 0.30, W * 0.40]
-    for r, lw, alpha in zip(radii, ring_widths, (255, 180, 120)):
-        bbox = [cx - r, cy - r, cx + r, cy + r]
-        d.arc(bbox, start=-78, end=12, fill=CREAM[:3] + (alpha,), width=round(lw))
-
-    # The lens: an outer ring and a filled iris with a small catch-light notch.
-    lr = W * 0.125
-    d.ellipse([cx - lr, cy - lr, cx + lr, cy + lr], outline=CREAM, width=round(W * 0.030))
-    ir = W * 0.070
-    d.ellipse([cx - ir, cy - ir, cx + ir, cy + ir], fill=CREAM)
-    # Negative-space aperture blades hint (simple triangle cut).
-    hole = W * 0.026
-    d.ellipse([cx - hole, cy - hole, cx + hole, cy + hole], fill=(12, 55, 56, 255))
+def _cubic(p0, p1, p2, p3, steps=400):
+    pts = []
+    for i in range(steps + 1):
+        t = i / steps
+        u = 1 - t
+        x = u * u * u * p0[0] + 3 * u * u * t * p1[0] + 3 * u * t * t * p2[0] + t * t * t * p3[0]
+        y = u * u * u * p0[1] + 3 * u * u * t * p1[1] + 3 * u * t * t * p2[1] + t * t * t * p3[1]
+        pts.append((x, y))
+    return pts
 
 
-def rounded(img, radius_ratio=0.2237):
-    # iOS applies its own mask, but round here too so the standalone PNG looks right.
-    r = round(W * radius_ratio)
-    mask = Image.new("L", (W, W), 0)
-    ImageDraw.Draw(mask).rounded_rectangle([0, 0, W, W], radius=r, fill=255)
-    out = Image.new("RGBA", (W, W), (0, 0, 0, 0))
-    out.paste(img, (0, 0), mask)
-    return out
+def render_mark(size=1024, supersample=4) -> None:
+    """The same two arcs + optical centre as LensBeacon_Master_1024.svg, flat colour,
+    on a transparent field. Used as a template image in the app.
 
+    Each arc is stamped as a run of filled discs (radius = half the SVG stroke
+    width) along the sampled bezier — this gives an artefact-free round-capped
+    stroke that PIL's wide `line()` cannot."""
+    k = supersample
+    S = size * k
+    img = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    r = 39 * k  # SVG stroke-width 78 -> radius 39
 
-def main():
-    img = background().convert("RGBA")
-    draw_mark(img)
-    icon = rounded(img).resize((S, S), Image.LANCZOS)
-    icon.convert("RGB").save("LensBeacon/Resources/Assets.xcassets/AppIcon.appiconset/icon-1024.png")
+    def arc(seg):
+        line = _cubic(seg[0], seg[1], seg[2], seg[3])[:-1] + _cubic(seg[3], seg[4], seg[5], seg[6])
+        for x, y in line:
+            cx, cy = x * k, y * k
+            d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=BEACON_BLUE)
 
-    # A transparent glyph for in-app use (onboarding, About).
-    glyph = Image.new("RGBA", (W, W), (0, 0, 0, 0))
-    draw_mark_glyph(glyph)
-    glyph.resize((S, S), Image.LANCZOS).save("LensBeacon/Resources/Assets.xcassets/Mark.imageset/mark.png")
+    # Upper arc: M145 478 C 275 270,430 194,512 194 C 594 194,749 270,879 478
+    arc([(145, 478), (275, 270), (430, 194), (512, 194), (594, 194), (749, 270), (879, 478)])
+    # Lower arc: M145 546 C 275 754,430 830,512 830 C 594 830,749 754,879 546
+    arc([(145, 546), (275, 754), (430, 830), (512, 830), (594, 830), (749, 754), (879, 546)])
 
+    # Optical centre: solid disc with a negative-space pupil, so the glyph still
+    # reads when tinted a single colour.
+    c = 512 * k
+    d.ellipse([c - 132 * k, c - 132 * k, c + 132 * k, c + 132 * k], fill=BEACON_BLUE)
+    d.ellipse([c - 52 * k, c - 52 * k, c + 52 * k, c + 52 * k], fill=(0, 0, 0, 0))
 
-def draw_mark_glyph(img):
-    d = ImageDraw.Draw(img, "RGBA")
-    cx, cy = W / 2 - W * 0.04, W / 2 + W * 0.04
-    for r, lw, alpha in zip((W * 0.20, W * 0.30, W * 0.40),
-                            (W * 0.028, W * 0.030, W * 0.032),
-                            (255, 170, 110)):
-        d.arc([cx - r, cy - r, cx + r, cy + r], start=-78, end=12,
-              fill=(20, 90, 90, alpha), width=round(lw))
-    lr = W * 0.125
-    d.ellipse([cx - lr, cy - lr, cx + lr, cy + lr], outline=(20, 90, 90, 255), width=round(W * 0.030))
-    ir = W * 0.070
-    d.ellipse([cx - ir, cy - ir, cx + ir, cy + ir], fill=(20, 90, 90, 255))
+    img.resize((size, size), Image.LANCZOS).save(MARK)
+    print(f"mark  <- rendered from arc geometry ({size})")
 
 
 if __name__ == "__main__":
-    main()
+    install_app_icons()
+    render_mark()
+    print("done. run `xcodegen generate` if the watch appiconset is new.")

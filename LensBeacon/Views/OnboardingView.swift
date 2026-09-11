@@ -14,21 +14,21 @@ struct OnboardingView: View {
         VStack(spacing: 0) {
             TabView(selection: $page) {
                 Panel(
-                    symbol: "dot.radiowaves.left.and.right",
-                    title: "See the cameras around you",
-                    text: "LensBeacon listens for the Bluetooth signatures of camera glasses — like Ray-Ban Meta, Oakley Meta and Snap Spectacles — and shows you what’s nearby, with a confidence rating for each."
+                    art: .beacon,
+                    title: "Awareness, not accusation",
+                    text: "Camera glasses announce themselves over Bluetooth. LensBeacon listens for a known pair nearby — never for a person."
                 ).tag(0)
 
                 Panel(
-                    symbol: "checkmark.seal",
+                    art: .symbol("checkmark.seal"),
                     title: "Every flag shows its evidence",
-                    text: "A flag isn’t a guess you have to trust. LensBeacon tells you exactly which signals matched — the manufacturer, a service identifier, the device name — so you can judge it yourself. It can’t see a device that’s gone quiet, and a match never means someone is recording."
+                    text: "See the exact signal behind each flag and disagree with it. A detection is not proof anyone is recording, and quiet is not proof no one is."
                 ).tag(1)
 
                 Panel(
-                    symbol: "iphone",
+                    art: .symbol("lock.iphone"),
                     title: "Nothing leaves your iPhone",
-                    text: "No account. No servers. No analytics. LensBeacon makes zero network connections. Your sightings history is stored only on this device, encrypted at rest."
+                    text: "No account, no server, no analytics — zero network connections. Your log is on this device only, and Settings ▸ Data erases it any time."
                 ).tag(2)
             }
             .tabViewStyle(.page)
@@ -64,16 +64,26 @@ struct OnboardingView: View {
 }
 
 private struct Panel: View {
-    let symbol: String
+    enum Art { case beacon, symbol(String) }
+    let art: Art
     let title: String
     let text: String
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 22) {
             Spacer()
-            Image(systemName: symbol)
-                .font(.system(size: 56, weight: .light))
-                .foregroundStyle(Palette.accent)
+            Group {
+                switch art {
+                case .beacon:
+                    ScanField(active: true)
+                        .frame(width: 132, height: 132)
+                case .symbol(let name):
+                    Image(systemName: name)
+                        .font(.system(size: 54, weight: .light))
+                        .foregroundStyle(Palette.accent)
+                        .frame(height: 132)
+                }
+            }
             Text(title)
                 .font(.title.weight(.semibold))
                 .multilineTextAlignment(.center)

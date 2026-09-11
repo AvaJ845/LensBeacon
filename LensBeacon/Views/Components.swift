@@ -1,25 +1,39 @@
 import SwiftUI
 
-/// Confidence badge. Colour + symbol + word, always all three, so it survives
-/// grayscale, Increase Contrast, and VoiceOver equally well.
-struct ConfidenceBadge: View {
-    let level: ConfidenceLevel
+/// Detection-tier badge. Colour + symbol + word, always all three, so it survives
+/// grayscale, Increase Contrast, and VoiceOver equally well — the tier is never
+/// carried by colour alone.
+struct TierBadge: View {
+    let tier: DetectionTier
     var compact = false
 
     var body: some View {
         Label {
-            Text(level.title)
+            Text(tier.title)
         } icon: {
-            Image(systemName: level.symbolName)
+            Image(systemName: tier.symbolName)
         }
         .font(compact ? .caption2.weight(.semibold) : .caption.weight(.semibold))
-        .foregroundStyle(Palette.confidence(level))
+        .foregroundStyle(Palette.tier(tier))
         .padding(.horizontal, compact ? 6 : 8)
         .padding(.vertical, compact ? 2 : 4)
-        .background(Palette.confidence(level).opacity(0.14), in: Capsule())
+        .background(Palette.tier(tier).opacity(0.14), in: Capsule())
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Confidence: \(level.title)")
-        .accessibilityHint(level.explanation)
+        .accessibilityLabel("Signal strength: \(tier.title)")
+        .accessibilityHint(tier.explanation)
+    }
+}
+
+/// A quiet "display glasses — no camera" chip for Even Realities and similar.
+struct NoCameraChip: View {
+    var body: some View {
+        Label("No camera", systemImage: "eye.slash")
+            .font(.caption2.weight(.semibold))
+            .foregroundStyle(.secondary)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(Color.secondary.opacity(0.12), in: Capsule())
+            .accessibilityLabel("Display glasses, no camera")
     }
 }
 
@@ -32,6 +46,79 @@ struct ProximityChip: View {
             .font(.caption2.weight(.medium))
             .foregroundStyle(Palette.proximity(band))
             .accessibilityLabel("Proximity: \(band.title)")
+    }
+}
+
+/// Three ascending bars filled by band, next to the word. A glanceable proximity
+/// read — deliberately coarse, and it makes **no** claim about distance in metres or
+/// direction (the signal cannot support either).
+struct ProximityMeter: View {
+    let band: ProximityBand
+
+    var body: some View {
+        HStack(spacing: 6) {
+            HStack(alignment: .bottom, spacing: 3) {
+                ForEach(0..<3, id: \.self) { i in
+                    Capsule()
+                        .fill(i < level ? Palette.proximity(band) : Color.secondary.opacity(0.25))
+                        .frame(width: 4, height: CGFloat(6 + i * 5))
+                }
+            }
+            Text(band.title)
+                .font(.caption2.weight(.medium))
+                .foregroundStyle(Palette.proximity(band))
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Proximity: \(band.title). A rough sense of distance only — no direction.")
+    }
+
+    private var level: Int {
+        switch band {
+        case .far:    return 1
+        case .nearby: return 2
+        case .near:   return 3
+        }
+    }
+}
+
+/// The number behind the band, always in view right under `ProximityMeter` —
+/// not tucked behind a tap, because this *is* the feature. No metres, no
+/// feet: RSSI through a real body, pocket, or wall can't support a distance
+/// claim, so this pairs the honest raw number (dBm) with one plain-English
+/// sentence instead of a fabricated range like "1.6 to 4.0 m".
+struct SignalDetailRow: View {
+    let band: ProximityBand
+    /// Smoothed dBm reading, when one is available (live devices always have
+    /// one; a stored record shows its last known reading).
+    var rssi: Int?
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 6) {
+            Image(systemName: "antenna.radiowaves.left.and.right")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            if let rssi {
+                Text("\(rssi) dBm")
+                    .font(.caption.monospacedDigit().weight(.medium))
+                    .foregroundStyle(.secondary)
+                Text("·")
+                    .foregroundStyle(.tertiary)
+            }
+            Text(band.roughDistanceHint.prefixedUppercase)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(rssi.map { "Signal strength \($0) dBm. \(band.roughDistanceHint)." } ?? band.roughDistanceHint)
+    }
+}
+
+private extension String {
+    /// Capitalizes just the first letter, for turning a hint written to
+    /// finish a sentence ("roughly arm's length…") into a standalone line.
+    var prefixedUppercase: String {
+        guard let first else { return self }
+        return first.uppercased() + dropFirst()
     }
 }
 
@@ -66,9 +153,10 @@ struct LimitsNote: View {
     var body: some View {
         DisclosureGroup {
             VStack(alignment: .leading, spacing: 8) {
-                bullet("A device that is already paired to its owner's phone often goes quiet and won't be detected.")
-                bullet("Some wearables only advertise briefly. LensBeacon may see them once and then not again.")
-                bullet("A match means a Bluetooth signature looks like camera glasses — not that anyone is recording.")
+                bullet(Copy.notAccusation)
+                bullet(Copy.standaloneSilence)
+                bullet(Copy.proximityOnly)
+                bullet("Device signatures are refined with each update as vendors change how their hardware broadcasts.")
             }
             .font(.footnote)
             .foregroundStyle(.secondary)
@@ -88,7 +176,8 @@ struct LimitsNote: View {
     }
 }
 
-/// Card container matching the theme.
+/// Card container matching the theme — a soft raised surface, a hairline, and a
+/// whisper of shadow for depth (kept low so nothing "floats").
 struct Card<Content: View>: View {
     @ViewBuilder var content: Content
     var body: some View {
@@ -99,5 +188,6 @@ struct Card<Content: View>: View {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .strokeBorder(Palette.hairline)
             )
+            .shadow(color: Palette.deepNavy.opacity(0.06), radius: 8, y: 3)
     }
 }

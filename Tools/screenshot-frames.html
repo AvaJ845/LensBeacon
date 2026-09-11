@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LensBeacon — App Store screenshot frames</title>
+<style>
+  /*
+    App Store screenshot builder — redesign captions.
+
+    HOW TO USE
+    1. On your iPhone (iOS 18+, real device), launch with the -demo-data argument
+       (Xcode ▸ scheme ▸ Run ▸ Arguments) so the Sightings + a demo flag are seeded,
+       then take a raw screenshot of each screen listed below.
+    2. Save them as  AppStore/raw/01.png … 08.png  (portrait, any size — they are
+       object-fit: cover'd into the frame).
+    3. Open this file, set the toggle to "export", and screenshot / print each
+       .frame at 1320 × 2868 (6.9"). Or use browser print-to-PDF, one frame per page.
+
+    The 3 watch frames read raw/w1.png … w3.png and export at 422 × 514 (Ultra 3).
+  */
+  :root{
+    --navy:#0B1F33; --navy2:#1b3a57; --cyan:#63C7F2; --ink:#eaf2fb;
+    --shot-w: 300px;               /* on-screen preview scale; export math below */
+  }
+  *{box-sizing:border-box; margin:0}
+  body{
+    background:#334155; font-family:"SF Pro Text",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    padding:32px; color:#0f172a;
+  }
+  .bar{
+    max-width:1100px; margin:0 auto 24px; background:#fff; border-radius:12px; padding:14px 18px;
+    font-size:14px; line-height:1.5;
+  }
+  .bar code{background:#f1f5f9; padding:1px 5px; border-radius:4px}
+
+  .sheet{display:flex; flex-wrap:wrap; gap:28px; max-width:1100px; margin:0 auto; justify-content:center}
+
+  /* One 6.9" frame: 1320 x 2868  →  aspect 0.46025 */
+  .frame{
+    width:var(--shot-w);
+    aspect-ratio:1320 / 2868;
+    background:radial-gradient(130% 90% at 78% 0%, var(--navy2) 0%, var(--navy) 58%);
+    border-radius:22px; overflow:hidden; position:relative;
+    display:flex; flex-direction:column; align-items:center;
+    padding: 7% 8% 0;
+  }
+  .frame .cap{
+    color:var(--ink); text-align:center; font-weight:700; letter-spacing:-0.02em;
+    font-size: calc(var(--shot-w) * 0.085); line-height:1.15;
+  }
+  .frame .sub{
+    color:var(--cyan); font-weight:600; margin-top:.5em;
+    font-size: calc(var(--shot-w) * 0.045);
+  }
+  .frame .shot{
+    margin-top: auto; width:86%;
+    border-radius: calc(var(--shot-w) * 0.09) calc(var(--shot-w) * 0.09) 0 0;
+    border:1px solid rgba(255,255,255,.12); border-bottom:0;
+    aspect-ratio: 9 / 17; object-fit:cover; object-position:top;
+    background:#0b1f33 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="200"><text x="50" y="100" fill="%23335" font-size="9" text-anchor="middle">raw/NN.png</text></svg>') center/contain no-repeat;
+    box-shadow:0 -20px 60px -20px rgba(0,0,0,.5);
+  }
+
+  /* Watch: 422 x 514 → aspect 0.8210 */
+  .wframe{
+    width:190px; aspect-ratio:422 / 514;
+    background:var(--navy); border-radius:18px; overflow:hidden;
+    display:flex; flex-direction:column; align-items:center; padding:9% 8% 0;
+  }
+  .wframe .cap{color:var(--ink); text-align:center; font-weight:700; font-size:15px; line-height:1.2}
+  .wframe .shot{margin-top:auto; width:78%; aspect-ratio:1/1; border-radius:16px 16px 0 0; object-fit:cover; object-position:top; background:#0b1f33}
+
+  h2{max-width:1100px; margin:40px auto 8px; color:#e2e8f0; font-size:15px; text-transform:uppercase; letter-spacing:.12em}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <strong>LensBeacon — App Store frames (redesign).</strong>
+  Fill <code>AppStore/raw/01.png … 08.png</code> and <code>w1–w3.png</code> with raw
+  device screenshots, then screenshot each frame below (6.9″ = 1320 × 2868, Watch = 422 × 514).
+  Frame captions are final copy; screens are placeholders until you drop the raw files in.
+</div>
+
+<h2>iPhone 6.9″ — 8 frames, payoff first</h2>
+<div class="sheet">
+
+  <div class="frame">
+    <div class="cap">Camera glasses announce themselves over Bluetooth</div>
+    <div class="sub">LensBeacon listens</div>
+    <img class="shot" src="raw/01.png" alt="Dashboard with one flag">
+  </div>
+
+  <div class="frame">
+    <div class="cap">Every flag shows its evidence</div>
+    <div class="sub">The AD field, the raw bytes, the tier — disagree with it</div>
+    <img class="shot" src="raw/02.png" alt="Evidence view">
+  </div>
+
+  <div class="frame">
+    <div class="cap">High, Medium, Low — by manufacturer signature</div>
+    <div class="sub">Not guesswork, and never colour alone</div>
+    <img class="shot" src="raw/03.png" alt="Two flags at different tiers">
+  </div>
+
+  <div class="frame">
+    <div class="cap">A rough sense of distance</div>
+    <div class="sub">Never a direction. Never a name.</div>
+    <img class="shot" src="raw/04.png" alt="Proximity meter close-up">
+  </div>
+
+  <div class="frame">
+    <div class="cap">Display glasses have no camera</div>
+    <div class="sub">LensBeacon labels them, and never counts them as one</div>
+    <img class="shot" src="raw/05.png" alt="Even Realities row with No camera chip">
+  </div>
+
+  <div class="frame">
+    <div class="cap">Own a pair? Mark them once</div>
+    <div class="sub">They stop raising alerts — for good</div>
+    <img class="shot" src="raw/06.png" alt="These are mine toggle">
+  </div>
+
+  <div class="frame">
+    <div class="cap">Pay once. $9.99. No subscription.</div>
+    <div class="sub">Background scan · Live Activity · widget · CSV export</div>
+    <img class="shot" src="raw/07.png" alt="Unlock screen">
+  </div>
+
+  <div class="frame">
+    <div class="cap">Nothing leaves your iPhone</div>
+    <div class="sub">No account, no server. Works in Airplane Mode. Erase it all in one tap.</div>
+    <img class="shot" src="raw/08.png" alt="Settings Data section">
+  </div>
+
+</div>
+
+<h2>Apple Watch — Ultra 3 (422 × 514)</h2>
+<div class="sheet">
+  <div class="wframe"><div class="cap">Is there a camera near me right now?</div><img class="shot" src="raw/w1.png" alt="Watch scanning"></div>
+  <div class="wframe"><div class="cap">Nearest signal, strongest tier</div><img class="shot" src="raw/w2.png" alt="Watch nearby"></div>
+  <div class="wframe"><div class="cap">Why it thinks so — on your wrist</div><img class="shot" src="raw/w3.png" alt="Watch detail"></div>
+</div>
+
+<div class="bar" style="margin-top:40px">
+  <strong>Raw capture list</strong> (launch with <code>-demo-data</code>):
+  <ol>
+    <li>Nearby tab — one flag visible (tier badge + proximity meter)</li>
+    <li>Tap the flag → Sighting detail, Evidence section showing AD type / value / raw bytes / tier</li>
+    <li>Nearby tab with a High-tier flag and the "Name matches" disclosure expanded (a Low-tier row)</li>
+    <li>Sighting detail scrolled to the proximity meter + the "rough sense of distance" caption</li>
+    <li>Sighting detail for a G1_… device — the "No camera" chip and display-glasses copy</li>
+    <li>Sighting detail with "These are mine" turned on</li>
+    <li>Settings → LensBeacon Unlock sheet</li>
+    <li>Settings → Data section (record count, Clear / Reset / Erase)</li>
+    <li>w1–w3: Watch scanning state, nearby list, one flag detail</li>
+  </ol>
+</div>
+
+</body>
+</html>

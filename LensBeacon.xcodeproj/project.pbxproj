@@ -8,65 +8,124 @@
 
 /* Begin PBXBuildFile section */
 		0062E1089571D806C1F2D855 /* FlagNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD7478BF7C60186F28407FB /* FlagNotifier.swift */; };
-		01167B0D386DE3F948D7EE83 /* ConfidenceLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0188AE43AB62925F840D72 /* ConfidenceLevel.swift */; };
-		027EED3B2B6C106E4A65DA86 /* ConfidenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96D77089966B267E086272F /* ConfidenceEngine.swift */; };
+		0568FA5FB7E455F7D5B05AD0 /* DemoSeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51901B0953D20B790D363207 /* DemoSeed.swift */; };
+		062DD950E224346506221940 /* DetectionRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16120AFCDFA8DD3F88286BF8 /* DetectionRules.swift */; };
+		06A7360CA8F51AAF508DFC65 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 54B6F413A10F2FC178E96BB0 /* PrivacyInfo.xcprivacy */; };
+		0CB3F6394D05B1945E8633B5 /* WatchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0132691C5427928E7FBA0666 /* WatchDetailView.swift */; };
 		0DB043AD22449B209FF96B5B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDE4BF91152CCFCDF1B254 /* Theme.swift */; };
+		0EF972A16BC8F5850B552AD7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 54B6F413A10F2FC178E96BB0 /* PrivacyInfo.xcprivacy */; };
+		100300572256BE7A934F9C13 /* ScanControlIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6841C9D684DCD013813BCFE /* ScanControlIntents.swift */; };
+		136BCB9014C5650CDFF47B34 /* Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F0187533BA2FF318207A2 /* Copy.swift */; };
+		1894C93256CF1F4F2633C3C8 /* LensBeaconWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = CB96145173392A75857F9C23 /* LensBeaconWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		195EDEC761546332AE5E4C80 /* Detection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B85EFB70DC4A4B7785EB7C /* Detection.swift */; };
 		1CB6297A41EDE880A2802BD5 /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */; };
+		1DBA6D30E85484CE80ED72AA /* DetectionRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16120AFCDFA8DD3F88286BF8 /* DetectionRules.swift */; };
+		1E121701476E92573667C592 /* Legal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ED65E0A5B4A6980C1325A7 /* Legal.swift */; };
 		217CFBBD3CFFCD8544E0A824 /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */; };
 		21D526B1FC6D7CCEB55F90E2 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B092193CD8E17D70DA4B2E /* RootView.swift */; };
+		23848DB875F685D6AE997FAB /* CaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91919DF14015DC6A89FB314D /* CaptureView.swift */; };
 		2431AF6F5CD09C9AF4E8B504 /* ScanCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8CEB71738203F7D7AAD489 /* ScanCoordinator.swift */; };
+		243D4756F9DF97E6E25B7AB3 /* ScanControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F475A93A38AFAFC489C55967 /* ScanControl.swift */; };
+		27E6AD095C6D311C559BB1FE /* ScanControlBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4669BF786DCFBCB118B1C3 /* ScanControlBridge.swift */; };
+		2A2FEEB5EA02A0B05541053E /* Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F0187533BA2FF318207A2 /* Copy.swift */; };
 		2B097574D261E892A30C01A3 /* ScanActivityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E799770714850A870C69ED8B /* ScanActivityController.swift */; };
+		2D41136B74985C1A69D57C31 /* ScanControlIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6841C9D684DCD013813BCFE /* ScanControlIntents.swift */; };
+		2E25AF77C161ABC55DD8F2F2 /* DetectionRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16120AFCDFA8DD3F88286BF8 /* DetectionRules.swift */; };
+		3366BB6B1D1798BD40755E77 /* Legal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ED65E0A5B4A6980C1325A7 /* Legal.swift */; };
 		34EE57220ADB973D873B8099 /* DashboardSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD3B36114475BA0E8B555E6 /* DashboardSnapshot.swift */; };
-		34F41B5E2BFE5E808AC8212A /* ConfidenceLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0188AE43AB62925F840D72 /* ConfidenceLevel.swift */; };
-		36306BDE868B1BF211633CE7 /* ConfidenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96D77089966B267E086272F /* ConfidenceEngine.swift */; };
 		3640B5A5A01419328477CEAB /* SightingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089DE783EDB8AB75AE31AB2D /* SightingsStore.swift */; };
+		38DF97A0BA1B584AFBA72FFB /* DetectionEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0CD71B7BD1F3DC4925E6C7 /* DetectionEngineTests.swift */; };
 		3BB64343BC560A82DCF38165 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E60BE93EAF03C62C5A856 /* OnboardingView.swift */; };
 		4157EFA8DAE07D0B1A3CB584 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7B9C4CAC84311671B2B06A /* Components.swift */; };
 		477E7154091124283BAAE4E8 /* ScanLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A620E27E4756C479343E36 /* ScanLiveActivity.swift */; };
-		4ADA3CA80407606C2E3A4745 /* ConfidenceEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F2B72F7EC27330F9764FAA /* ConfidenceEngineTests.swift */; };
+		4E3EFAAA2B8ADD88F9A52FF8 /* WatchComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7111C0FB03742840484678 /* WatchComponents.swift */; };
 		4E4A620244724E05ADFFA5BB /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF848D94E48D42C1D067FA38 /* DashboardView.swift */; };
+		52530B128D55F67948108C4F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 54B6F413A10F2FC178E96BB0 /* PrivacyInfo.xcprivacy */; };
+		528E672F35963445F8BE8762 /* Sighting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7AFD6DE5B42C4A0498351 /* Sighting.swift */; };
+		5445D681D411E10BA29DEE23 /* DetectionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9466FF3BE07241B4403F8B9 /* DetectionEngine.swift */; };
 		56369AD023741271CA4D1420 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B4AACE24066B82652057D0 /* Haptics.swift */; };
 		588F5984FC8D686FB9795682 /* MineRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082ECB0547B0DE204893D61D /* MineRegistry.swift */; };
 		59E39D32AC1DED453F30F417 /* BluetoothScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E87AC1D87A4165E88A10E9F /* BluetoothScanner.swift */; };
+		5CCB86849DB7F2908C4A8165 /* Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F0187533BA2FF318207A2 /* Copy.swift */; };
+		5CD443EACFF584A88A30825E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FABEC359EF3B0C3B73FFAEF /* Assets.xcassets */; };
 		616056CFBDFC49B58273882E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D140401EDC119CDAA24B762 /* SettingsView.swift */; };
 		65019930320F1EA5027B32FD /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDE4BF91152CCFCDF1B254 /* Theme.swift */; };
+		68CF380DC9C847439937188E /* RSSISmootherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DF92D77117D02D898319E8 /* RSSISmootherTests.swift */; };
+		69FE3D67EB90E6DDA87591B4 /* DetectionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9466FF3BE07241B4403F8B9 /* DetectionEngine.swift */; };
+		6BE5AD9FC9D63CA8DAEC7BE1 /* DetectionRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16120AFCDFA8DD3F88286BF8 /* DetectionRules.swift */; };
+		6EE8F41D4D26C46A0B56A836 /* ProximityBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */; };
 		725906B4AA7B5370A153C851 /* UnlockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A24458AA55EBA6FFE8BE96 /* UnlockStore.swift */; };
+		806F4C0FBA837DA618FDD13C /* WatchScanModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C09453CCC68BBFE5885EB /* WatchScanModel.swift */; };
+		84897BF97A1824A6BB29E72C /* ScanControlBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4669BF786DCFBCB118B1C3 /* ScanControlBridge.swift */; };
+		8729A276DB2F60DBED817DC3 /* BeaconMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85B365D41B378692E7A0614 /* BeaconMark.swift */; };
+		8A5B5B0826E4CF9A4E643CAA /* SightingsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB2FCAED81C54DE43AC2804 /* SightingsStoreTests.swift */; };
+		8DCEDDA821EBB38D27F565DD /* Detection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B85EFB70DC4A4B7785EB7C /* Detection.swift */; };
+		8ED7CEE5AF458C194125805B /* LensBeaconWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA2132E420CF9360D82F2BB /* LensBeaconWatchApp.swift */; };
+		91C7B6148735CB3C4C7B583D /* SightingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089DE783EDB8AB75AE31AB2D /* SightingsStore.swift */; };
 		95CE574127FCC2181D590F02 /* CSVDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD2326F43F3C55252CCA7C3 /* CSVDocument.swift */; };
 		99F7FD2274F09E1A9A33F067 /* ProximityBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */; };
 		9B647D8F8CA719D98F3E0EDC /* ProximityBandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4A4B76F13BE4E70DE6E663 /* ProximityBandTests.swift */; };
-		9BC7CDEC35A2C54E9C70519C /* SignatureTableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3A3599C38C70580250A329 /* SignatureTableTests.swift */; };
 		9E5FABA93A417FCB19C7CAD3 /* ScanActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1695A09FEC8475600B27352D /* ScanActivityAttributes.swift */; };
-		A3AFCF7B2919F546180C1469 /* DeviceSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A9517B670756B966ED4FBB /* DeviceSignature.swift */; };
+		A37296826D3B9F1AB7772794 /* LensBeaconWatchWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A2929513F369040FB5EC0EC6 /* LensBeaconWatchWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A69512C1D522DA6BA687EB08 /* ProximityBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */; };
+		A81B07AEA69BE28FEB01BC92 /* DetectionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9466FF3BE07241B4403F8B9 /* DetectionEngine.swift */; };
 		AB37001F52C7E596BE9672C5 /* NearbyLensesWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DEA41C869DAA842B3768D0 /* NearbyLensesWidget.swift */; };
 		ABA0806D5D74C02C1663725A /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */; };
 		ABB32FDC4805F140840A35F4 /* SightingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443F23EFFFA836BD85CC198B /* SightingDetailView.swift */; };
-		ADB216878A98EF00E86D91BF /* ConfidenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96D77089966B267E086272F /* ConfidenceEngine.swift */; };
+		B21AEAF1F7786A67DC4CA597 /* MineRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082ECB0547B0DE204893D61D /* MineRegistry.swift */; };
 		B6D2EC3B8F6063E84905EF9F /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDE4BF91152CCFCDF1B254 /* Theme.swift */; };
-		BB47038A38846029FE93F254 /* ConfidenceLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0188AE43AB62925F840D72 /* ConfidenceLevel.swift */; };
+		BA701366E0BEDE36610707D3 /* WatchTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB45A5A30F859D56FDE8EA11 /* WatchTheme.swift */; };
+		BC4C1CA73C8D7D3DE5E9DDE6 /* Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F0187533BA2FF318207A2 /* Copy.swift */; };
+		BFF530067FDC5F6ABAA39A63 /* LensBeaconComplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD4B35D402AFD56E584481B /* LensBeaconComplication.swift */; };
+		C0296C554C498293F19A58DC /* LensBeaconShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43C9EBFC58AEE320DDD4E4C /* LensBeaconShortcuts.swift */; };
 		C575F826EF61B99A2CD1CDF7 /* LensBeaconWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601C102F57B029CAC84D3C2C /* LensBeaconWidgetBundle.swift */; };
 		C648AA1B89D5D516EA98DDEB /* DashboardSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD3B36114475BA0E8B555E6 /* DashboardSnapshot.swift */; };
+		C6563224D96C43DDF1D54318 /* BluetoothScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E87AC1D87A4165E88A10E9F /* BluetoothScanner.swift */; };
 		C6AFADAC3C2E3A4B88AC8165 /* Sighting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7AFD6DE5B42C4A0498351 /* Sighting.swift */; };
 		CC2AE761D062A710AF700840 /* ScanActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1695A09FEC8475600B27352D /* ScanActivityAttributes.swift */; };
 		CD8C65E3F9D7A21EAC0060ED /* UnlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B390A82463EEC7F6AEB2729C /* UnlockView.swift */; };
+		CEA4900A76521C58F4D6722B /* Legal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ED65E0A5B4A6980C1325A7 /* Legal.swift */; };
 		D40678F1EED0E4621103FA94 /* LensBeaconWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2B265E77960BDB535637986F /* LensBeaconWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D5DA8DBDF65E185426B1CD2D /* ProximityBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */; };
-		D7B46DA26674C7D906D862CF /* DeviceSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A9517B670756B966ED4FBB /* DeviceSignature.swift */; };
+		DBF869656FD4EE20424D8A6C /* ScanControlBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4669BF786DCFBCB118B1C3 /* ScanControlBridge.swift */; };
+		DC147419C738174F0F14D53B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 54B6F413A10F2FC178E96BB0 /* PrivacyInfo.xcprivacy */; };
+		DCC78242ACE8BCBF5912BC1F /* DetectionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9466FF3BE07241B4403F8B9 /* DetectionEngine.swift */; };
 		DCEA8DA0FE919C1FE91888A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E1BD3D98116BEEB4640F6C2 /* Assets.xcassets */; };
 		DE7380B2EE71FF795C0BD555 /* DashboardSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD3B36114475BA0E8B555E6 /* DashboardSnapshot.swift */; };
 		DFDCE7C048A9D55896EE7954 /* SightingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B12F3B36B9E2F2F70E6F62 /* SightingsView.swift */; };
-		E692FDFC2DADEEE6624AB5FC /* DeviceSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A9517B670756B966ED4FBB /* DeviceSignature.swift */; };
 		E7B6E6A3FC080DAE83D73A2B /* LensBeaconApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A981769ECFB4ABB7D9E4FC7F /* LensBeaconApp.swift */; };
+		EB1AA204371F120293F685FF /* Detection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B85EFB70DC4A4B7785EB7C /* Detection.swift */; };
+		EE0E615F5E0F192F4B3FBCE0 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F7341DE5F4802B4AD1BF51 /* Appearance.swift */; };
 		F241AE56E54326DBDC7B0D24 /* ScanActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1695A09FEC8475600B27352D /* ScanActivityAttributes.swift */; };
+		F2BD5F6894291861C479F355 /* WatchRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DC681DF5632EED5E90B3BC /* WatchRootView.swift */; };
+		F3DBBF7C7EC19B911A8B4B90 /* BeaconMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85B365D41B378692E7A0614 /* BeaconMark.swift */; };
+		F4EE3DEFD95DEB166F4F398D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 54B6F413A10F2FC178E96BB0 /* PrivacyInfo.xcprivacy */; };
+		F792CDA2F9FA4EE6E291BBFD /* Detection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B85EFB70DC4A4B7785EB7C /* Detection.swift */; };
+		FDA0C6DDD7BBD018AC2A7F68 /* DetectionRuleTableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18590C218FA6C1A01F6C3164 /* DetectionRuleTableTests.swift */; };
+		FE5E6179DA605EB30E54A7E6 /* CaptureLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC9A3D52D162B5135062BF5 /* CaptureLog.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		6281ECE46FF71ACCC54E62AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4AC8BA7C4E879B7C70D24494 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6080DA826CEC34CB07D043F0;
+			remoteInfo = LensBeaconWatch;
+		};
 		67EB8A5C83658C1C4134E484 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4AC8BA7C4E879B7C70D24494 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = BC8B0157AC5468CBBDC66FE0;
 			remoteInfo = LensBeaconWidget;
+		};
+		FEB93078576649C3CDEC2F0B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4AC8BA7C4E879B7C70D24494 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 96D571400A4325474254E4F2;
+			remoteInfo = LensBeaconWatchWidget;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -82,13 +141,41 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5604ADE8A48BCDAE0B00ED90 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				1894C93256CF1F4F2633C3C8 /* LensBeaconWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F40EDA734D571C296B475BED /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A37296826D3B9F1AB7772794 /* LensBeaconWatchWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0132691C5427928E7FBA0666 /* WatchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchDetailView.swift; sourceTree = "<group>"; };
 		082ECB0547B0DE204893D61D /* MineRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineRegistry.swift; sourceTree = "<group>"; };
 		089DE783EDB8AB75AE31AB2D /* SightingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingsStore.swift; sourceTree = "<group>"; };
+		0C7C09453CCC68BBFE5885EB /* WatchScanModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchScanModel.swift; sourceTree = "<group>"; };
+		0FABEC359EF3B0C3B73FFAEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		16120AFCDFA8DD3F88286BF8 /* DetectionRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionRules.swift; sourceTree = "<group>"; };
 		1695A09FEC8475600B27352D /* ScanActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanActivityAttributes.swift; sourceTree = "<group>"; };
+		18590C218FA6C1A01F6C3164 /* DetectionRuleTableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionRuleTableTests.swift; sourceTree = "<group>"; };
 		1AFDE4BF91152CCFCDF1B254 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		1BB2FCAED81C54DE43AC2804 /* SightingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingsStoreTests.swift; sourceTree = "<group>"; };
 		224E60BE93EAF03C62C5A856 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		2B265E77960BDB535637986F /* LensBeaconWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = LensBeaconWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F8CEB71738203F7D7AAD489 /* ScanCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanCoordinator.swift; sourceTree = "<group>"; };
@@ -97,34 +184,55 @@
 		4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContainer.swift; sourceTree = "<group>"; };
 		443F23EFFFA836BD85CC198B /* SightingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingDetailView.swift; sourceTree = "<group>"; };
 		4C506331FCCC2C3B616A6D5B /* LensBeaconTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LensBeaconTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E7111C0FB03742840484678 /* WatchComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchComponents.swift; sourceTree = "<group>"; };
+		51901B0953D20B790D363207 /* DemoSeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoSeed.swift; sourceTree = "<group>"; };
+		53ED65E0A5B4A6980C1325A7 /* Legal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Legal.swift; sourceTree = "<group>"; };
+		54B6F413A10F2FC178E96BB0 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		58DEA41C869DAA842B3768D0 /* NearbyLensesWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyLensesWidget.swift; sourceTree = "<group>"; };
-		5C0188AE43AB62925F840D72 /* ConfidenceLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfidenceLevel.swift; sourceTree = "<group>"; };
 		601C102F57B029CAC84D3C2C /* LensBeaconWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensBeaconWidgetBundle.swift; sourceTree = "<group>"; };
+		6C4669BF786DCFBCB118B1C3 /* ScanControlBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanControlBridge.swift; sourceTree = "<group>"; };
 		6DCD3FC54280ABDF99ED4256 /* LensBeacon.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LensBeacon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E1BD3D98116BEEB4640F6C2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProximityBand.swift; sourceTree = "<group>"; };
-		71F2B72F7EC27330F9764FAA /* ConfidenceEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfidenceEngineTests.swift; sourceTree = "<group>"; };
+		70DF92D77117D02D898319E8 /* RSSISmootherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSISmootherTests.swift; sourceTree = "<group>"; };
+		7909FD1FE408DCB1AB215355 /* LensBeacon.storekit */ = {isa = PBXFileReference; path = LensBeacon.storekit; sourceTree = "<group>"; };
 		7D140401EDC119CDAA24B762 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		7DC9A3D52D162B5135062BF5 /* CaptureLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureLog.swift; sourceTree = "<group>"; };
 		82F7AFD6DE5B42C4A0498351 /* Sighting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sighting.swift; sourceTree = "<group>"; };
 		8B4A4B76F13BE4E70DE6E663 /* ProximityBandTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProximityBandTests.swift; sourceTree = "<group>"; };
 		8FD3B36114475BA0E8B555E6 /* DashboardSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSnapshot.swift; sourceTree = "<group>"; };
-		90A9517B670756B966ED4FBB /* DeviceSignature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSignature.swift; sourceTree = "<group>"; };
+		91919DF14015DC6A89FB314D /* CaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureView.swift; sourceTree = "<group>"; };
 		9A7B9C4CAC84311671B2B06A /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		9B1F0187533BA2FF318207A2 /* Copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Copy.swift; sourceTree = "<group>"; };
+		A2929513F369040FB5EC0EC6 /* LensBeaconWatchWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LensBeaconWatchWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A43C9EBFC58AEE320DDD4E4C /* LensBeaconShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensBeaconShortcuts.swift; sourceTree = "<group>"; };
+		A4545FD060E34E782C551852 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A5D92E2A25F395B1B1BFB99E /* LensBeacon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LensBeacon.entitlements; sourceTree = "<group>"; };
 		A981769ECFB4ABB7D9E4FC7F /* LensBeaconApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensBeaconApp.swift; sourceTree = "<group>"; };
 		A9F40949F336410DF060196D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		AA3A3599C38C70580250A329 /* SignatureTableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureTableTests.swift; sourceTree = "<group>"; };
 		ACD7478BF7C60186F28407FB /* FlagNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagNotifier.swift; sourceTree = "<group>"; };
+		B0E30F21B3E37303B25DF52F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B2B12F3B36B9E2F2F70E6F62 /* SightingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingsView.swift; sourceTree = "<group>"; };
 		B390A82463EEC7F6AEB2729C /* UnlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockView.swift; sourceTree = "<group>"; };
 		B773ADAAF251D5D8E2CA775E /* LensBeaconWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LensBeaconWidget.entitlements; sourceTree = "<group>"; };
+		C85B365D41B378692E7A0614 /* BeaconMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconMark.swift; sourceTree = "<group>"; };
+		CB96145173392A75857F9C23 /* LensBeaconWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LensBeaconWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBD4B35D402AFD56E584481B /* LensBeaconComplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensBeaconComplication.swift; sourceTree = "<group>"; };
 		CD1AB2344B1D2AA084600D6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D2A24458AA55EBA6FFE8BE96 /* UnlockStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockStore.swift; sourceTree = "<group>"; };
 		D2A620E27E4756C479343E36 /* ScanLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanLiveActivity.swift; sourceTree = "<group>"; };
+		D5DC681DF5632EED5E90B3BC /* WatchRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchRootView.swift; sourceTree = "<group>"; };
+		DBA2132E420CF9360D82F2BB /* LensBeaconWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensBeaconWatchApp.swift; sourceTree = "<group>"; };
 		E1B4AACE24066B82652057D0 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
+		E6841C9D684DCD013813BCFE /* ScanControlIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanControlIntents.swift; sourceTree = "<group>"; };
 		E799770714850A870C69ED8B /* ScanActivityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanActivityController.swift; sourceTree = "<group>"; };
+		EB45A5A30F859D56FDE8EA11 /* WatchTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTheme.swift; sourceTree = "<group>"; };
 		EF848D94E48D42C1D067FA38 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
-		F96D77089966B267E086272F /* ConfidenceEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfidenceEngine.swift; sourceTree = "<group>"; };
+		F475A93A38AFAFC489C55967 /* ScanControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanControl.swift; sourceTree = "<group>"; };
+		F6F7341DE5F4802B4AD1BF51 /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
+		F8B85EFB70DC4A4B7785EB7C /* Detection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Detection.swift; sourceTree = "<group>"; };
+		F9466FF3BE07241B4403F8B9 /* DetectionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionEngine.swift; sourceTree = "<group>"; };
+		FD0CD71B7BD1F3DC4925E6C7 /* DetectionEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionEngineTests.swift; sourceTree = "<group>"; };
 		FDD2326F43F3C55252CCA7C3 /* CSVDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVDocument.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -149,6 +257,8 @@
 		188F591919DCB14FD6235393 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C85B365D41B378692E7A0614 /* BeaconMark.swift */,
+				91919DF14015DC6A89FB314D /* CaptureView.swift */,
 				9A7B9C4CAC84311671B2B06A /* Components.swift */,
 				EF848D94E48D42C1D067FA38 /* DashboardView.swift */,
 				224E60BE93EAF03C62C5A856 /* OnboardingView.swift */,
@@ -171,9 +281,11 @@
 		3175D84FDD596C854F709A66 /* LensBeaconTests */ = {
 			isa = PBXGroup;
 			children = (
-				71F2B72F7EC27330F9764FAA /* ConfidenceEngineTests.swift */,
+				FD0CD71B7BD1F3DC4925E6C7 /* DetectionEngineTests.swift */,
+				18590C218FA6C1A01F6C3164 /* DetectionRuleTableTests.swift */,
 				8B4A4B76F13BE4E70DE6E663 /* ProximityBandTests.swift */,
-				AA3A3599C38C70580250A329 /* SignatureTableTests.swift */,
+				70DF92D77117D02D898319E8 /* RSSISmootherTests.swift */,
+				1BB2FCAED81C54DE43AC2804 /* SightingsStoreTests.swift */,
 			);
 			path = LensBeaconTests;
 			sourceTree = "<group>";
@@ -181,12 +293,17 @@
 		5B44C40A71101D8F4109721F /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				F96D77089966B267E086272F /* ConfidenceEngine.swift */,
-				5C0188AE43AB62925F840D72 /* ConfidenceLevel.swift */,
+				9B1F0187533BA2FF318207A2 /* Copy.swift */,
 				8FD3B36114475BA0E8B555E6 /* DashboardSnapshot.swift */,
-				90A9517B670756B966ED4FBB /* DeviceSignature.swift */,
+				F8B85EFB70DC4A4B7785EB7C /* Detection.swift */,
+				F9466FF3BE07241B4403F8B9 /* DetectionEngine.swift */,
+				16120AFCDFA8DD3F88286BF8 /* DetectionRules.swift */,
+				53ED65E0A5B4A6980C1325A7 /* Legal.swift */,
+				54B6F413A10F2FC178E96BB0 /* PrivacyInfo.xcprivacy */,
 				6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */,
 				1695A09FEC8475600B27352D /* ScanActivityAttributes.swift */,
+				6C4669BF786DCFBCB118B1C3 /* ScanControlBridge.swift */,
+				E6841C9D684DCD013813BCFE /* ScanControlIntents.swift */,
 				4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */,
 				1AFDE4BF91152CCFCDF1B254 /* Theme.swift */,
 			);
@@ -199,6 +316,21 @@
 				3E87AC1D87A4165E88A10E9F /* BluetoothScanner.swift */,
 			);
 			path = Scanner;
+			sourceTree = "<group>";
+		};
+		7FCE1B5609F7DD7DF27DD93D /* LensBeaconWatch */ = {
+			isa = PBXGroup;
+			children = (
+				0FABEC359EF3B0C3B73FFAEF /* Assets.xcassets */,
+				A4545FD060E34E782C551852 /* Info.plist */,
+				DBA2132E420CF9360D82F2BB /* LensBeaconWatchApp.swift */,
+				4E7111C0FB03742840484678 /* WatchComponents.swift */,
+				0132691C5427928E7FBA0666 /* WatchDetailView.swift */,
+				D5DC681DF5632EED5E90B3BC /* WatchRootView.swift */,
+				0C7C09453CCC68BBFE5885EB /* WatchScanModel.swift */,
+				EB45A5A30F859D56FDE8EA11 /* WatchTheme.swift */,
+			);
+			path = LensBeaconWatch;
 			sourceTree = "<group>";
 		};
 		7FCFF7F8E841024DA8866DA8 /* LensBeacon */ = {
@@ -223,8 +355,11 @@
 			children = (
 				7FCFF7F8E841024DA8866DA8 /* LensBeacon */,
 				3175D84FDD596C854F709A66 /* LensBeaconTests */,
+				7FCE1B5609F7DD7DF27DD93D /* LensBeaconWatch */,
+				CD062CA5B2A3ACE9D3E00CDF /* LensBeaconWatchWidget */,
 				C75B90BED04617C3553B9EBB /* LensBeaconWidget */,
 				5B44C40A71101D8F4109721F /* Shared */,
+				7909FD1FE408DCB1AB215355 /* LensBeacon.storekit */,
 				CF15387F2398B5D5A9ABC3AC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -232,9 +367,13 @@
 		A5AA18EBBDD454EF973C7075 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				F6F7341DE5F4802B4AD1BF51 /* Appearance.swift */,
+				7DC9A3D52D162B5135062BF5 /* CaptureLog.swift */,
 				FDD2326F43F3C55252CCA7C3 /* CSVDocument.swift */,
+				51901B0953D20B790D363207 /* DemoSeed.swift */,
 				ACD7478BF7C60186F28407FB /* FlagNotifier.swift */,
 				E1B4AACE24066B82652057D0 /* Haptics.swift */,
+				A43C9EBFC58AEE320DDD4E4C /* LensBeaconShortcuts.swift */,
 				E799770714850A870C69ED8B /* ScanActivityController.swift */,
 			);
 			path = Support;
@@ -247,9 +386,19 @@
 				B773ADAAF251D5D8E2CA775E /* LensBeaconWidget.entitlements */,
 				601C102F57B029CAC84D3C2C /* LensBeaconWidgetBundle.swift */,
 				58DEA41C869DAA842B3768D0 /* NearbyLensesWidget.swift */,
+				F475A93A38AFAFC489C55967 /* ScanControl.swift */,
 				D2A620E27E4756C479343E36 /* ScanLiveActivity.swift */,
 			);
 			path = LensBeaconWidget;
+			sourceTree = "<group>";
+		};
+		CD062CA5B2A3ACE9D3E00CDF /* LensBeaconWatchWidget */ = {
+			isa = PBXGroup;
+			children = (
+				B0E30F21B3E37303B25DF52F /* Info.plist */,
+				CBD4B35D402AFD56E584481B /* LensBeaconComplication.swift */,
+			);
+			path = LensBeaconWatchWidget;
 			sourceTree = "<group>";
 		};
 		CF15387F2398B5D5A9ABC3AC /* Products */ = {
@@ -257,6 +406,8 @@
 			children = (
 				6DCD3FC54280ABDF99ED4256 /* LensBeacon.app */,
 				4C506331FCCC2C3B616A6D5B /* LensBeaconTests.xctest */,
+				CB96145173392A75857F9C23 /* LensBeaconWatch.app */,
+				A2929513F369040FB5EC0EC6 /* LensBeaconWatchWidget.appex */,
 				2B265E77960BDB535637986F /* LensBeaconWidget.appex */,
 			);
 			name = Products;
@@ -283,11 +434,32 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		6080DA826CEC34CB07D043F0 /* LensBeaconWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E6075FBCC410DD0AD4E759D3 /* Build configuration list for PBXNativeTarget "LensBeaconWatch" */;
+			buildPhases = (
+				DB244EAA1B2D9278A3EF79E9 /* Sources */,
+				FFF1F155A2C567084442EF61 /* Resources */,
+				F40EDA734D571C296B475BED /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				57601CB3DD21C4257CDE406C /* PBXTargetDependency */,
+			);
+			name = LensBeaconWatch;
+			packageProductDependencies = (
+			);
+			productName = LensBeaconWatch;
+			productReference = CB96145173392A75857F9C23 /* LensBeaconWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
 		613E3BE8EA2D2A00F4EFA185 /* LensBeaconTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 49EAAA28C85627C12B0BE1F4 /* Build configuration list for PBXNativeTarget "LensBeaconTests" */;
 			buildPhases = (
 				7688D0DB6E0193F06C385828 /* Sources */,
+				2F6B61253D780C9E995DEC1A /* Resources */,
 			);
 			buildRules = (
 			);
@@ -307,11 +479,13 @@
 				6B84AAC4E223C8AB7E71212A /* Sources */,
 				834BA290CD7064FA97545943 /* Resources */,
 				08824BD2EF67BF7085C1BD7D /* Embed Foundation Extensions */,
+				5604ADE8A48BCDAE0B00ED90 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				4015FCEF212EFC6FF301BD77 /* PBXTargetDependency */,
+				1F41F3D31F1B7DC554FCF0A5 /* PBXTargetDependency */,
 			);
 			name = LensBeacon;
 			packageProductDependencies = (
@@ -320,11 +494,30 @@
 			productReference = 6DCD3FC54280ABDF99ED4256 /* LensBeacon.app */;
 			productType = "com.apple.product-type.application";
 		};
+		96D571400A4325474254E4F2 /* LensBeaconWatchWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9D838D1D2FA6B121690FC599 /* Build configuration list for PBXNativeTarget "LensBeaconWatchWidget" */;
+			buildPhases = (
+				DFC43DA791F06A67FC5DC51C /* Sources */,
+				F1F23790EA30BEC91AEA809B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LensBeaconWatchWidget;
+			packageProductDependencies = (
+			);
+			productName = LensBeaconWatchWidget;
+			productReference = A2929513F369040FB5EC0EC6 /* LensBeaconWatchWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		BC8B0157AC5468CBBDC66FE0 /* LensBeaconWidget */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0D4CEA1A3E07A806C13DA8EC /* Build configuration list for PBXNativeTarget "LensBeaconWidget" */;
 			buildPhases = (
 				576307AF5AE53B84461D748A /* Sources */,
+				CF6723037E61347A93620695 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -346,11 +539,19 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					6080DA826CEC34CB07D043F0 = {
+						DevelopmentTeam = 3L683975L8;
+						ProvisioningStyle = Automatic;
+					};
 					613E3BE8EA2D2A00F4EFA185 = {
 						DevelopmentTeam = 3L683975L8;
 						ProvisioningStyle = Automatic;
 					};
 					90232068E3F82F3B491A4F32 = {
+						DevelopmentTeam = 3L683975L8;
+						ProvisioningStyle = Automatic;
+					};
+					96D571400A4325474254E4F2 = {
 						DevelopmentTeam = 3L683975L8;
 						ProvisioningStyle = Automatic;
 					};
@@ -376,17 +577,53 @@
 			targets = (
 				90232068E3F82F3B491A4F32 /* LensBeacon */,
 				613E3BE8EA2D2A00F4EFA185 /* LensBeaconTests */,
+				6080DA826CEC34CB07D043F0 /* LensBeaconWatch */,
+				96D571400A4325474254E4F2 /* LensBeaconWatchWidget */,
 				BC8B0157AC5468CBBDC66FE0 /* LensBeaconWidget */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2F6B61253D780C9E995DEC1A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0EF972A16BC8F5850B552AD7 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		834BA290CD7064FA97545943 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				DCEA8DA0FE919C1FE91888A2 /* Assets.xcassets in Resources */,
+				F4EE3DEFD95DEB166F4F398D /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CF6723037E61347A93620695 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC147419C738174F0F14D53B /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1F23790EA30BEC91AEA809B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				06A7360CA8F51AAF508DFC65 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FFF1F155A2C567084442EF61 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CD443EACFF584A88A30825E /* Assets.xcassets in Resources */,
+				52530B128D55F67948108C4F /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,14 +634,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADB216878A98EF00E86D91BF /* ConfidenceEngine.swift in Sources */,
-				34F41B5E2BFE5E808AC8212A /* ConfidenceLevel.swift in Sources */,
+				8729A276DB2F60DBED817DC3 /* BeaconMark.swift in Sources */,
+				5CCB86849DB7F2908C4A8165 /* Copy.swift in Sources */,
 				34EE57220ADB973D873B8099 /* DashboardSnapshot.swift in Sources */,
-				A3AFCF7B2919F546180C1469 /* DeviceSignature.swift in Sources */,
+				8DCEDDA821EBB38D27F565DD /* Detection.swift in Sources */,
+				69FE3D67EB90E6DDA87591B4 /* DetectionEngine.swift in Sources */,
+				062DD950E224346506221940 /* DetectionRules.swift in Sources */,
+				1E121701476E92573667C592 /* Legal.swift in Sources */,
 				C575F826EF61B99A2CD1CDF7 /* LensBeaconWidgetBundle.swift in Sources */,
 				AB37001F52C7E596BE9672C5 /* NearbyLensesWidget.swift in Sources */,
 				99F7FD2274F09E1A9A33F067 /* ProximityBand.swift in Sources */,
 				CC2AE761D062A710AF700840 /* ScanActivityAttributes.swift in Sources */,
+				243D4756F9DF97E6E25B7AB3 /* ScanControl.swift in Sources */,
+				84897BF97A1824A6BB29E72C /* ScanControlBridge.swift in Sources */,
+				100300572256BE7A934F9C13 /* ScanControlIntents.swift in Sources */,
 				477E7154091124283BAAE4E8 /* ScanLiveActivity.swift in Sources */,
 				217CFBBD3CFFCD8544E0A824 /* SharedContainer.swift in Sources */,
 				65019930320F1EA5027B32FD /* Theme.swift in Sources */,
@@ -415,23 +658,33 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE0E615F5E0F192F4B3FBCE0 /* Appearance.swift in Sources */,
+				F3DBBF7C7EC19B911A8B4B90 /* BeaconMark.swift in Sources */,
 				59E39D32AC1DED453F30F417 /* BluetoothScanner.swift in Sources */,
 				95CE574127FCC2181D590F02 /* CSVDocument.swift in Sources */,
+				FE5E6179DA605EB30E54A7E6 /* CaptureLog.swift in Sources */,
+				23848DB875F685D6AE997FAB /* CaptureView.swift in Sources */,
 				4157EFA8DAE07D0B1A3CB584 /* Components.swift in Sources */,
-				36306BDE868B1BF211633CE7 /* ConfidenceEngine.swift in Sources */,
-				01167B0D386DE3F948D7EE83 /* ConfidenceLevel.swift in Sources */,
+				2A2FEEB5EA02A0B05541053E /* Copy.swift in Sources */,
 				C648AA1B89D5D516EA98DDEB /* DashboardSnapshot.swift in Sources */,
 				4E4A620244724E05ADFFA5BB /* DashboardView.swift in Sources */,
-				D7B46DA26674C7D906D862CF /* DeviceSignature.swift in Sources */,
+				0568FA5FB7E455F7D5B05AD0 /* DemoSeed.swift in Sources */,
+				F792CDA2F9FA4EE6E291BBFD /* Detection.swift in Sources */,
+				A81B07AEA69BE28FEB01BC92 /* DetectionEngine.swift in Sources */,
+				6BE5AD9FC9D63CA8DAEC7BE1 /* DetectionRules.swift in Sources */,
 				0062E1089571D806C1F2D855 /* FlagNotifier.swift in Sources */,
 				56369AD023741271CA4D1420 /* Haptics.swift in Sources */,
+				CEA4900A76521C58F4D6722B /* Legal.swift in Sources */,
 				E7B6E6A3FC080DAE83D73A2B /* LensBeaconApp.swift in Sources */,
+				C0296C554C498293F19A58DC /* LensBeaconShortcuts.swift in Sources */,
 				588F5984FC8D686FB9795682 /* MineRegistry.swift in Sources */,
 				3BB64343BC560A82DCF38165 /* OnboardingView.swift in Sources */,
 				D5DA8DBDF65E185426B1CD2D /* ProximityBand.swift in Sources */,
 				21D526B1FC6D7CCEB55F90E2 /* RootView.swift in Sources */,
 				F241AE56E54326DBDC7B0D24 /* ScanActivityAttributes.swift in Sources */,
 				2B097574D261E892A30C01A3 /* ScanActivityController.swift in Sources */,
+				27E6AD095C6D311C559BB1FE /* ScanControlBridge.swift in Sources */,
+				2D41136B74985C1A69D57C31 /* ScanControlIntents.swift in Sources */,
 				2431AF6F5CD09C9AF4E8B504 /* ScanCoordinator.swift in Sources */,
 				616056CFBDFC49B58273882E /* SettingsView.swift in Sources */,
 				1CB6297A41EDE880A2802BD5 /* SharedContainer.swift in Sources */,
@@ -449,27 +702,72 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				027EED3B2B6C106E4A65DA86 /* ConfidenceEngine.swift in Sources */,
-				4ADA3CA80407606C2E3A4745 /* ConfidenceEngineTests.swift in Sources */,
-				BB47038A38846029FE93F254 /* ConfidenceLevel.swift in Sources */,
+				BC4C1CA73C8D7D3DE5E9DDE6 /* Copy.swift in Sources */,
 				DE7380B2EE71FF795C0BD555 /* DashboardSnapshot.swift in Sources */,
-				E692FDFC2DADEEE6624AB5FC /* DeviceSignature.swift in Sources */,
+				195EDEC761546332AE5E4C80 /* Detection.swift in Sources */,
+				5445D681D411E10BA29DEE23 /* DetectionEngine.swift in Sources */,
+				38DF97A0BA1B584AFBA72FFB /* DetectionEngineTests.swift in Sources */,
+				FDA0C6DDD7BBD018AC2A7F68 /* DetectionRuleTableTests.swift in Sources */,
+				1DBA6D30E85484CE80ED72AA /* DetectionRules.swift in Sources */,
+				3366BB6B1D1798BD40755E77 /* Legal.swift in Sources */,
+				B21AEAF1F7786A67DC4CA597 /* MineRegistry.swift in Sources */,
 				A69512C1D522DA6BA687EB08 /* ProximityBand.swift in Sources */,
 				9B647D8F8CA719D98F3E0EDC /* ProximityBandTests.swift in Sources */,
+				68CF380DC9C847439937188E /* RSSISmootherTests.swift in Sources */,
 				9E5FABA93A417FCB19C7CAD3 /* ScanActivityAttributes.swift in Sources */,
+				DBF869656FD4EE20424D8A6C /* ScanControlBridge.swift in Sources */,
 				ABA0806D5D74C02C1663725A /* SharedContainer.swift in Sources */,
-				9BC7CDEC35A2C54E9C70519C /* SignatureTableTests.swift in Sources */,
+				528E672F35963445F8BE8762 /* Sighting.swift in Sources */,
+				91C7B6148735CB3C4C7B583D /* SightingsStore.swift in Sources */,
+				8A5B5B0826E4CF9A4E643CAA /* SightingsStoreTests.swift in Sources */,
 				B6D2EC3B8F6063E84905EF9F /* Theme.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DB244EAA1B2D9278A3EF79E9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6563224D96C43DDF1D54318 /* BluetoothScanner.swift in Sources */,
+				136BCB9014C5650CDFF47B34 /* Copy.swift in Sources */,
+				EB1AA204371F120293F685FF /* Detection.swift in Sources */,
+				DCC78242ACE8BCBF5912BC1F /* DetectionEngine.swift in Sources */,
+				2E25AF77C161ABC55DD8F2F2 /* DetectionRules.swift in Sources */,
+				8ED7CEE5AF458C194125805B /* LensBeaconWatchApp.swift in Sources */,
+				6EE8F41D4D26C46A0B56A836 /* ProximityBand.swift in Sources */,
+				4E3EFAAA2B8ADD88F9A52FF8 /* WatchComponents.swift in Sources */,
+				0CB3F6394D05B1945E8633B5 /* WatchDetailView.swift in Sources */,
+				F2BD5F6894291861C479F355 /* WatchRootView.swift in Sources */,
+				806F4C0FBA837DA618FDD13C /* WatchScanModel.swift in Sources */,
+				BA701366E0BEDE36610707D3 /* WatchTheme.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DFC43DA791F06A67FC5DC51C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFF530067FDC5F6ABAA39A63 /* LensBeaconComplication.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1F41F3D31F1B7DC554FCF0A5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6080DA826CEC34CB07D043F0 /* LensBeaconWatch */;
+			targetProxy = 6281ECE46FF71ACCC54E62AB /* PBXContainerItemProxy */;
+		};
 		4015FCEF212EFC6FF301BD77 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BC8B0157AC5468CBBDC66FE0 /* LensBeaconWidget */;
 			targetProxy = 67EB8A5C83658C1C4134E484 /* PBXContainerItemProxy */;
+		};
+		57601CB3DD21C4257CDE406C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 96D571400A4325474254E4F2 /* LensBeaconWatchWidget */;
+			targetProxy = FEB93078576649C3CDEC2F0B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -505,6 +803,37 @@
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
+		};
+		32F0FB077487A0AA151B65AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3L683975L8;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LensBeaconWatchWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.avaresearch.lensbeacon.watch.widget;
+				PRODUCT_NAME = LensBeaconWatchWidget;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Debug;
 		};
 		3B4FD24CAFB1119EE1F6E538 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -548,8 +877,11 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.avaresearch.lensbeacon.tests;
 				PRODUCT_NAME = LensBeaconTests;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -557,8 +889,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-Midnight AppIcon-Mono";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = LensBeacon/LensBeacon.entitlements;
@@ -594,8 +928,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-Midnight AppIcon-Mono";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = LensBeacon/LensBeacon.entitlements;
@@ -630,7 +966,72 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		93C7081F9B7923BF9D75D111 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3L683975L8;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LensBeaconWatchWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0.0;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.avaresearch.lensbeacon.watch.widget;
+				PRODUCT_NAME = LensBeaconWatchWidget;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Release;
+		};
+		9CCCABE7179785BCCF06FCFF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3L683975L8;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LensBeaconWatch/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0.0;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.avaresearch.lensbeacon.watch;
+				PRODUCT_NAME = LensBeacon;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
 			};
 			name = Release;
 		};
@@ -639,7 +1040,42 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		F4B6E7E56EF2F202C5A3B23D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3L683975L8;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LensBeaconWatch/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.avaresearch.lensbeacon.watch;
+				PRODUCT_NAME = LensBeacon;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
 			};
 			name = Debug;
 		};
@@ -652,8 +1088,11 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.avaresearch.lensbeacon.tests;
 				PRODUCT_NAME = LensBeaconTests;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -692,6 +1131,24 @@
 			buildConfigurations = (
 				F68C47F6E5A903636280F601 /* Debug */,
 				51EA87E79A4C6C72BFF4F316 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9D838D1D2FA6B121690FC599 /* Build configuration list for PBXNativeTarget "LensBeaconWatchWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				32F0FB077487A0AA151B65AD /* Debug */,
+				93C7081F9B7923BF9D75D111 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E6075FBCC410DD0AD4E759D3 /* Build configuration list for PBXNativeTarget "LensBeaconWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F4B6E7E56EF2F202C5A3B23D /* Debug */,
+				9CCCABE7179785BCCF06FCFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

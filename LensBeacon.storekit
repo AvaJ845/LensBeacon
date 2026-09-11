@@ -1,0 +1,35 @@
+{
+  "identifier" : "A1B2C3D4",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : false,
+      "internalID" : "5E6F7A8B",
+      "localizations" : [
+        {
+          "description" : "One payment, no subscription. Adds background scanning, a Home Screen widget, a Live Activity, new-flag alerts, unlimited history, and CSV export.",
+          "displayName" : "LensBeacon Unlock",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.avaresearch.lensbeacon.unlock",
+      "referenceName" : "LensBeacon Unlock",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "0000000000",
+    "_developerTeamID" : "3L683975L8",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 0,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : []
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

@@ -9,5 +9,6 @@ struct LensBeaconWidgetBundle: WidgetBundle {
     var body: some Widget {
         NearbyLensesWidget()
         ScanLiveActivity()
+        ScanControl()
     }
 }

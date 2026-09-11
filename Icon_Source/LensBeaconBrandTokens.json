@@ -1,0 +1,15 @@
+{
+  "colors": {
+    "deepNavy": "#0B1F33",
+    "beaconBlue": "#3B82F6",
+    "lensCyan": "#63C7F2",
+    "teal": "#10B981",
+    "coolGray": "#E5EAF2",
+    "background": "#F8FAFC",
+    "secondaryText": "#64748B"
+  },
+  "icon": {
+    "ios_ipados_master_px": 1024,
+    "watchos_master_px": 1088
+  }
+}
