@@ -40,6 +40,7 @@
 		477E7154091124283BAAE4E8 /* ScanLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A620E27E4756C479343E36 /* ScanLiveActivity.swift */; };
 		4E3EFAAA2B8ADD88F9A52FF8 /* WatchComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7111C0FB03742840484678 /* WatchComponents.swift */; };
 		4E4A620244724E05ADFFA5BB /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF848D94E48D42C1D067FA38 /* DashboardView.swift */; };
+		5015D67B0BD2DDB049B0ED53 /* ContributionReportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E7E02D361C51C5580E784 /* ContributionReportTests.swift */; };
 		52530B128D55F67948108C4F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 54B6F413A10F2FC178E96BB0 /* PrivacyInfo.xcprivacy */; };
 		528E672F35963445F8BE8762 /* Sighting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7AFD6DE5B42C4A0498351 /* Sighting.swift */; };
 		5445D681D411E10BA29DEE23 /* DetectionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9466FF3BE07241B4403F8B9 /* DetectionEngine.swift */; };
@@ -48,6 +49,7 @@
 		59E39D32AC1DED453F30F417 /* BluetoothScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E87AC1D87A4165E88A10E9F /* BluetoothScanner.swift */; };
 		5CCB86849DB7F2908C4A8165 /* Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F0187533BA2FF318207A2 /* Copy.swift */; };
 		5CD443EACFF584A88A30825E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FABEC359EF3B0C3B73FFAEF /* Assets.xcassets */; };
+		5D600A441B49F7C518783788 /* ContributionReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47ED31E1E4B84656102FD9F0 /* ContributionReport.swift */; };
 		616056CFBDFC49B58273882E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D140401EDC119CDAA24B762 /* SettingsView.swift */; };
 		65019930320F1EA5027B32FD /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDE4BF91152CCFCDF1B254 /* Theme.swift */; };
 		68CF380DC9C847439937188E /* RSSISmootherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DF92D77117D02D898319E8 /* RSSISmootherTests.swift */; };
@@ -66,6 +68,7 @@
 		99F7FD2274F09E1A9A33F067 /* ProximityBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */; };
 		9B647D8F8CA719D98F3E0EDC /* ProximityBandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4A4B76F13BE4E70DE6E663 /* ProximityBandTests.swift */; };
 		9E5FABA93A417FCB19C7CAD3 /* ScanActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1695A09FEC8475600B27352D /* ScanActivityAttributes.swift */; };
+		A1503622AB1C16D0DF371BE5 /* ContributionReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47ED31E1E4B84656102FD9F0 /* ContributionReport.swift */; };
 		A37296826D3B9F1AB7772794 /* LensBeaconWatchWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A2929513F369040FB5EC0EC6 /* LensBeaconWatchWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A69512C1D522DA6BA687EB08 /* ProximityBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */; };
 		A81B07AEA69BE28FEB01BC92 /* DetectionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9466FF3BE07241B4403F8B9 /* DetectionEngine.swift */; };
@@ -98,6 +101,7 @@
 		EE0E615F5E0F192F4B3FBCE0 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F7341DE5F4802B4AD1BF51 /* Appearance.swift */; };
 		F241AE56E54326DBDC7B0D24 /* ScanActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1695A09FEC8475600B27352D /* ScanActivityAttributes.swift */; };
 		F2BD5F6894291861C479F355 /* WatchRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DC681DF5632EED5E90B3BC /* WatchRootView.swift */; };
+		F3374AF812CFAA2082779299 /* ContributionReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47ED31E1E4B84656102FD9F0 /* ContributionReport.swift */; };
 		F3DBBF7C7EC19B911A8B4B90 /* BeaconMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85B365D41B378692E7A0614 /* BeaconMark.swift */; };
 		F4EE3DEFD95DEB166F4F398D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 54B6F413A10F2FC178E96BB0 /* PrivacyInfo.xcprivacy */; };
 		F792CDA2F9FA4EE6E291BBFD /* Detection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B85EFB70DC4A4B7785EB7C /* Detection.swift */; };
@@ -183,6 +187,7 @@
 		3E87AC1D87A4165E88A10E9F /* BluetoothScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothScanner.swift; sourceTree = "<group>"; };
 		4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContainer.swift; sourceTree = "<group>"; };
 		443F23EFFFA836BD85CC198B /* SightingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingDetailView.swift; sourceTree = "<group>"; };
+		47ED31E1E4B84656102FD9F0 /* ContributionReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContributionReport.swift; sourceTree = "<group>"; };
 		4C506331FCCC2C3B616A6D5B /* LensBeaconTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LensBeaconTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E7111C0FB03742840484678 /* WatchComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchComponents.swift; sourceTree = "<group>"; };
 		51901B0953D20B790D363207 /* DemoSeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoSeed.swift; sourceTree = "<group>"; };
@@ -207,6 +212,7 @@
 		A2929513F369040FB5EC0EC6 /* LensBeaconWatchWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LensBeaconWatchWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A43C9EBFC58AEE320DDD4E4C /* LensBeaconShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensBeaconShortcuts.swift; sourceTree = "<group>"; };
 		A4545FD060E34E782C551852 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A51E7E02D361C51C5580E784 /* ContributionReportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContributionReportTests.swift; sourceTree = "<group>"; };
 		A5D92E2A25F395B1B1BFB99E /* LensBeacon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LensBeacon.entitlements; sourceTree = "<group>"; };
 		A981769ECFB4ABB7D9E4FC7F /* LensBeaconApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensBeaconApp.swift; sourceTree = "<group>"; };
 		A9F40949F336410DF060196D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -281,6 +287,7 @@
 		3175D84FDD596C854F709A66 /* LensBeaconTests */ = {
 			isa = PBXGroup;
 			children = (
+				A51E7E02D361C51C5580E784 /* ContributionReportTests.swift */,
 				FD0CD71B7BD1F3DC4925E6C7 /* DetectionEngineTests.swift */,
 				18590C218FA6C1A01F6C3164 /* DetectionRuleTableTests.swift */,
 				8B4A4B76F13BE4E70DE6E663 /* ProximityBandTests.swift */,
@@ -293,6 +300,7 @@
 		5B44C40A71101D8F4109721F /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				47ED31E1E4B84656102FD9F0 /* ContributionReport.swift */,
 				9B1F0187533BA2FF318207A2 /* Copy.swift */,
 				8FD3B36114475BA0E8B555E6 /* DashboardSnapshot.swift */,
 				F8B85EFB70DC4A4B7785EB7C /* Detection.swift */,
@@ -635,6 +643,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8729A276DB2F60DBED817DC3 /* BeaconMark.swift in Sources */,
+				5D600A441B49F7C518783788 /* ContributionReport.swift in Sources */,
 				5CCB86849DB7F2908C4A8165 /* Copy.swift in Sources */,
 				34EE57220ADB973D873B8099 /* DashboardSnapshot.swift in Sources */,
 				8DCEDDA821EBB38D27F565DD /* Detection.swift in Sources */,
@@ -665,6 +674,7 @@
 				FE5E6179DA605EB30E54A7E6 /* CaptureLog.swift in Sources */,
 				23848DB875F685D6AE997FAB /* CaptureView.swift in Sources */,
 				4157EFA8DAE07D0B1A3CB584 /* Components.swift in Sources */,
+				F3374AF812CFAA2082779299 /* ContributionReport.swift in Sources */,
 				2A2FEEB5EA02A0B05541053E /* Copy.swift in Sources */,
 				C648AA1B89D5D516EA98DDEB /* DashboardSnapshot.swift in Sources */,
 				4E4A620244724E05ADFFA5BB /* DashboardView.swift in Sources */,
@@ -702,6 +712,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1503622AB1C16D0DF371BE5 /* ContributionReport.swift in Sources */,
+				5015D67B0BD2DDB049B0ED53 /* ContributionReportTests.swift in Sources */,
 				BC4C1CA73C8D7D3DE5E9DDE6 /* Copy.swift in Sources */,
 				DE7380B2EE71FF795C0BD555 /* DashboardSnapshot.swift in Sources */,
 				195EDEC761546332AE5E4C80 /* Detection.swift in Sources */,

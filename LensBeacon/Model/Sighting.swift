@@ -100,6 +100,12 @@ struct LiveSighting: Identifiable, Equatable, Sendable {
     var lastSeen: Date
     /// The user marked this product "mine" — suppressed from flags and alerts.
     var isMine: Bool
+    /// The most recent raw advertisement, kept only in memory for as long as the
+    /// device is in range. It's what "Suggest what this is" reads from — for an
+    /// unmatched device, `detection.evidence` is empty (nothing matched), so this
+    /// is the only place its fields exist to contribute at all. Never persisted:
+    /// dropped the moment the device leaves range, same as everything else here.
+    var lastAdvertisement: AdvertisementFields
 
     var proximity: ProximityBand { smoother.band }
     var tier: DetectionTier? { detection.bestTier }

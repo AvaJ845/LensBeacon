@@ -17,11 +17,13 @@ struct SightingDetailView: View {
 
     @Environment(MineRegistry.self) private var mine
     @Environment(SightingsStore.self) private var store
+    @State private var contributionGuess: DeviceGuess?
 
     var body: some View {
         List {
             headerSection
             evidenceSection
+            contributeSection
             timelineSection
             if productKey != nil { mineSection }
             explainerSection
@@ -102,6 +104,35 @@ struct SightingDetailView: View {
             Text("Evidence")
         } footer: {
             Text(Copy.notAccusation)
+        }
+    }
+
+    /// Live devices only — a stored record's raw fields were never kept (only
+    /// recognised glasses persist evidence at all; see `SightingsStore.record`).
+    /// This is the one path that can turn an *unmatched* device, which has no
+    /// evidence to show above, into something reportable.
+    @ViewBuilder
+    private var contributeSection: some View {
+        if case .live(let live) = source {
+            Section {
+                Text("Wasn't recognised, or recognised wrong? Send the fields LensBeacon read from it, and what you believe it is — LensBeacon still makes no network request of its own; you choose where this goes.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                Picker("What do you think this is?", selection: $contributionGuess) {
+                    Text("Choose one").tag(DeviceGuess?.none)
+                    ForEach(DeviceGuess.allCases) { guess in
+                        Text(guess.rawValue).tag(Optional(guess))
+                    }
+                }
+                ShareLink(
+                    item: ContributionReport.text(for: live.lastAdvertisement, detection: live.detection, guess: contributionGuess)
+                ) {
+                    Label("Share as evidence", systemImage: "square.and.arrow.up")
+                }
+                .disabled(contributionGuess == nil)
+            } header: {
+                Text("Suggest what this is")
+            }
         }
     }
 

@@ -145,10 +145,24 @@ Activity, notifications and any background story) and scans only while its scree
 showing. The app icon and palette come from the Apple Fellow brand kit vendored in
 `Icon_Source/`.
 
-## Dev-only tooling (never ships)
+## How the rule table grows
 
-`LensBeacon/Support/CaptureLog.swift` and `LensBeacon/Views/CaptureView.swift` are
-wrapped in `#if DEBUG` — a raw BLE advertisement logger used to confirm new
-detection rules against real hardware captures before they're added to
-`DetectionRuleTable`. Verified absent from Release builds by symbol and string
-inspection of the compiled binary. See `docs/DEVICE-TESTING.md`.
+`LiveSighting` keeps the most recent `AdvertisementFields` for whatever's
+currently in range (`lastAdvertisement` — in memory only, gone the moment a
+device leaves range, same lifetime as everything else in `working`). Two things
+read it:
+
+- **"Suggest what this is"** (`SightingDetailView`, ships to every user) —
+  `Shared/ContributionReport.swift` turns those fields plus the user's optional
+  guess (`DeviceGuess`) into a plain-text report, handed to the system Share
+  Sheet. LensBeacon still makes zero network requests of its own; the user
+  chooses where the text goes, identical in spirit to CSV export. This is the
+  only path that can produce anything for a genuinely unmatched device — its
+  `Detection.evidence` is empty by construction, so without the raw fields
+  there would be nothing to report at all.
+- **Dev-only tooling** — `LensBeacon/Support/CaptureLog.swift` and
+  `LensBeacon/Views/CaptureView.swift`, wrapped in `#if DEBUG`. A fuller raw
+  advertisement logger (every variant a device broadcasts, not just the latest)
+  for confirming a rule against real hardware before it's added to
+  `DetectionRuleTable`. Verified absent from Release builds by symbol and
+  string inspection of the compiled binary. See `docs/DEVICE-TESTING.md`.

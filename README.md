@@ -50,7 +50,8 @@ Every build decision serves **both** of these:
 ## Free vs. LensBeacon Unlock
 
 **Free, forever:** full scanning, live Dashboard, evidence-per-flag, 7-day history,
-"mark as mine", pause/resume scanning, a Control Center control and a "scan for
+"mark as mine", "suggest what this is" (share a device's fields toward improving
+the rule table), pause/resume scanning, a Control Center control and a "scan for
 camera glasses" Siri phrase, and one-tap data erase in Settings.
 
 **LensBeacon Unlock — $9.99, one-time, non-consumable.** No subscription, no trial

@@ -217,6 +217,7 @@ final class ScanCoordinator {
            event.timestamp.timeIntervalSince(lastClassifiedAt[key] ?? .distantPast) < reclassifyInterval {
             existing.smoother.add(event.rssi)
             existing.lastSeen = event.timestamp
+            existing.lastAdvertisement = event.advertisement
             working[key] = existing
             workingDirty = true
             return
@@ -231,6 +232,7 @@ final class ScanCoordinator {
             existing.smoother.add(event.rssi)
             existing.detection = existing.detection.merged(with: detection)
             existing.lastSeen = event.timestamp
+            existing.lastAdvertisement = event.advertisement
             existing.isMine = mine.contains(productKey: existing.detection.productKey)
             working[key] = existing
         } else {
@@ -243,7 +245,8 @@ final class ScanCoordinator {
                 smoother: smoother,
                 firstSeen: event.timestamp,
                 lastSeen: event.timestamp,
-                isMine: mine.contains(productKey: detection.productKey)
+                isMine: mine.contains(productKey: detection.productKey),
+                lastAdvertisement: event.advertisement
             )
         }
 

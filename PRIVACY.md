@@ -50,6 +50,7 @@ following stay on the device and are never sent anywhere:
 | "Mine" list | Opaque keys you chose to suppress. |
 | Preferences | Onboarding done, scan toggles, purchase state mirror. |
 | CSV export | Only when *you* export, to a location *you* pick. Every column is named in the header. |
+| "Suggest what this is" report | Only when *you* share it, to a destination *you* pick (Mail, Messages, AirDrop, ...). Contains a device's advertisement fields and your optional guess at what it is — never your name, location, or anything else about your phone. |
 
 ## Permissions LensBeacon requests
 

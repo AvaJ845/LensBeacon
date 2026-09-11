@@ -74,6 +74,20 @@ must gate on a second discriminator (a specific service UUID or name), never the
 company ID alone. This is enforced by `DetectionRuleTableTests` and a load-bearing
 comment in `DetectionRules.swift`.
 
+## Where new evidence comes from
+
+Two paths feed this table, both landing as a user-sent report — LensBeacon has no
+server to receive one automatically:
+
+- **"Suggest what this is"** (`SightingDetailView`, ships to every user) — on any
+  live device, matched or not, shares a plain-text report of its advertisement
+  fields plus what the person believes it is. The one path that can produce
+  anything for a truly unmatched device, since an unmatched `Detection` has no
+  evidence of its own (see `Shared/ContributionReport.swift`).
+- **BLE capture** (`Settings ▸ About`, Debug builds only) — the fuller developer
+  tool, for confirming a rule against many advertisement variants at once
+  before/after a table change.
+
 ## Adding a rule from a capture
 
 1. Debug build → **Settings ▸ Signature capture**. Put the device in pairing mode,
