@@ -8,8 +8,11 @@ itself must actually be that thing, not just claim to be it. These notes are
 written so a reviewer reaches the same read a Fellow would: this is a careful,
 honest tool, not a surveillance app that needs a second look.
 
-Paste the "App Review Information → Notes" block into App Store Connect as-is.
-Adapt only the sandbox tester line for the account you actually create.
+Paste the "App Review Information → Notes" block into App Store Connect as-is,
+then fill in the sandbox tester line **directly in App Store Connect, not in this
+file** — a sandbox Apple ID and password are real, live credentials, and this
+document is committed to a public repository. Never replace the bracketed
+placeholder below with an actual account and commit it.
 
 ---
 
@@ -50,7 +53,7 @@ LensBeacon Unlock ($9.99, non-consumable) adds background scanning with a
 Live Activity, a Home Screen widget, local new-flag notifications, unlimited
 history, and CSV export. Everything else — scanning, the Dashboard, and the
 full evidence view — is free and unrestricted. Sandbox tester for IAP
-testing: [ADD SANDBOX APPLE ID HERE]. "Restore Purchase" is on the Unlock
+testing: [FILL IN VIA APP STORE CONNECT ONLY — DO NOT COMMIT]. "Restore Purchase" is on the Unlock
 sheet and in Settings.
 
 Bluetooth permission is requested once, with a plain-language purpose string,

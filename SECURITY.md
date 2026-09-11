@@ -10,8 +10,9 @@ Please do **not** open a public issue for a security report.
 
 ## What is in scope
 
-- The iOS app and widget (`LensBeacon/`, `LensBeaconWidget/`, `Shared/`).
-- The signature table (`Shared/DeviceSignature.swift`) — e.g. a signature so broad it
+- The iOS app, widget, and watch app (`LensBeacon/`, `LensBeaconWidget/`,
+  `LensBeaconWatch/`, `Shared/`).
+- The detection rule table (`Shared/DetectionRules.swift`) — e.g. a rule so broad it
   false-flags unrelated common hardware, or so wrong it points evidence at the wrong
   manufacturer.
 - The Sightings log persistence and CSV export — e.g. anything that persists or

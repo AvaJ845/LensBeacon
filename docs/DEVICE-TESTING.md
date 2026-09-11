@@ -7,7 +7,7 @@ own hardware: confirming the detection rules against real advertisements.
 ## Setup
 
 1. Open `LensBeacon.xcodeproj` in Xcode 26+.
-2. Xcode ▸ Settings ▸ Accounts — add your Apple ID (team AVA Research, `3L683975L8`).
+2. Xcode ▸ Settings ▸ Accounts — add the Apple ID for your development team.
 3. Select the **LensBeacon** scheme, pick your iPhone (iOS 18+), `⌘R`, tap **Allow**
    on the Bluetooth prompt. Automatic signing registers the App IDs + App Group.
 4. The scheme has a StoreKit config (`LensBeacon.storekit`), so Unlock is testable

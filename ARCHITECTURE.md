@@ -7,14 +7,14 @@
    `false` as belt-and-braces. If a future change tried to make a request it would
    fail loudly.
 2. **Pure logic is separated from I/O.** The classification pipeline
-   (`SignatureTable` → `ConfidenceEngine` → `ProximityBand`) has no CoreBluetooth or
-   UIKit dependency, lives in `Shared/`, and is unit-tested with no app host.
+   (`DetectionRuleTable` → `DetectionEngine` → `ProximityBand`) has no CoreBluetooth
+   or UIKit dependency, lives in `Shared/`, and is unit-tested with no app host.
 3. **One actor owns the mutable state.** `ScanCoordinator` is `@MainActor
    @Observable`. Bluetooth callbacks hop onto it. No locks, no shared mutable state
    outside an actor.
 4. **The evidence the UI shows is the structure the decision was made from.** A flag's
-   "why" screen renders the same `ConfidenceEngine.Evidence` the classifier produced —
-   they cannot drift.
+   "why" screen renders the same `DetectionEvidence` the classifier produced — they
+   cannot drift.
 
 ## The scan pipeline
 
@@ -22,17 +22,17 @@
 CBCentralManager (private serial queue)
    │  didDiscover(peripheral, advertisementData, rssi)
    ▼
-BluetoothScanner.parse()            ── extracts exactly 4 fields:
-   │                                    companyIdentifier, serviceUUIDs, localName, isConnectable
+BluetoothScanner.parse()            ── extracts AdvertisementFields:
+   │                                    manufacturerData, serviceUUIDs16, localName, isConnectable
    ▼  ScanEvent  (Sendable)
    │  Task { @MainActor }
    ▼
 ScanCoordinator.ingest()
-   ├─ ConfidenceEngine.classify()   ── category? confidence? evidence[]
+   ├─ DetectionEngine.classify()    ── category, tier, evidence[] (Detection)
    ├─ RSSISmoother (per device)     ── EMA → ProximityBand
-   ├─ live[peripheralKey]           ── in-memory "what's nearby now"
-   ├─ SightingsStore.record()       ── durable log (debounced write, capped)
-   ├─ maybeAlert()                  ── local notification if likely/strong + opted in
+   ├─ working[peripheralKey]        ── in-memory "what's nearby now", published on a debounced tick
+   ├─ SightingsStore.record()       ── durable log (glasses only; debounced write, capped)
+   ├─ maybeAlert()                  ── local notification if a flag appears + opted in
    └─ writeSnapshot()               ── DashboardSnapshot → App Group → widget + Live Activity
 ```
 
@@ -44,60 +44,66 @@ small value type means (a) strict concurrency is satisfied end to end, (b) the
 "what we keep" surface is one struct you can read in ten seconds, (c) the engine is
 trivially testable.
 
-## The confidence model
+## The detection model
 
-Three bands, never a percentage (false precision on noisy BLE data):
+Every flag comes from one small, versioned rule table
+(`Shared/DetectionRules.swift` → `DetectionRuleTable.current`, documented in
+[`docs/RULES.md`](docs/RULES.md)). Three tiers, never a percentage (false precision
+on noisy BLE data):
 
-| Matched signals | Band |
-| --- | --- |
-| manufacturer ID only | `possible` |
-| manufacturer ID + service UUID | `likely` |
-| service UUID + name (no manufacturer data present) | `likely` |
-| manufacturer ID + service UUID + name pattern | `strong` |
+| Tier | Matched signal | Notification |
+| --- | --- | --- |
+| Manufacturer (High) | A manufacturer identifier registered to a camera-glasses vendor | Yes, if opted in |
+| Service UUID (Medium) | A service UUID registered to a vendor | Yes, if opted in |
+| Name (Low) | Advertised name matches a known pattern only | In-app badge only |
 
-The manufacturer clause is a **filter, not a requirement**: contradictory
-manufacturer data rejects a signature outright; *absent* manufacturer data lets the
-other clauses carry a match (many real advertisements omit the company ID).
+A category (`cameraGlasses`, `displayGlasses`, `headset`, `unknown`) is resolved
+alongside the tier. **Category precedence beats tier when evidence merges**:
+display glasses > camera glasses > headset > unknown, so a headset-only signal (a
+company ID shared with that vendor's glasses, e.g. Meta's Quest and Ray-Ban Meta)
+never gets upgraded to a camera flag by a stronger *headset* signal — only a
+distinguishing camera/glasses signal can do that. Headsets (Quest, Vision Pro) are
+shown on the Dashboard so the user knows they're there, but are never flagged and
+never persisted to the Sightings log.
 
-**Headsets never become camera flags.** A Quest / Vision Pro identified by a
-*distinguishing* signal (name or headset-specific service) is classified `.headset`
-and shown but never flagged. A match on only the *shared* company ID (Meta's ID covers
-glasses and Quest alike) is too weak to reclassify and is dropped, so a bare Meta
-advertisement can still surface as `possible` per the model above.
+Rules that key on a company ID or service UUID shared across a vendor's whole
+product line (not just their camera glasses) are excluded outright rather than
+tuned — see the exclusion list in `docs/RULES.md`.
 
-> ⚠️ The concrete company IDs and service UUIDs in `SignatureTable` are **placeholder
-> values pending validation against real device captures** (Punch List AF-1). The
-> matching *logic* is tested; the *data* is not yet trustworthy.
+## Proximity and signal strength
 
-## Proximity
-
-`RSSISmoother` keeps a light EMA (α = 0.25) per device and only reports a band change
-when the smoothed value genuinely crosses a threshold, so the Dashboard doesn't
-strobe. Bands: `near` ≥ −55 dBm, `nearby` −55…−75, `far` < −75. **No direction, no
-distance, no arrows** — RSSI through a body and walls cannot support them, and a
-confident arrow pointing at a stranger is the alarmist UI this app must not be.
+`RSSISmoother` keeps a light EMA (α = 0.25) per device and only reports a band
+change when the smoothed value genuinely crosses a threshold, so the Dashboard
+doesn't strobe. Bands: `near` ≥ −55 dBm, `nearby` −55…−75, `far` < −75. The raw
+smoothed dBm is also surfaced directly (`SignalDetailRow`) next to a plain-language
+hint ("roughly arm's length…") — never a direction, never a distance in metres or
+feet, and never an arrow. RSSI through a body and walls cannot support any of those,
+and a confident arrow pointing at a stranger is the alarmist UI this app must not be.
 
 ## Persistence
 
 | What | Where | Protection |
 | --- | --- | --- |
-| Sightings log | `sightings.json` in the App Group container | `.completeFileProtectionUntilFirstUserAuthentication` + `isExcludedFromBackup` (upgrade to `.completeFileProtection` — SP-1) |
-| Onboarding flag, unlock mirror, "mine" keys, prefs | App Group `UserDefaults` | Container Data Protection; contents non-identifying |
-| Dashboard snapshot (counts + bands only) | App Group `UserDefaults` | Overwritten constantly; no history, no identifiers |
+| Sightings log | `sightings.json` in the App Group container | `.completeFileProtection`, `isExcludedFromBackup` |
+| Onboarding flag, unlock mirror, "mine" keys, appearance, prefs | App Group `UserDefaults` | Container Data Protection; contents non-identifying |
+| Dashboard snapshot (counts + bands only) | App Group `UserDefaults` | Overwritten at ≤1 Hz; no history, no identifiers |
 
 The log is one record per `peripheralKey` (iOS's per-app device UUID — **not** a
-MAC), keeping a strongest-classification high-water mark and a capped 60-sample RSSI
-timeline. Hard cap 2,000 records with least-recently-seen eviction; age pruning at
-7 days (free) or unlimited (Unlock).
+MAC), keeping a strongest-detection high-water mark and a capped 60-sample signal
+timeline. Only recognised camera/display glasses are persisted; a headset or an
+unmatched device is shown live but never written down. Hard cap on record count with
+least-recently-seen eviction; age pruning at 7 days (free) or unlimited (Unlock). A
+schema-version bump migrates rather than wipes — `SightingsStore` recovers whatever
+individual records still decode and only drops the ones that don't.
 
 ## Background scanning (LensBeacon Unlock)
 
 - Opt-in toggle → `bluetooth-central` background mode.
-- Background scan uses a **service-UUID filter** (`knownServiceUUIDs`) with
+- Background scan uses a **service-UUID filter** (derived from the rule table) with
   `allowDuplicates: false` — the only kind of scan iOS keeps servicing off-screen.
   Foreground uses `nil` services + duplicates to also catch manufacturer-only devices.
 - A persistent **Live Activity** (`pushType: nil` — no token minted) keeps the scan
-  visible and stoppable.
+  visible and stoppable, with a Stop button (`PauseScanIntent`).
 - `CBCentralManagerOptionRestoreIdentifierKey` + `willRestoreState` resume the scan
   after a CoreBluetooth background relaunch. Nothing to reconnect — this app never
   connects.
@@ -117,22 +123,32 @@ LensBeaconTests ──uses──▶ Shared/ (compiled in directly, no app host)
 
 LensBeacon (app) ──▶ Shared/
         │
-        ├──embeds──▶ LensBeaconWidget ──▶ Shared/
+        ├──embeds──▶ LensBeaconWidget ──▶ Shared/         (Home Screen widget, Live Activity, Control Center control)
         │
-        └──embeds──▶ LensBeaconWatch (watchOS) ──▶ Shared/{ConfidenceEngine,
-                          ConfidenceLevel, DeviceSignature, ProximityBand}.swift
+        └──embeds──▶ LensBeaconWatch (watchOS) ──▶ Shared/{Detection, DetectionRules,
+                          DetectionEngine, ProximityBand}.swift
                           + LensBeacon/Scanner/BluetoothScanner.swift
+                          │
+                          └──embeds──▶ LensBeaconWatchWidget  (launcher-only complication, no live data)
 ```
 
 `Shared/` is compiled into the iOS app, the widget and the tests. It is the reason
 the pure logic has no UIKit-only dependencies — `Theme.swift` imports SwiftUI, which
 is fine everywhere, but the engines import only `Foundation`.
 
-The **watch app** compiles in only the four pure engine files plus `BluetoothScanner`
+The **watch app** compiles in only the pure engine files plus `BluetoothScanner`
 (CoreBluetooth is available on watchOS; central role only, same as iOS). It does not
 take `Theme.swift` (its own `WatchTheme` avoids the `UIColor` trait closures) or the
 ActivityKit / StoreKit surfaces — a watch is a glance, not a record. It has its own
 `WatchScanModel` (the iOS `ScanCoordinator` stripped of the durable log, Live
 Activity, notifications and any background story) and scans only while its screen is
 showing. The app icon and palette come from the Apple Fellow brand kit vendored in
-`Icon_Source/` — see `docs/reviews/07-brand-icon-integration.md`.
+`Icon_Source/`.
+
+## Dev-only tooling (never ships)
+
+`LensBeacon/Support/CaptureLog.swift` and `LensBeacon/Views/CaptureView.swift` are
+wrapped in `#if DEBUG` — a raw BLE advertisement logger used to confirm new
+detection rules against real hardware captures before they're added to
+`DetectionRuleTable`. Verified absent from Release builds by symbol and string
+inspection of the compiled binary. See `docs/DEVICE-TESTING.md`.
