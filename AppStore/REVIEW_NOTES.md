@@ -60,16 +60,29 @@ App Tracking Transparency prompt because nothing is tracked.
 
 ## In-App Purchase → "LensBeacon Unlock" review screenshot
 
-Use `AppStore/iap-unlock-review.jpg` (1021×2208, no alpha — within Apple's
-640×920–1242×2208 spec). It's the real Unlock sheet, uncaptioned, exactly as
-a reviewer will see it. The purchase button renders disabled in this capture
-only because it was taken via `simctl launch` outside Xcode, which can't wire
-the local StoreKit configuration the way a real Xcode run or an App Review
-sandbox session does — the button, price, and purchase flow are all live
-under an actual StoreKit session (see `LensBeaconTests` / the `.storekit`
-config committed at the repo root). Regenerate from a real device or an
-Xcode-launched simulator if a reviewer flags it; the screenshot's only job
-here is to show the offer's content, not to prove the button is tappable.
+Use `AppStore/iap-unlock-review.png` — **1284×2778, PNG, no alpha**, one of
+the exact sizes App Store Connect already accepts for our iPhone screenshot
+set (ASC's IAP screenshot picker wants an exact device-bucket size here, not
+an arbitrary custom resize — an earlier 1021×2208 crop was rejected as "the
+dimensions of one or more screenshots are wrong"). It's the real Unlock
+sheet, uncaptioned, exactly as a reviewer will see it. The purchase button
+renders disabled in this capture only because it was taken via `simctl
+launch` outside Xcode, which can't wire the local StoreKit configuration the
+way a real Xcode run or an App Review sandbox session does — the button,
+price, and purchase flow are all live under an actual StoreKit session (see
+`LensBeaconTests` / the `.storekit` config committed at the repo root).
+Regenerate from a real device or an Xcode-launched simulator if a reviewer
+flags it; the screenshot's only job here is to show the offer's content, not
+to prove the button is tappable.
+
+## In-App Purchase → promotional image (App Store product page / win-back offers)
+
+Use `AppStore/iap-unlock-promo.png` — **1024×1024, PNG, 72 DPI, RGB, no
+alpha, sharp square corners** (Apple applies its own mask; a source image
+with baked-in rounding gets double-rounded). An open padlock in the same arc
+gradient and Deep Navy field as the app icon, so the promoted-purchase card
+reads as LensBeacon's, not a generic stock unlock graphic — verified with
+`sips -g dpiHeight -g dpiWidth -g hasAlpha` before upload.
 
 ## Tone check against the North Stars
 
