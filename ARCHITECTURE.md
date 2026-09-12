@@ -108,6 +108,19 @@ individual records still decode and only drops the ones that don't.
 - Background scan uses a **service-UUID filter** (derived from the rule table) with
   `allowDuplicates: false` — the only kind of scan iOS keeps servicing off-screen.
   Foreground uses `nil` services + duplicates to also catch manufacturer-only devices.
+- **`allowDuplicates: false` means CoreBluetooth reports each matching peripheral
+  once per scan session in the background** — RSSI never refreshes, and a device
+  whose advertisement doesn't change may not be reported again all session.
+  `BluetoothScanner` stops and restarts the scan every 4 minutes while backgrounded
+  (`scheduleBackgroundRestartLocked`) purely to re-arm discovery; it costs one more
+  `scanForPeripherals` call, not continuous extra radio time.
+- **Known gap, tracked not hidden: the background filter can only include a
+  service UUID, and today's camera-glasses rules (Luxottica `0x0D53`, Snap
+  `0x03C2`) are manufacturer-ID-only.** Until a real capture turns up a service
+  UUID those products also advertise, LensBeacon Unlock's background scan cannot
+  detect them at all while the app is backgrounded — only foreground scanning
+  (unfiltered) sees them today. Headsets (Quest via `0xFEB8`, Oculus `0xFD5F`)
+  aren't affected; they already have service-UUID rules. See `docs/RULES.md`.
 - A persistent **Live Activity** (`pushType: nil` — no token minted) keeps the scan
   visible and stoppable, with a Stop button (`PauseScanIntent`).
 - `CBCentralManagerOptionRestoreIdentifierKey` + `willRestoreState` resume the scan

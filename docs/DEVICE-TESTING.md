@@ -83,8 +83,8 @@ AirDrop / Messages / Files).
 | --- | --- |
 | **Meta Quest** | `0x058E` seen already. Check whether `0xFD5F` and/or `0x00E0` (Google) also appear, and the exact name. |
 | **Even Realities G1 / G2** | ✓ confirmed on a G2: company prefix `0x5245` ("ER") + name `Even G<1|2>_<ch>_<L|R>_<id>`. Capture a **G1** and the **right arm** to confirm the pattern holds. |
-| **Ray-Ban / Oakley Meta** | does `0x0D53` or `0x058E` actually appear? The exact advertised name. Any service UUIDs (tell me if `0xFD5F` shows — it would move that rule to camera-only). |
-| **Snap Spectacles** | is it `0x03C2`? Exact name. |
+| **Ray-Ban / Oakley Meta** | does `0x0D53` or `0x058E` actually appear? The exact advertised name. **Any service UUID at all, in either "Service UUIDs" or "Service data" — not just `0xFD5F`.** This rule is manufacturer-ID-only today, which means it currently cannot be included in the background-scan filter (`ARCHITECTURE.md` → "Background scanning"), so **Unlock's background scanning cannot detect this product at all while backgrounded** until some service UUID is confirmed to add. Also capture with the glasses **connected to their owner's phone, worn normally** — not just powered on and idle — since that's the state that actually matters and it's unconfirmed whether they keep advertising once connected. |
+| **Snap Spectacles** | is it `0x03C2`? Exact name. Same service-UUID gap and same connected-state check as above. |
 
 After a table change: `⌘U` (tests stay green — add one for the new signature), then
 re-capture to confirm the engine verdict.

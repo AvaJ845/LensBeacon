@@ -89,6 +89,7 @@ final class BluetoothScanner: NSObject, @unchecked Sendable {
     func stopScanning() {
         queue.async { [self] in
             central?.stopScan()
+            cancelBackgroundRestartLocked()
             emitState()
         }
     }
@@ -99,6 +100,7 @@ final class BluetoothScanner: NSObject, @unchecked Sendable {
     func teardown() {
         queue.async { [self] in
             central?.stopScan()
+            cancelBackgroundRestartLocked()
             central?.delegate = nil
             central = nil
             onEvent = nil
@@ -124,6 +126,45 @@ final class BluetoothScanner: NSObject, @unchecked Sendable {
         )
         log.debug("scan started (background=\(self.wantsBackgroundMode, privacy: .public))")
         onStateChange?(.scanning)
+
+        if wantsBackgroundMode {
+            scheduleBackgroundRestartLocked()
+        } else {
+            cancelBackgroundRestartLocked()
+        }
+    }
+
+    // MARK: - Background scan restart
+
+    /// `allowDuplicates: false` is required to keep iOS servicing the scan off-screen
+    /// at all, but it means CoreBluetooth reports each matching peripheral **once**
+    /// per scan session — RSSI never refreshes, and a device whose advertisement
+    /// payload never changes may not be reported a second time all session. Stopping
+    /// and restarting the scan re-arms discovery for everything the filter matches;
+    /// it costs one more `scanForPeripherals` call, not continuous extra radio time.
+    private let backgroundRestartInterval: TimeInterval = 240
+    private var backgroundRestartTimer: DispatchSourceTimer?
+
+    private func scheduleBackgroundRestartLocked() {
+        dispatchPrecondition(condition: .onQueue(queue))
+        guard backgroundRestartTimer == nil else { return }
+        let timer = DispatchSource.makeTimerSource(queue: queue)
+        timer.schedule(deadline: .now() + backgroundRestartInterval, repeating: backgroundRestartInterval)
+        timer.setEventHandler { [weak self] in
+            guard let self else { return }
+            dispatchPrecondition(condition: .onQueue(self.queue))
+            guard self.wantsBackgroundMode, let central = self.central, central.state == .poweredOn else { return }
+            central.stopScan()
+            self.beginScanLocked()
+        }
+        timer.resume()
+        backgroundRestartTimer = timer
+    }
+
+    private func cancelBackgroundRestartLocked() {
+        dispatchPrecondition(condition: .onQueue(queue))
+        backgroundRestartTimer?.cancel()
+        backgroundRestartTimer = nil
     }
 
     private func emitState() {
