@@ -138,7 +138,16 @@ enum SessionAnalyzer {
                 firstSeen: sorted.first!.timestamp,
                 lastSeen: sorted.last!.timestamp,
                 intervalSeconds: intervals,
-                rssiValues: sorted.map(\.rssi)
+                // Same valid-range guard as the product's own `RSSISmoother`
+                // (`Shared/ProximityBand.swift`): CoreBluetooth reports `127`
+                // as its "no reading available" sentinel, and stray values at
+                // or beyond -120 dBm are noise, not signal. `RawPacket`/
+                // `PacketRecord` still keep the true raw value — this filter
+                // is scoped to derived *statistics* only, so mean/min/max RSSI
+                // aren't dragged around by a sentinel that isn't a real
+                // reading. Confirmed as a real bug against exported field
+                // data: a Quest capture's max_rssi came back `127`.
+                rssiValues: sorted.map(\.rssi).filter { $0 < 0 && $0 > -120 }
             )
         }.sorted { $0.packetCount > $1.packetCount }
     }

@@ -29,6 +29,30 @@ struct HarnessAnalyzerTests {
         #expect(summaries[0].meanIntervalSeconds == nil)
     }
 
+    /// Real bug, confirmed against an actual field capture: CoreBluetooth's
+    /// `127` "no reading available" RSSI sentinel was landing directly in
+    /// `max_rssi` on an exported CSV. `rssiValues` must apply the same valid-
+    /// range guard as the product's own `RSSISmoother`.
+    @Test func rssiStatsIgnoreTheCoreBluetoothNoReadingSentinel() {
+        let now = Date()
+        let packets = [-50, 127, -55, 127, -48].map { rssi in
+            PacketRecord(peripheralID: "a", timestamp: now, rssi: rssi)
+        }
+        let summary = SessionAnalyzer.summarize(packets)[0]
+        #expect(summary.rssiValues == [-50, -55, -48])
+        #expect(summary.maxRSSI == -48)
+        #expect(summary.minRSSI == -55)
+    }
+
+    @Test func rssiStatsAlsoIgnoreValuesAtOrBeyondNegative120() {
+        let now = Date()
+        let packets = [-50, -120, -150, 0].map { rssi in
+            PacketRecord(peripheralID: "a", timestamp: now, rssi: rssi)
+        }
+        let summary = SessionAnalyzer.summarize(packets)[0]
+        #expect(summary.rssiValues == [-50])
+    }
+
     @Test func summarizeGroupsSeparatelyByPeripheralID() {
         let now = Date()
         let packets = [

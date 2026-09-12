@@ -177,7 +177,7 @@ private struct SessionListView: View {
                 } label: {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(session.startedAt.formatted(date: .abbreviated, time: .shortened))
-                        Text("\(session.environment.title) · \(session.packets.count) packets\(session.isActive ? " · active" : "")")
+                        Text("\(session.environment.title) · \(session.packetCount) packets\(session.isActive ? " · active" : "")")
                             .font(.caption).foregroundStyle(.secondary)
                     }
                 }
@@ -196,9 +196,17 @@ private struct AnalysisView: View {
     let session: HarnessSession
     @State private var exportDoc: CSVDocument?
 
-    private var records: [PacketRecord] { session.packets.map(\.asRecord) }
-    private var summaries: [SessionAnalyzer.DeviceSummary] { SessionAnalyzer.summarize(records) }
-    private var ratio: Double? { SessionAnalyzer.payloadConfirmedRatio(records) }
+    // Computed once, in `.task` below, not as plain computed properties.
+    // `session.packets` is a SwiftData relationship — reading it faults
+    // (fully materializes) every `RawPacket` in the session, and
+    // `SessionAnalyzer.summarize` then walks that whole array. As plain
+    // `var`s, both re-ran on *every* re-render of this view, including the
+    // one triggered by just tapping an Export button below — for a session
+    // with thousands of packets that was a visible freeze on every tap.
+    @State private var records: [PacketRecord] = []
+    @State private var summaries: [SessionAnalyzer.DeviceSummary] = []
+    @State private var ratio: Double?
+    @State private var loaded = false
 
     var body: some View {
         List {
@@ -208,7 +216,7 @@ private struct AnalysisView: View {
                 if let ended = session.endedAt {
                     LabeledContent("Duration", value: durationString(ended.timeIntervalSince(session.startedAt)))
                 }
-                LabeledContent("Total packets", value: "\(records.count)")
+                LabeledContent("Total packets", value: "\(session.packetCount)")
                 if !session.notes.isEmpty { Text(session.notes).font(.caption).foregroundStyle(.secondary) }
             }
             Section("Ground truth") {
@@ -227,20 +235,33 @@ private struct AnalysisView: View {
                     Text("\(Int((ratio * 100).rounded()))% carried the confirming payload")
                 }
             }
-            Section("Per-device summary (\(summaries.count))") {
-                ForEach(summaries) { s in deviceSummaryRow(s) }
-            }
-            Section {
-                Button("Export raw packets (CSV)") {
-                    exportDoc = CSVDocument(text: HarnessCSVExporter.rawPackets(records, sessionID: session.id.uuidString))
+            if loaded {
+                Section("Per-device summary (\(summaries.count))") {
+                    ForEach(summaries) { s in deviceSummaryRow(s) }
                 }
-                Button("Export device summary (CSV)") {
-                    exportDoc = CSVDocument(text: HarnessCSVExporter.deviceSummaries(summaries, sessionID: session.id.uuidString))
+                Section {
+                    Button("Export raw packets (CSV)") {
+                        exportDoc = CSVDocument(text: HarnessCSVExporter.rawPackets(records, sessionID: session.id.uuidString))
+                    }
+                    Button("Export device summary (CSV)") {
+                        exportDoc = CSVDocument(text: HarnessCSVExporter.deviceSummaries(summaries, sessionID: session.id.uuidString))
+                    }
                 }
+            } else {
+                Section { ProgressView("Loading \(session.packetCount) packets…") }
             }
         }
         .navigationTitle("Analysis")
         .navigationBarTitleDisplayMode(.inline)
+        .task {
+            // Computed exactly once per time this screen is opened — see the
+            // doc comment on the `@State` properties above for why this must
+            // never be a plain re-evaluated computed property here.
+            records = session.packets.map(\.asRecord)
+            summaries = SessionAnalyzer.summarize(records)
+            ratio = SessionAnalyzer.payloadConfirmedRatio(records)
+            loaded = true
+        }
         .fileExporter(
             isPresented: Binding(get: { exportDoc != nil }, set: { if !$0 { exportDoc = nil } }),
             document: exportDoc, contentType: .commaSeparatedText, defaultFilename: "harness-export"
@@ -275,40 +296,51 @@ private struct AnalysisView: View {
 private struct AggregateAnalysisView: View {
     let sessions: [HarnessSession]
 
-    private var outcomes: [SessionAnalyzer.SessionOutcome] {
-        sessions.flatMap { session in
-            SessionAnalyzer.outcomes(
-                startedAt: session.startedAt,
-                deviceStates: session.deviceStates.map(\.asRecord),
-                packets: session.packets.map(\.asRecord)
-            )
-        }
-    }
-    private var rates: [SessionAnalyzer.TruePositiveRate] { SessionAnalyzer.truePositiveRates(outcomes) }
+    // Same reasoning as `AnalysisView`, worse in degree: this walks every
+    // packet in *every* session, not just one. As plain computed properties
+    // this re-ran on every re-render of this screen — exactly the screen the
+    // field protocol says to check repeatedly through the day.
+    @State private var rates: [SessionAnalyzer.TruePositiveRate] = []
+    @State private var loaded = false
 
     var body: some View {
         List {
-            Section("True-positive rate by ground-truth category") {
-                ForEach(rates, id: \.category) { r in
-                    HStack {
-                        Text(r.category.title)
-                        Spacer()
-                        if let rate = r.rate {
-                            Text("\(Int((rate * 100).rounded()))% (\(r.detectedSessions)/\(r.totalSessions))")
-                                .foregroundStyle(.secondary)
-                        } else {
-                            Text("no sessions yet").foregroundStyle(.secondary)
+            if loaded {
+                Section("True-positive rate by ground-truth category") {
+                    ForEach(rates, id: \.category) { r in
+                        HStack {
+                            Text(r.category.title)
+                            Spacer()
+                            if let rate = r.rate {
+                                Text("\(Int((rate * 100).rounded()))% (\(r.detectedSessions)/\(r.totalSessions))")
+                                    .foregroundStyle(.secondary)
+                            } else {
+                                Text("no sessions yet").foregroundStyle(.secondary)
+                            }
                         }
                     }
                 }
-            }
-            Section {
-                Text("A category with 0 sessions is not a 0% detection rate — it's no data. Run the field protocol in HARNESS.md before drawing any conclusion from this table, and check the pre-registered kill criterion against the \"Worn + paired\" row specifically.")
-                    .font(.caption2).foregroundStyle(.secondary)
+                Section {
+                    Text("A category with 0 sessions is not a 0% detection rate — it's no data. Run the field protocol in HARNESS.md before drawing any conclusion from this table, and check the pre-registered kill criterion against the \"Worn + paired\" row specifically.")
+                        .font(.caption2).foregroundStyle(.secondary)
+                }
+            } else {
+                Section { ProgressView("Loading \(sessions.count) session(s)…") }
             }
         }
         .navigationTitle("Aggregate")
         .navigationBarTitleDisplayMode(.inline)
+        .task {
+            let outcomes = sessions.flatMap { session in
+                SessionAnalyzer.outcomes(
+                    startedAt: session.startedAt,
+                    deviceStates: session.deviceStates.map(\.asRecord),
+                    packets: session.packets.map(\.asRecord)
+                )
+            }
+            rates = SessionAnalyzer.truePositiveRates(outcomes)
+            loaded = true
+        }
     }
 }
 #endif

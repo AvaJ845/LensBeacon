@@ -135,6 +135,14 @@ final class HarnessSession {
     var endedAt: Date?
     var environmentRaw: String = HarnessEnvironment.isolated.rawValue
     var notes: String = ""
+    /// A plain, denormalized counter — kept in sync by `HarnessCoordinator
+    /// .ingest` alongside every insert. Exists solely so a list row can show
+    /// "how many packets" without touching `packets` below: reading a
+    /// `@Relationship` array's `.count` faults (fully materializes) every
+    /// related `RawPacket` into memory, which is fine to pay once when
+    /// actually opening a session's Analysis screen, but was hanging the UI
+    /// when `SessionListView` did it for every row just to render a number.
+    var packetCount: Int = 0
 
     @Relationship(deleteRule: .cascade, inverse: \DeviceState.session)
     var deviceStates: [DeviceState] = []

@@ -21,6 +21,19 @@ final class HarnessCoordinator {
     private var seenPeripherals: Set<String> = []
     private var saveScheduled = false
 
+    // `packetCount`/`uniquePeripheralCount` above are `@Observable` — updating
+    // them straight from `ingest()` (called on every single BLE packet, tens
+    // of times a second in a busy promiscuous scan) forced a full SwiftUI
+    // re-render on every packet and visibly stressed the main thread for the
+    // whole session. Every other scanner in this app (`ScanCoordinator`,
+    // `WatchScanModel`, `CaptureLog`) throttles its published state to a
+    // ~500ms tick for exactly this reason; these two counters are updated the
+    // same way now, from the cheap plain vars below.
+    private var rawPacketCount = 0
+    private var rawUniquePeripheralCount = 0
+    private var displayTick: Task<Void, Never>?
+    private let displayInterval: Duration = .milliseconds(500)
+
     init(context: ModelContext = ModelContext(HarnessStore.container)) {
         self.context = context
         scanner.onStateChange = { [weak self] state in self?.state = state }
@@ -28,7 +41,7 @@ final class HarnessCoordinator {
     }
 
     func start() { scanner.start() }
-    func stop() { scanner.stop() }
+    func stop() { scanner.stop(); displayTick?.cancel(); displayTick = nil }
 
     func startSession(environment: HarnessEnvironment, notes: String, deviceStates: [DeviceState]) {
         let session = HarnessSession(environment: environment)
@@ -38,12 +51,22 @@ final class HarnessCoordinator {
         context.insert(session)
         try? context.save()
         activeSession = session
+        rawPacketCount = 0
+        rawUniquePeripheralCount = 0
         packetCount = 0
         uniquePeripheralCount = 0
         seenPeripherals.removeAll()
+        ensureDisplayTick()
     }
 
     func endSession() {
+        displayTick?.cancel()
+        displayTick = nil
+        // Flush the counters one last time so the final numbers shown (and
+        // the session's persisted `packetCount`) reflect every packet, not
+        // whatever the last 500ms tick happened to catch.
+        packetCount = rawPacketCount
+        uniquePeripheralCount = rawUniquePeripheralCount
         activeSession?.endedAt = Date()
         try? context.save()
         activeSession = nil
@@ -59,9 +82,24 @@ final class HarnessCoordinator {
         )
         raw.session = session
         context.insert(raw)
-        packetCount += 1
-        if seenPeripherals.insert(packet.peripheralID).inserted { uniquePeripheralCount += 1 }
+        rawPacketCount += 1
+        session.packetCount = rawPacketCount
+        if seenPeripherals.insert(packet.peripheralID).inserted { rawUniquePeripheralCount += 1 }
         scheduleSave()
+    }
+
+    /// Copies the cheap plain counters into the `@Observable` properties the
+    /// UI reads, at most twice a second — never directly from `ingest()`.
+    private func ensureDisplayTick() {
+        guard displayTick == nil else { return }
+        displayTick = Task { [weak self] in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: self?.displayInterval ?? .milliseconds(500))
+                guard let self, self.activeSession != nil else { return }
+                self.packetCount = self.rawPacketCount
+                self.uniquePeripheralCount = self.rawUniquePeripheralCount
+            }
+        }
     }
 
     /// Debounced, like `SightingsStore.scheduleSave()` — a busy scan touches
