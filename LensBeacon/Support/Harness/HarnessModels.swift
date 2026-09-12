@@ -63,6 +63,32 @@ final class DeviceState {
     }
 }
 
+// `SessionEventKind` itself lives in `SessionAnalyzer.swift`, un-gated — this
+// model just wraps it in a `@Model`. It needs to compile in every
+// configuration (including the always-compiled test target), same reasoning
+// as `PacketRecord`/`DeviceStateRecord`.
+@Model
+final class SessionEvent {
+    var id: UUID = UUID()
+    var at: Date = Date()
+    var kindRaw: String = SessionEventKind.photoCapture.rawValue
+
+    var session: HarnessSession?
+
+    var kind: SessionEventKind {
+        get { SessionEventKind(rawValue: kindRaw) ?? .photoCapture }
+        set { kindRaw = newValue.rawValue }
+    }
+
+    init(kind: SessionEventKind, at: Date = Date()) {
+        self.id = UUID()
+        self.at = at
+        self.kindRaw = kind.rawValue
+    }
+
+    var asRecord: SessionEventRecord { SessionEventRecord(kind: kind, at: at) }
+}
+
 /// One captured BLE advertisement, exactly as CoreBluetooth reported it, with
 /// nothing discarded. Classification is a **pure function over this table**
 /// (`PacketClassifier`), never something computed once at capture time and
@@ -150,6 +176,9 @@ final class HarnessSession {
     @Relationship(deleteRule: .cascade, inverse: \RawPacket.session)
     var packets: [RawPacket] = []
 
+    @Relationship(deleteRule: .cascade, inverse: \SessionEvent.session)
+    var events: [SessionEvent] = []
+
     var environment: HarnessEnvironment {
         get { HarnessEnvironment(rawValue: environmentRaw) ?? .isolated }
         set { environmentRaw = newValue.rawValue }
@@ -168,7 +197,7 @@ enum HarnessStore {
     /// A private on-disk store, deliberately not the App Group container —
     /// research telemetry about the radio, unrelated to a user's sightings.
     static let container: ModelContainer = {
-        let schema = Schema([HarnessSession.self, DeviceState.self, RawPacket.self])
+        let schema = Schema([HarnessSession.self, DeviceState.self, RawPacket.self, SessionEvent.self])
         let url = URL.applicationSupportDirectory.appending(path: "lensbeacon-harness.store")
         let config = ModelConfiguration(schema: schema, url: url)
         do {

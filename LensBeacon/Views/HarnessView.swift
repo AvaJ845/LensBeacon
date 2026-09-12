@@ -52,6 +52,21 @@ private struct HarnessRootContent: View {
                             .font(.caption2).foregroundStyle(.secondary)
                     }
                 }
+                if let session = coordinator.activeSession {
+                    Section("Mark an event") {
+                        Text("Tap the instant it happens — this is what lets the packet timeline be checked for anything unusual right around that moment. Events are sparse by nature, so reading this list back is cheap, unlike the packet log.")
+                            .font(.caption2).foregroundStyle(.secondary)
+                        ForEach(SessionEventKind.allCases) { kind in
+                            Button("\(kind.emoji) \(kind.title)") { coordinator.markEvent(kind) }
+                        }
+                        if !session.events.isEmpty {
+                            ForEach(session.events.sorted { $0.at > $1.at }, id: \.id) { event in
+                                Text("• \(event.kind.title) — \(event.at.formatted(date: .omitted, time: .standard))")
+                                    .font(.caption2).foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
                 Section {
                     NavigationLink("All sessions (\(sessions.count))") { SessionListView(sessions: sessions) }
                     NavigationLink("Aggregate analysis") { AggregateAnalysisView(sessions: sessions) }
@@ -230,6 +245,20 @@ private struct AnalysisView: View {
                     }
                 }
             }
+            if !session.events.isEmpty {
+                Section("Marked events (\(session.events.count))") {
+                    Text("Cross-reference these timestamps against the raw packet CSV's timestamp_iso8601 column to see what the nearest devices were doing right around each one.")
+                        .font(.caption2).foregroundStyle(.secondary)
+                    ForEach(session.events.sorted { $0.at < $1.at }, id: \.id) { event in
+                        HStack {
+                            Text("\(event.kind.emoji) \(event.kind.title)")
+                            Spacer()
+                            Text(event.at.formatted(date: .omitted, time: .standard)).foregroundStyle(.secondary)
+                        }
+                        .font(.caption)
+                    }
+                }
+            }
             if let ratio {
                 Section("Payload-confirmation ratio (0x058E / 0x01AB packets only)") {
                     Text("\(Int((ratio * 100).rounded()))% carried the confirming payload")
@@ -245,6 +274,11 @@ private struct AnalysisView: View {
                     }
                     Button("Export device summary (CSV)") {
                         exportDoc = CSVDocument(text: HarnessCSVExporter.deviceSummaries(summaries, sessionID: session.id.uuidString))
+                    }
+                    if !session.events.isEmpty {
+                        Button("Export marked events (CSV)") {
+                            exportDoc = CSVDocument(text: HarnessCSVExporter.events(session.events.map(\.asRecord), sessionID: session.id.uuidString))
+                        }
                     }
                 }
             } else {

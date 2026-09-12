@@ -72,6 +72,19 @@ final class HarnessCoordinator {
         activeSession = nil
     }
 
+    /// Records a momentary action against the running session, timestamped
+    /// now. Rare and operator-triggered (a tap, not a packet), so this saves
+    /// immediately rather than joining the debounced packet-save path —
+    /// there's no volume concern, and losing an event to a crash before the
+    /// next debounce window would defeat the point of marking it at all.
+    func markEvent(_ kind: SessionEventKind) {
+        guard let session = activeSession else { return }
+        let event = SessionEvent(kind: kind)
+        event.session = session
+        context.insert(event)
+        try? context.save()
+    }
+
     private func ingest(_ packet: HarnessAdvertisement) {
         guard let session = activeSession else { return }
         let raw = RawPacket(

@@ -35,5 +35,18 @@ struct HarnessCSVExporterTests {
     @Test func headerRowIsPresentEvenWithNoPackets() {
         #expect(HarnessCSVExporter.rawPackets([], sessionID: "s").hasPrefix("session_id,timestamp_iso8601"))
         #expect(HarnessCSVExporter.deviceSummaries([], sessionID: "s").hasPrefix("session_id,peripheral_id"))
+        #expect(HarnessCSVExporter.events([], sessionID: "s").hasPrefix("session_id,timestamp_iso8601"))
+    }
+
+    @Test func eventsExportInChronologicalOrderRegardlessOfInputOrder() {
+        let now = Date()
+        let events = [
+            SessionEventRecord(kind: .metaAIQuery, at: now.addingTimeInterval(10)),
+            SessionEventRecord(kind: .photoCapture, at: now),
+        ]
+        let csv = HarnessCSVExporter.events(events, sessionID: "s")
+        let rows = csv.split(separator: "\n").dropFirst()
+        #expect(rows.first?.contains("photoCapture") == true)
+        #expect(rows.last?.contains("metaAIQuery") == true)
     }
 }

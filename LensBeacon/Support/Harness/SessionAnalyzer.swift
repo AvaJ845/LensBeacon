@@ -3,6 +3,40 @@ import Foundation
 // See `PacketClassifier.swift` for why this file is un-gated (pure + testable)
 // while the capture/session UI that produces its inputs is `#if DEBUG`-only.
 
+/// A momentary action during a session — distinct from `DeviceStateRecord`,
+/// which is a *sustained* condition entered once before capture starts.
+/// "Took a photo" and "talked to Meta AI" happen at a specific instant, and
+/// the whole reason to record one is to later look at what the packet
+/// timeline was doing right around that timestamp — a static session-level
+/// toggle can only express "whether," never "when," and "when" is the
+/// actually useful part here (the same question `Shared/ActivationSignal
+/// .swift` asks of the product's own connect/disconnect hypothesis).
+enum SessionEventKind: String, CaseIterable, Identifiable, Codable, Sendable {
+    case photoCapture
+    case metaAIQuery
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .photoCapture: return "Took a photo"
+        case .metaAIQuery:  return "Talked to Meta AI"
+        }
+    }
+
+    var emoji: String {
+        switch self {
+        case .photoCapture: return "📷"
+        case .metaAIQuery:  return "🎙️"
+        }
+    }
+}
+
+struct SessionEventRecord: Sendable, Equatable {
+    let kind: SessionEventKind
+    let at: Date
+}
+
 /// Ground truth for one physical device the operator says was actually present
 /// during a session, in the plain, capture-independent shape analysis code
 /// takes — mirrors the `#if DEBUG` `@Model DeviceState`. Independent booleans,

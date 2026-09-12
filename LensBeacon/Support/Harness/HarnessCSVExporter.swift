@@ -30,6 +30,16 @@ enum HarnessCSVExporter {
         return rows.joined(separator: "\n")
     }
 
+    static func events(_ events: [SessionEventRecord], sessionID: String) -> String {
+        let iso = ISO8601DateFormatter()
+        iso.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        var rows = ["session_id,timestamp_iso8601,kind"]
+        for e in events.sorted(by: { $0.at < $1.at }) {
+            rows.append([csvField(sessionID), csvField(iso.string(from: e.at)), csvField(e.kind.rawValue)].joined(separator: ","))
+        }
+        return rows.joined(separator: "\n")
+    }
+
     static func deviceSummaries(_ summaries: [SessionAnalyzer.DeviceSummary], sessionID: String) -> String {
         let iso = ISO8601DateFormatter()
         var rows = [
