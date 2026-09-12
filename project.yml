@@ -297,6 +297,12 @@ targets:
       - path: LensBeacon/Model/Sighting.swift
       - path: LensBeacon/Store/SightingsStore.swift
       - path: LensBeacon/Store/MineRegistry.swift
+      # Phase 0 detection validation harness — pure classification/analysis
+      # layer only (see HARNESS.md). The capture UI and SwiftData models that
+      # feed it are #if DEBUG-gated inside the app target itself, not here.
+      - path: LensBeacon/Support/Harness/PacketClassifier.swift
+      - path: LensBeacon/Support/Harness/SessionAnalyzer.swift
+      - path: LensBeacon/Support/Harness/HarnessCSVExporter.swift
     settings:
       base:
         PRODUCT_NAME: LensBeaconTests

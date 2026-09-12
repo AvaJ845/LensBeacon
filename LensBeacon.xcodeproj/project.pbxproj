@@ -10,6 +10,7 @@
 		0062E1089571D806C1F2D855 /* FlagNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD7478BF7C60186F28407FB /* FlagNotifier.swift */; };
 		05095BEBFD930020E962D256 /* DashboardSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD3B36114475BA0E8B555E6 /* DashboardSnapshot.swift */; };
 		0568FA5FB7E455F7D5B05AD0 /* DemoSeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51901B0953D20B790D363207 /* DemoSeed.swift */; };
+		057CFF0E966F6368BB252EA9 /* PacketClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFC7F6EE0DCA6FC05A2EDDB3 /* PacketClassifier.swift */; };
 		062DD950E224346506221940 /* DetectionRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16120AFCDFA8DD3F88286BF8 /* DetectionRules.swift */; };
 		06A7360CA8F51AAF508DFC65 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 54B6F413A10F2FC178E96BB0 /* PrivacyInfo.xcprivacy */; };
 		0A1F2C9306519254FB620002 /* Detection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B85EFB70DC4A4B7785EB7C /* Detection.swift */; };
@@ -21,6 +22,7 @@
 		1820ADA7F260E09B88CBB906 /* ActivationSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808F2D22903E648C4AAECCFB /* ActivationSignal.swift */; };
 		1894C93256CF1F4F2633C3C8 /* LensBeaconWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = CB96145173392A75857F9C23 /* LensBeaconWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		195EDEC761546332AE5E4C80 /* Detection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B85EFB70DC4A4B7785EB7C /* Detection.swift */; };
+		1AB20EB5F5F55CDF8D0E8F92 /* HarnessScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F023BECC2F0C0407467A1BD /* HarnessScanner.swift */; };
 		1CB6297A41EDE880A2802BD5 /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */; };
 		1DBA6D30E85484CE80ED72AA /* DetectionRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16120AFCDFA8DD3F88286BF8 /* DetectionRules.swift */; };
 		1E121701476E92573667C592 /* Legal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ED65E0A5B4A6980C1325A7 /* Legal.swift */; };
@@ -29,16 +31,20 @@
 		23848DB875F685D6AE997FAB /* CaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91919DF14015DC6A89FB314D /* CaptureView.swift */; };
 		2431AF6F5CD09C9AF4E8B504 /* ScanCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8CEB71738203F7D7AAD489 /* ScanCoordinator.swift */; };
 		243D4756F9DF97E6E25B7AB3 /* ScanControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F475A93A38AFAFC489C55967 /* ScanControl.swift */; };
+		25F98198B6F93C499035EABE /* SessionAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9C7813C3A7F5A66D493A41 /* SessionAnalyzer.swift */; };
 		27E6AD095C6D311C559BB1FE /* ScanControlBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4669BF786DCFBCB118B1C3 /* ScanControlBridge.swift */; };
 		29D314ACE120817F5A7E168B /* ActivationSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808F2D22903E648C4AAECCFB /* ActivationSignal.swift */; };
+		29F9FCFF3AD055B4BDC26554 /* PacketClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFC7F6EE0DCA6FC05A2EDDB3 /* PacketClassifier.swift */; };
 		2A2FEEB5EA02A0B05541053E /* Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F0187533BA2FF318207A2 /* Copy.swift */; };
 		2B097574D261E892A30C01A3 /* ScanActivityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E799770714850A870C69ED8B /* ScanActivityController.swift */; };
+		2D0FC8EFFCD9CFFB43CE0810 /* HarnessClassifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF586AFCACDF49F0522BAD13 /* HarnessClassifierTests.swift */; };
 		2D41136B74985C1A69D57C31 /* ScanControlIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6841C9D684DCD013813BCFE /* ScanControlIntents.swift */; };
 		2E25AF77C161ABC55DD8F2F2 /* DetectionRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16120AFCDFA8DD3F88286BF8 /* DetectionRules.swift */; };
 		2E3BB00D1719FE3253B7C901 /* QuietHours.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6575315C59EA131EF1393EDD /* QuietHours.swift */; };
 		33628AE6F26C7A2661F73951 /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */; };
 		3366BB6B1D1798BD40755E77 /* Legal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ED65E0A5B4A6980C1325A7 /* Legal.swift */; };
 		34EE57220ADB973D873B8099 /* DashboardSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD3B36114475BA0E8B555E6 /* DashboardSnapshot.swift */; };
+		359D7EEF38E0C9A2E6375D6F /* HarnessAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39A6F105AA9B04E1B42A0FD /* HarnessAnalyzerTests.swift */; };
 		3640B5A5A01419328477CEAB /* SightingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089DE783EDB8AB75AE31AB2D /* SightingsStore.swift */; };
 		38DF97A0BA1B584AFBA72FFB /* DetectionEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0CD71B7BD1F3DC4925E6C7 /* DetectionEngineTests.swift */; };
 		3BB64343BC560A82DCF38165 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E60BE93EAF03C62C5A856 /* OnboardingView.swift */; };
@@ -52,6 +58,7 @@
 		528E672F35963445F8BE8762 /* Sighting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7AFD6DE5B42C4A0498351 /* Sighting.swift */; };
 		5445D681D411E10BA29DEE23 /* DetectionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9466FF3BE07241B4403F8B9 /* DetectionEngine.swift */; };
 		56369AD023741271CA4D1420 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B4AACE24066B82652057D0 /* Haptics.swift */; };
+		57A013DBC73C725A75FCD6C5 /* HarnessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77350F1CF051CCC6D349A82 /* HarnessView.swift */; };
 		588F5984FC8D686FB9795682 /* MineRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082ECB0547B0DE204893D61D /* MineRegistry.swift */; };
 		59E39D32AC1DED453F30F417 /* BluetoothScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E87AC1D87A4165E88A10E9F /* BluetoothScanner.swift */; };
 		5B8C88DAC01C214153CC9588 /* WatchRelay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C0D6C75EF02F6D1ECB1A37 /* WatchRelay.swift */; };
@@ -60,9 +67,11 @@
 		5CD443EACFF584A88A30825E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FABEC359EF3B0C3B73FFAEF /* Assets.xcassets */; };
 		5D600A441B49F7C518783788 /* ContributionReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47ED31E1E4B84656102FD9F0 /* ContributionReport.swift */; };
 		616056CFBDFC49B58273882E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D140401EDC119CDAA24B762 /* SettingsView.swift */; };
+		64AF750758DFC0CED16AE073 /* HarnessCSVExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D424470A25CE0CAD08A4D93 /* HarnessCSVExporter.swift */; };
 		65019930320F1EA5027B32FD /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDE4BF91152CCFCDF1B254 /* Theme.swift */; };
 		68CF380DC9C847439937188E /* RSSISmootherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DF92D77117D02D898319E8 /* RSSISmootherTests.swift */; };
 		69FE3D67EB90E6DDA87591B4 /* DetectionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9466FF3BE07241B4403F8B9 /* DetectionEngine.swift */; };
+		6AD763A28F165D7700A956DD /* HarnessModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A03441311E9A495689E088 /* HarnessModels.swift */; };
 		6BE5AD9FC9D63CA8DAEC7BE1 /* DetectionRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16120AFCDFA8DD3F88286BF8 /* DetectionRules.swift */; };
 		6EE8F41D4D26C46A0B56A836 /* ProximityBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */; };
 		725906B4AA7B5370A153C851 /* UnlockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A24458AA55EBA6FFE8BE96 /* UnlockStore.swift */; };
@@ -71,6 +80,7 @@
 		7D3F1E2368E4B3114E2E9F05 /* QuietHours.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6575315C59EA131EF1393EDD /* QuietHours.swift */; };
 		7DEB973E2756DBF3DAA48934 /* DashboardSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD3B36114475BA0E8B555E6 /* DashboardSnapshot.swift */; };
 		806F4C0FBA837DA618FDD13C /* WatchScanModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C09453CCC68BBFE5885EB /* WatchScanModel.swift */; };
+		82A40CFFE444A6F543975548 /* HarnessCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D235417C4D69B0716AAA54 /* HarnessCoordinator.swift */; };
 		84897BF97A1824A6BB29E72C /* ScanControlBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4669BF786DCFBCB118B1C3 /* ScanControlBridge.swift */; };
 		8729A276DB2F60DBED817DC3 /* BeaconMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85B365D41B378692E7A0614 /* BeaconMark.swift */; };
 		8A5B5B0826E4CF9A4E643CAA /* SightingsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB2FCAED81C54DE43AC2804 /* SightingsStoreTests.swift */; };
@@ -91,6 +101,7 @@
 		ABA0806D5D74C02C1663725A /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */; };
 		ABB32FDC4805F140840A35F4 /* SightingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443F23EFFFA836BD85CC198B /* SightingDetailView.swift */; };
 		B21AEAF1F7786A67DC4CA597 /* MineRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082ECB0547B0DE204893D61D /* MineRegistry.swift */; };
+		B61DE368FECACF6C55E4FC0D /* HarnessCSVExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D424470A25CE0CAD08A4D93 /* HarnessCSVExporter.swift */; };
 		B6D2EC3B8F6063E84905EF9F /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDE4BF91152CCFCDF1B254 /* Theme.swift */; };
 		BA701366E0BEDE36610707D3 /* WatchTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB45A5A30F859D56FDE8EA11 /* WatchTheme.swift */; };
 		BC4C1CA73C8D7D3DE5E9DDE6 /* Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F0187533BA2FF318207A2 /* Copy.swift */; };
@@ -106,6 +117,7 @@
 		D40678F1EED0E4621103FA94 /* LensBeaconWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2B265E77960BDB535637986F /* LensBeaconWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D5DA8DBDF65E185426B1CD2D /* ProximityBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FDA3FC4DC219470B8743F0B /* ProximityBand.swift */; };
 		D8146D18564DDD03B785D418 /* QuietHours.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6575315C59EA131EF1393EDD /* QuietHours.swift */; };
+		DB6308C86375E3038077B0F7 /* SessionAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9C7813C3A7F5A66D493A41 /* SessionAnalyzer.swift */; };
 		DBF869656FD4EE20424D8A6C /* ScanControlBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4669BF786DCFBCB118B1C3 /* ScanControlBridge.swift */; };
 		DC147419C738174F0F14D53B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 54B6F413A10F2FC178E96BB0 /* PrivacyInfo.xcprivacy */; };
 		DCC78242ACE8BCBF5912BC1F /* DetectionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9466FF3BE07241B4403F8B9 /* DetectionEngine.swift */; };
@@ -193,6 +205,7 @@
 		082ECB0547B0DE204893D61D /* MineRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineRegistry.swift; sourceTree = "<group>"; };
 		089DE783EDB8AB75AE31AB2D /* SightingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingsStore.swift; sourceTree = "<group>"; };
 		0C7C09453CCC68BBFE5885EB /* WatchScanModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchScanModel.swift; sourceTree = "<group>"; };
+		0D424470A25CE0CAD08A4D93 /* HarnessCSVExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HarnessCSVExporter.swift; sourceTree = "<group>"; };
 		0FABEC359EF3B0C3B73FFAEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		16120AFCDFA8DD3F88286BF8 /* DetectionRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionRules.swift; sourceTree = "<group>"; };
 		1695A09FEC8475600B27352D /* ScanActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanActivityAttributes.swift; sourceTree = "<group>"; };
@@ -205,8 +218,10 @@
 		35B092193CD8E17D70DA4B2E /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		3BE884D4769455378E3C75F1 /* ActivationSignalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationSignalTests.swift; sourceTree = "<group>"; };
 		3E87AC1D87A4165E88A10E9F /* BluetoothScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothScanner.swift; sourceTree = "<group>"; };
+		3F023BECC2F0C0407467A1BD /* HarnessScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HarnessScanner.swift; sourceTree = "<group>"; };
 		4318FE17E7C2AED9A6ED1629 /* SharedContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContainer.swift; sourceTree = "<group>"; };
 		443F23EFFFA836BD85CC198B /* SightingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingDetailView.swift; sourceTree = "<group>"; };
+		44D235417C4D69B0716AAA54 /* HarnessCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HarnessCoordinator.swift; sourceTree = "<group>"; };
 		47ED31E1E4B84656102FD9F0 /* ContributionReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContributionReport.swift; sourceTree = "<group>"; };
 		4C506331FCCC2C3B616A6D5B /* LensBeaconTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LensBeaconTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E7111C0FB03742840484678 /* WatchComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchComponents.swift; sourceTree = "<group>"; };
@@ -215,6 +230,7 @@
 		54AD56E714655010E06AC54A /* WatchRelayReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchRelayReceiver.swift; sourceTree = "<group>"; };
 		54B6F413A10F2FC178E96BB0 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		58DEA41C869DAA842B3768D0 /* NearbyLensesWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyLensesWidget.swift; sourceTree = "<group>"; };
+		5D9C7813C3A7F5A66D493A41 /* SessionAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionAnalyzer.swift; sourceTree = "<group>"; };
 		601C102F57B029CAC84D3C2C /* LensBeaconWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensBeaconWidgetBundle.swift; sourceTree = "<group>"; };
 		6575315C59EA131EF1393EDD /* QuietHours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuietHours.swift; sourceTree = "<group>"; };
 		6C4669BF786DCFBCB118B1C3 /* ScanControlBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanControlBridge.swift; sourceTree = "<group>"; };
@@ -242,10 +258,12 @@
 		A981769ECFB4ABB7D9E4FC7F /* LensBeaconApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensBeaconApp.swift; sourceTree = "<group>"; };
 		A9F40949F336410DF060196D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		ACD7478BF7C60186F28407FB /* FlagNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagNotifier.swift; sourceTree = "<group>"; };
+		AFC7F6EE0DCA6FC05A2EDDB3 /* PacketClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketClassifier.swift; sourceTree = "<group>"; };
 		B0E30F21B3E37303B25DF52F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B2B12F3B36B9E2F2F70E6F62 /* SightingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingsView.swift; sourceTree = "<group>"; };
 		B390A82463EEC7F6AEB2729C /* UnlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockView.swift; sourceTree = "<group>"; };
 		B773ADAAF251D5D8E2CA775E /* LensBeaconWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LensBeaconWidget.entitlements; sourceTree = "<group>"; };
+		C4A03441311E9A495689E088 /* HarnessModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HarnessModels.swift; sourceTree = "<group>"; };
 		C77421867A424B52F81CA2C5 /* QuietHoursTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuietHoursTests.swift; sourceTree = "<group>"; };
 		C85B365D41B378692E7A0614 /* BeaconMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconMark.swift; sourceTree = "<group>"; };
 		CB96145173392A75857F9C23 /* LensBeaconWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LensBeaconWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -253,13 +271,16 @@
 		CD1AB2344B1D2AA084600D6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D2A24458AA55EBA6FFE8BE96 /* UnlockStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockStore.swift; sourceTree = "<group>"; };
 		D2A620E27E4756C479343E36 /* ScanLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanLiveActivity.swift; sourceTree = "<group>"; };
+		D39A6F105AA9B04E1B42A0FD /* HarnessAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HarnessAnalyzerTests.swift; sourceTree = "<group>"; };
 		D5DC681DF5632EED5E90B3BC /* WatchRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchRootView.swift; sourceTree = "<group>"; };
 		DBA2132E420CF9360D82F2BB /* LensBeaconWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensBeaconWatchApp.swift; sourceTree = "<group>"; };
 		E00494055D8180F6358E5D3B /* LensBeaconWatchWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LensBeaconWatchWidget.entitlements; sourceTree = "<group>"; };
 		E1B4AACE24066B82652057D0 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		E6841C9D684DCD013813BCFE /* ScanControlIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanControlIntents.swift; sourceTree = "<group>"; };
+		E77350F1CF051CCC6D349A82 /* HarnessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HarnessView.swift; sourceTree = "<group>"; };
 		E799770714850A870C69ED8B /* ScanActivityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanActivityController.swift; sourceTree = "<group>"; };
 		EB45A5A30F859D56FDE8EA11 /* WatchTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTheme.swift; sourceTree = "<group>"; };
+		EF586AFCACDF49F0522BAD13 /* HarnessClassifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HarnessClassifierTests.swift; sourceTree = "<group>"; };
 		EF848D94E48D42C1D067FA38 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		F475A93A38AFAFC489C55967 /* ScanControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanControl.swift; sourceTree = "<group>"; };
 		F6F7341DE5F4802B4AD1BF51 /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
@@ -294,6 +315,7 @@
 				91919DF14015DC6A89FB314D /* CaptureView.swift */,
 				9A7B9C4CAC84311671B2B06A /* Components.swift */,
 				EF848D94E48D42C1D067FA38 /* DashboardView.swift */,
+				E77350F1CF051CCC6D349A82 /* HarnessView.swift */,
 				224E60BE93EAF03C62C5A856 /* OnboardingView.swift */,
 				7D140401EDC119CDAA24B762 /* SettingsView.swift */,
 				443F23EFFFA836BD85CC198B /* SightingDetailView.swift */,
@@ -311,6 +333,19 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		30A7FDAFC02A731923B3D143 /* Harness */ = {
+			isa = PBXGroup;
+			children = (
+				44D235417C4D69B0716AAA54 /* HarnessCoordinator.swift */,
+				0D424470A25CE0CAD08A4D93 /* HarnessCSVExporter.swift */,
+				C4A03441311E9A495689E088 /* HarnessModels.swift */,
+				3F023BECC2F0C0407467A1BD /* HarnessScanner.swift */,
+				AFC7F6EE0DCA6FC05A2EDDB3 /* PacketClassifier.swift */,
+				5D9C7813C3A7F5A66D493A41 /* SessionAnalyzer.swift */,
+			);
+			path = Harness;
+			sourceTree = "<group>";
+		};
 		3175D84FDD596C854F709A66 /* LensBeaconTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -318,6 +353,8 @@
 				A51E7E02D361C51C5580E784 /* ContributionReportTests.swift */,
 				FD0CD71B7BD1F3DC4925E6C7 /* DetectionEngineTests.swift */,
 				18590C218FA6C1A01F6C3164 /* DetectionRuleTableTests.swift */,
+				D39A6F105AA9B04E1B42A0FD /* HarnessAnalyzerTests.swift */,
+				EF586AFCACDF49F0522BAD13 /* HarnessClassifierTests.swift */,
 				8B4A4B76F13BE4E70DE6E663 /* ProximityBandTests.swift */,
 				C77421867A424B52F81CA2C5 /* QuietHoursTests.swift */,
 				70DF92D77117D02D898319E8 /* RSSISmootherTests.swift */,
@@ -409,6 +446,7 @@
 		A5AA18EBBDD454EF973C7075 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				30A7FDAFC02A731923B3D143 /* Harness */,
 				F6F7341DE5F4802B4AD1BF51 /* Appearance.swift */,
 				7DC9A3D52D162B5135062BF5 /* CaptureLog.swift */,
 				FDD2326F43F3C55252CCA7C3 /* CSVDocument.swift */,
@@ -726,11 +764,17 @@
 				6BE5AD9FC9D63CA8DAEC7BE1 /* DetectionRules.swift in Sources */,
 				0062E1089571D806C1F2D855 /* FlagNotifier.swift in Sources */,
 				56369AD023741271CA4D1420 /* Haptics.swift in Sources */,
+				64AF750758DFC0CED16AE073 /* HarnessCSVExporter.swift in Sources */,
+				82A40CFFE444A6F543975548 /* HarnessCoordinator.swift in Sources */,
+				6AD763A28F165D7700A956DD /* HarnessModels.swift in Sources */,
+				1AB20EB5F5F55CDF8D0E8F92 /* HarnessScanner.swift in Sources */,
+				57A013DBC73C725A75FCD6C5 /* HarnessView.swift in Sources */,
 				CEA4900A76521C58F4D6722B /* Legal.swift in Sources */,
 				E7B6E6A3FC080DAE83D73A2B /* LensBeaconApp.swift in Sources */,
 				C0296C554C498293F19A58DC /* LensBeaconShortcuts.swift in Sources */,
 				588F5984FC8D686FB9795682 /* MineRegistry.swift in Sources */,
 				3BB64343BC560A82DCF38165 /* OnboardingView.swift in Sources */,
+				29F9FCFF3AD055B4BDC26554 /* PacketClassifier.swift in Sources */,
 				D5DA8DBDF65E185426B1CD2D /* ProximityBand.swift in Sources */,
 				7D3F1E2368E4B3114E2E9F05 /* QuietHours.swift in Sources */,
 				21D526B1FC6D7CCEB55F90E2 /* RootView.swift in Sources */,
@@ -739,6 +783,7 @@
 				27E6AD095C6D311C559BB1FE /* ScanControlBridge.swift in Sources */,
 				2D41136B74985C1A69D57C31 /* ScanControlIntents.swift in Sources */,
 				2431AF6F5CD09C9AF4E8B504 /* ScanCoordinator.swift in Sources */,
+				25F98198B6F93C499035EABE /* SessionAnalyzer.swift in Sources */,
 				616056CFBDFC49B58273882E /* SettingsView.swift in Sources */,
 				1CB6297A41EDE880A2802BD5 /* SharedContainer.swift in Sources */,
 				C6AFADAC3C2E3A4B88AC8165 /* Sighting.swift in Sources */,
@@ -767,8 +812,12 @@
 				38DF97A0BA1B584AFBA72FFB /* DetectionEngineTests.swift in Sources */,
 				FDA0C6DDD7BBD018AC2A7F68 /* DetectionRuleTableTests.swift in Sources */,
 				1DBA6D30E85484CE80ED72AA /* DetectionRules.swift in Sources */,
+				359D7EEF38E0C9A2E6375D6F /* HarnessAnalyzerTests.swift in Sources */,
+				B61DE368FECACF6C55E4FC0D /* HarnessCSVExporter.swift in Sources */,
+				2D0FC8EFFCD9CFFB43CE0810 /* HarnessClassifierTests.swift in Sources */,
 				3366BB6B1D1798BD40755E77 /* Legal.swift in Sources */,
 				B21AEAF1F7786A67DC4CA597 /* MineRegistry.swift in Sources */,
+				057CFF0E966F6368BB252EA9 /* PacketClassifier.swift in Sources */,
 				A69512C1D522DA6BA687EB08 /* ProximityBand.swift in Sources */,
 				9B647D8F8CA719D98F3E0EDC /* ProximityBandTests.swift in Sources */,
 				EE36B5B5A49AADC15A8212AA /* QuietHours.swift in Sources */,
@@ -776,6 +825,7 @@
 				68CF380DC9C847439937188E /* RSSISmootherTests.swift in Sources */,
 				9E5FABA93A417FCB19C7CAD3 /* ScanActivityAttributes.swift in Sources */,
 				DBF869656FD4EE20424D8A6C /* ScanControlBridge.swift in Sources */,
+				DB6308C86375E3038077B0F7 /* SessionAnalyzer.swift in Sources */,
 				ABA0806D5D74C02C1663725A /* SharedContainer.swift in Sources */,
 				528E672F35963445F8BE8762 /* Sighting.swift in Sources */,
 				91C7B6148735CB3C4C7B583D /* SightingsStore.swift in Sources */,

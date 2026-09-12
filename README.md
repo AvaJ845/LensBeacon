@@ -13,9 +13,10 @@ signals that matched.
 > (Meta Quest 2, Even Realities G2). Builds clean (0 warnings), unit tests pass,
 > privacy hard-gate passes. Landing page: **[lensbeacon site](https://avaj845.github.io/LensBeacon/)**.
 > See [`docs/RULES.md`](docs/RULES.md) for the detection rule table,
-> [`AppStore/METADATA.md`](AppStore/METADATA.md) for App Store metadata, and
+> [`AppStore/METADATA.md`](AppStore/METADATA.md) for App Store metadata,
 > [`docs/DEVICE-TESTING.md`](docs/DEVICE-TESTING.md) for how to test on a real
-> iPhone.
+> iPhone, and [`HARNESS.md`](HARNESS.md) for the Phase 0 field protocol
+> measuring real-world detection rate on worn, paired camera glasses.
 
 GitHub Pages: **Source: Deploy from a branch → `main` / `/docs`**. The site is
 `docs/index.html`; `docs/.nojekyll` keeps the engineering `.md` files out of the

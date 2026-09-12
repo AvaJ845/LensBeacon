@@ -223,6 +223,7 @@ struct SettingsView: View {
             NavigationLink("Privacy details") { PrivacyDetailView() }
             #if DEBUG
             NavigationLink("BLE capture (dev only)") { CaptureView() }
+            NavigationLink("Detection harness (dev only)") { HarnessView() }
             #endif
             LabeledContent("Version") {
                 Text(Self.versionString).foregroundStyle(.secondary)
