@@ -100,7 +100,7 @@ final class ScanCoordinator {
     /// A short smoothed-RSSI trail per device, sampled once per tick, purely to feed
     /// `ActivationSignal` at the moment a device drops out of range. Bounded to the
     /// same handful of samples `isLikelyCliff` actually looks at; never persisted.
-    private var rssiHistory: [String: [Double]] = [:]
+    private var rssiHistory: [String: [ActivationSignal.Sample]] = [:]
     private static let rssiHistoryCap = 8
 
     // MARK: - Tuning
@@ -233,6 +233,7 @@ final class ScanCoordinator {
             existing.lastSeen = event.timestamp
             existing.lastAdvertisement = event.advertisement
             working[key] = existing
+            recordRSSIHistory(key: key, value: existing.smoother.value, at: event.timestamp)
             workingDirty = true
             return
         }
@@ -265,6 +266,7 @@ final class ScanCoordinator {
         }
 
         guard let current = working[key] else { return }
+        recordRSSIHistory(key: key, value: current.smoother.value, at: event.timestamp)
 
         // Persist on a first sighting or a tier upgrade immediately; otherwise at
         // most once a second per device.
@@ -320,19 +322,23 @@ final class ScanCoordinator {
         }
     }
 
+    /// Appends one real sample to a device's short RSSI trail — called from
+    /// `ingest()`, on an actual packet, never from the periodic tick. Sampling on
+    /// a timer instead would keep re-appending the same frozen last-known value
+    /// for up to `staleInterval` while a device sits silently waiting to be
+    /// pruned, erasing exactly the fade-vs-cliff distinction this trail exists to
+    /// preserve — the tail would always read "flat" by the time anyone looks.
+    private func recordRSSIHistory(key: String, value: Double, at timestamp: Date) {
+        var trail = rssiHistory[key] ?? []
+        trail.append(ActivationSignal.Sample(rssi: value, at: timestamp))
+        if trail.count > Self.rssiHistoryCap { trail.removeFirst(trail.count - Self.rssiHistoryCap) }
+        rssiHistory[key] = trail
+    }
+
     /// One pass. Returns whether the loop should keep spinning.
     @discardableResult
     private func tick() -> Bool {
         let now = Date()
-
-        // Sample the trail before anything gets pruned — the last entry has to be
-        // "how it looked right before it vanished", not "how it looked a tick ago".
-        for (key, sighting) in working {
-            var trail = rssiHistory[key] ?? []
-            trail.append(sighting.smoother.value)
-            if trail.count > Self.rssiHistoryCap { trail.removeFirst(trail.count - Self.rssiHistoryCap) }
-            rssiHistory[key] = trail
-        }
 
         let fresh = working.filter { now.timeIntervalSince($0.value.lastSeen) < staleInterval }
         if fresh.count != working.count {
@@ -397,17 +403,13 @@ final class ScanCoordinator {
             guard let sighting = working[key], sighting.detection.category != .unknown,
                   !sighting.isMine else { continue }
             let history = rssiHistory[key] ?? []
-            // Duration → seconds: displayInterval is a compile-time constant, but
-            // converted properly rather than hardcoding the current tick rate twice.
-            let sampleInterval = Double(displayInterval.components.seconds)
-                + Double(displayInterval.components.attoseconds) / 1e18
-            guard ActivationSignal.isLikelyCliff(history: history, sampleInterval: sampleInterval) else { continue }
+            guard ActivationSignal.isLikelyCliff(history: history) else { continue }
 
             let event = ActivationEvent(
                 peripheralKey: key,
                 productName: sighting.title,
                 category: sighting.detection.category,
-                lastRSSI: history.last ?? sighting.smoother.value
+                lastRSSI: history.last?.rssi ?? sighting.smoother.value
             )
             recentActivations.insert(event, at: 0)
             if recentActivations.count > Self.maxRecentActivations {

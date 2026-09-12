@@ -19,23 +19,31 @@ import Foundation
 /// evidence-based tiers. It has no push notification and no persistence; it is
 /// not wired to one until a real false-positive rate is known from field use.
 enum ActivationSignal {
+    /// One real RSSI reading. Timestamped, rather than assuming a fixed sampling
+    /// interval — samples come from actual advertisement packets (`ScanCoordinator
+    /// .ingest`), which arrive irregularly, not on a timer.
+    struct Sample: Sendable, Equatable {
+        let rssi: Double
+        let at: Date
+    }
+
     /// `history` is the smoothed RSSI trajectory, oldest first, ending with the
-    /// last reading before the device stopped being seen.
+    /// last real reading before the device stopped being seen.
     static func isLikelyCliff(
-        history: [Double],
-        sampleInterval: TimeInterval,
+        history: [Sample],
         strongThreshold: Double = -60,
         minSamples: Int = 6,
         minDuration: TimeInterval = 3
     ) -> Bool {
         guard history.count >= minSamples,
-              Double(history.count) * sampleInterval >= minDuration
+              let first = history.first?.at, let last = history.last?.at,
+              last.timeIntervalSince(first) >= minDuration
         else { return false }
 
         // Held strong for every recent reading — a fade would show the tail
         // declining through weaker bands before the device actually vanished;
         // a cliff holds strong right up to the last sample taken.
-        return history.suffix(minSamples).allSatisfy { $0 >= strongThreshold }
+        return history.suffix(minSamples).allSatisfy { $0.rssi >= strongThreshold }
     }
 }
 
