@@ -132,6 +132,31 @@ individual records still decode and only drops the ones that don't.
   window check (`QuietHours.window(_:start:end:)`), gated in `ScanCoordinator
   .maybeAlert` alongside the existing alerts/unlock checks.
 
+## Activation signal — a hypothesis, kept visibly separate from evidence
+
+`Shared/ActivationSignal.swift` / `ScanCoordinator.detectActivations` infer a
+possible "this device just connected to a phone" moment from an RSSI trajectory:
+strong and holding, then gone abruptly (a *cliff*), rather than fading through the
+bands first (a walk-away). The reasoning connects to the same limitation
+`SECURITY.md` documents — a BLE peripheral generally leaves the advertising
+channels once it completes a connection, so a cliff is *consistent* with that
+moment. It is exactly as consistent with a pocket, a turned corner, or a body in
+the way. RSSI in the real world is noisy; this cannot tell those cases apart, and
+doesn't claim to.
+
+Deliberately scoped conservatively pending real-world validation:
+- Only considered for a device that already carries *some* glasses/headset
+  category evidence (never a bare anonymous device — that would just be noise
+  from every phone and car stereo walking in and out of range).
+- Surfaced as `ActivationEvent`s, in-memory only, capped at 5, never persisted,
+  never a push notification. The Dashboard shows them in a collapsed disclosure
+  (`recentActivationsSection`), styled with a dashed, unfilled border —
+  deliberately nothing like `FlagRow`'s solid evidence card, so an inference can
+  never be mistaken for evidence at a glance.
+- Not wired to `FlagNotifier` or `maybeAlert` at all. A heuristic with an unknown
+  false-positive rate does not get a notification surface until that rate is
+  known from real field use — that's a later decision, not a v1 default.
+
 ## Watch complication relay (LensBeacon Unlock)
 
 The complication shows real counts without the watch ever scanning on its own —

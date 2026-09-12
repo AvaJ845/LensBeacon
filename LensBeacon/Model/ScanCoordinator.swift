@@ -53,6 +53,14 @@ final class ScanCoordinator {
     /// Everything in range now, for the Dashboard's expandable list.
     private(set) var allInRange: [LiveSighting] = []
 
+    /// Inferred "this may have just connected to a phone" moments — a headset- or
+    /// camera-glasses-adjacent device that read strong and then vanished abruptly,
+    /// rather than fading. In-memory only, capped, never persisted, never a
+    /// notification — see `Shared/ActivationSignal.swift` for why this is a
+    /// hypothesis to show calmly, not a confirmed event.
+    private(set) var recentActivations: [ActivationEvent] = []
+    private static let maxRecentActivations = 5
+
     /// The user has switched scanning off from the Dashboard or the Live Activity.
     /// Persisted so it survives a scene change and a relaunch — a listening tool the
     /// user silenced stays silent until they say otherwise.
@@ -89,6 +97,11 @@ final class ScanCoordinator {
     /// The flagged-item payload of the last snapshot we wrote, to suppress no-op writes.
     private var lastSnapshotItems: [DashboardSnapshot.Item] = []
     private var lastSnapshotAt: Date = .distantPast
+    /// A short smoothed-RSSI trail per device, sampled once per tick, purely to feed
+    /// `ActivationSignal` at the moment a device drops out of range. Bounded to the
+    /// same handful of samples `isLikelyCliff` actually looks at; never persisted.
+    private var rssiHistory: [String: [Double]] = [:]
+    private static let rssiHistoryCap = 8
 
     // MARK: - Tuning
 
@@ -166,6 +179,7 @@ final class ScanCoordinator {
             live.removeAll()
             flags.removeAll(); weakSignals.removeAll(); displayGlasses.removeAll()
             headsets.removeAll(); allInRange.removeAll()
+            recentActivations.removeAll(); rssiHistory.removeAll()
             displayLoop?.cancel(); displayLoop = nil
             writeSnapshot(force: true)
         } else {
@@ -310,9 +324,21 @@ final class ScanCoordinator {
     @discardableResult
     private func tick() -> Bool {
         let now = Date()
+
+        // Sample the trail before anything gets pruned — the last entry has to be
+        // "how it looked right before it vanished", not "how it looked a tick ago".
+        for (key, sighting) in working {
+            var trail = rssiHistory[key] ?? []
+            trail.append(sighting.smoother.value)
+            if trail.count > Self.rssiHistoryCap { trail.removeFirst(trail.count - Self.rssiHistoryCap) }
+            rssiHistory[key] = trail
+        }
+
         let fresh = working.filter { now.timeIntervalSince($0.value.lastSeen) < staleInterval }
         if fresh.count != working.count {
+            detectActivations(departing: working.keys.filter { fresh[$0] == nil })
             working = fresh
+            rssiHistory = rssiHistory.filter { working[$0.key] != nil }
             lastLoggedAt = lastLoggedAt.filter { working[$0.key] != nil }
             lastClassifiedAt = lastClassifiedAt.filter { working[$0.key] != nil }
             alertedKeys = alertedKeys.filter { working[$0] != nil }
@@ -360,6 +386,34 @@ final class ScanCoordinator {
             return (lhs.tier ?? .name) > (rhs.tier ?? .name)
         }
         return lhs.proximity > rhs.proximity
+    }
+
+    /// Checks each device about to be pruned for a possible "just connected" cliff.
+    /// Scoped to devices already carrying *some* glasses/headset-adjacent evidence
+    /// (never a bare anonymous device — that would just be noise from every phone
+    /// and car stereo that walks in and out of range).
+    private func detectActivations(departing keys: [String]) {
+        for key in keys {
+            guard let sighting = working[key], sighting.detection.category != .unknown,
+                  !sighting.isMine else { continue }
+            let history = rssiHistory[key] ?? []
+            // Duration → seconds: displayInterval is a compile-time constant, but
+            // converted properly rather than hardcoding the current tick rate twice.
+            let sampleInterval = Double(displayInterval.components.seconds)
+                + Double(displayInterval.components.attoseconds) / 1e18
+            guard ActivationSignal.isLikelyCliff(history: history, sampleInterval: sampleInterval) else { continue }
+
+            let event = ActivationEvent(
+                peripheralKey: key,
+                productName: sighting.title,
+                category: sighting.detection.category,
+                lastRSSI: history.last ?? sighting.smoother.value
+            )
+            recentActivations.insert(event, at: 0)
+            if recentActivations.count > Self.maxRecentActivations {
+                recentActivations.removeLast(recentActivations.count - Self.maxRecentActivations)
+            }
+        }
     }
 
     // MARK: - Shared snapshot

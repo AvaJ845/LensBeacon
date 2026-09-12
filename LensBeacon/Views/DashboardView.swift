@@ -64,6 +64,7 @@ struct DashboardView: View {
 
                     seenNotFlaggedSection
                     otherDevicesSection
+                    recentActivationsSection
 
                     LimitsNote()
                         .padding(.horizontal, 4)
@@ -185,6 +186,33 @@ struct DashboardView: View {
                     .font(.subheadline.weight(.medium))
             }
             .tint(Palette.accent)
+            .padding(.horizontal, 4)
+        }
+    }
+
+    /// A signal that read strong, then vanished abruptly rather than fading —
+    /// consistent with a device that just connected to a phone, and exactly as
+    /// consistent with mundane things (a pocket, a turned corner). Deliberately
+    /// never styled like a `FlagRow` — a guess must never look like evidence.
+    @ViewBuilder
+    private var recentActivationsSection: some View {
+        if !coordinator.recentActivations.isEmpty {
+            DisclosureGroup {
+                VStack(spacing: 8) {
+                    ForEach(coordinator.recentActivations) { event in
+                        ActivationRow(event: event)
+                    }
+                    Text("A signal held strong, then stopped abruptly instead of fading — that can mean a device just connected to a phone, or just as easily that it went behind something. This is a guess, never a finding.")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.top, 6)
+            } label: {
+                Label("Possible activity nearby (\(coordinator.recentActivations.count))", systemImage: "waveform.path.ecg")
+                    .font(.subheadline.weight(.medium))
+            }
+            .tint(Palette.secondaryText)
             .padding(.horizontal, 4)
         }
     }
@@ -411,6 +439,35 @@ private struct OtherDeviceRow: View {
             return device.tier.map { "Camera glasses — \($0.title.lowercased())" } ?? "Camera glasses"
         case .unknown: return "Unrecognised Bluetooth device"
         }
+    }
+}
+
+/// One inferred "possibly just connected" moment. Dashed, unfilled — deliberately
+/// nothing like `FlagRow`'s solid card, so an inference can never be mistaken for
+/// evidence at a glance (HIG: never encode meaning with shape/weight alone either —
+/// this pairs the visual difference with an explicit label and caption text).
+private struct ActivationRow: View {
+    let event: ActivationEvent
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "arrow.down.right.and.arrow.up.left")
+                .foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(event.productName).font(.subheadline)
+                Text("Signal dropped abruptly \(event.at, style: .relative) ago")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .strokeBorder(Palette.hairline, style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
+        )
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(event.productName), signal dropped abruptly \(event.at.formatted(.relative(presentation: .named))) ago — a guess, not a confirmed activation")
     }
 }
 
