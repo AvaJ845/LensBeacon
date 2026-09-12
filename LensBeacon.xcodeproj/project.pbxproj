@@ -237,6 +237,7 @@
 		A43C9EBFC58AEE320DDD4E4C /* LensBeaconShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensBeaconShortcuts.swift; sourceTree = "<group>"; };
 		A4545FD060E34E782C551852 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A51E7E02D361C51C5580E784 /* ContributionReportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContributionReportTests.swift; sourceTree = "<group>"; };
+		A55AE72C877B57C9795A1F5C /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = "<group>"; };
 		A5D92E2A25F395B1B1BFB99E /* LensBeacon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LensBeacon.entitlements; sourceTree = "<group>"; };
 		A981769ECFB4ABB7D9E4FC7F /* LensBeaconApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LensBeaconApp.swift; sourceTree = "<group>"; };
 		A9F40949F336410DF060196D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -393,6 +394,7 @@
 		8F5F7E9F395C344E4A91B447 = {
 			isa = PBXGroup;
 			children = (
+				D53CC758681DEAA571AAD973 /* Config */,
 				7FCFF7F8E841024DA8866DA8 /* LensBeacon */,
 				3175D84FDD596C854F709A66 /* LensBeaconTests */,
 				7FCE1B5609F7DD7DF27DD93D /* LensBeaconWatch */,
@@ -462,6 +464,14 @@
 				35B092193CD8E17D70DA4B2E /* RootView.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		D53CC758681DEAA571AAD973 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				A55AE72C877B57C9795A1F5C /* Local.xcconfig */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		FDE1F4CF9FE4195D7E1A3D44 /* Model */ = {
@@ -582,23 +592,18 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					6080DA826CEC34CB07D043F0 = {
-						DevelopmentTeam = 3L683975L8;
 						ProvisioningStyle = Automatic;
 					};
 					613E3BE8EA2D2A00F4EFA185 = {
-						DevelopmentTeam = 3L683975L8;
 						ProvisioningStyle = Automatic;
 					};
 					90232068E3F82F3B491A4F32 = {
-						DevelopmentTeam = 3L683975L8;
 						ProvisioningStyle = Automatic;
 					};
 					96D571400A4325474254E4F2 = {
-						DevelopmentTeam = 3L683975L8;
 						ProvisioningStyle = Automatic;
 					};
 					BC8B0157AC5468CBBDC66FE0 = {
-						DevelopmentTeam = 3L683975L8;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -846,7 +851,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 3L683975L8;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = LensBeaconWidget/Info.plist;
@@ -878,7 +882,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 3L683975L8;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -910,7 +913,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 3L683975L8;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -937,7 +939,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3L683975L8;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.avaresearch.lensbeacon.tests;
@@ -964,7 +965,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 3L683975L8;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -1003,7 +1003,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 3L683975L8;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -1028,6 +1027,7 @@
 		};
 		791178241BA24180748B471C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A55AE72C877B57C9795A1F5C /* Local.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
@@ -1044,7 +1044,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 3L683975L8;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = LensBeaconWatchWidget/Info.plist;
@@ -1078,7 +1077,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 3L683975L8;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -1104,6 +1102,7 @@
 		};
 		B978EE5E084DC8CA614562F4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A55AE72C877B57C9795A1F5C /* Local.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
@@ -1122,7 +1121,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 3L683975L8;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -1151,7 +1149,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3L683975L8;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.avaresearch.lensbeacon.tests;

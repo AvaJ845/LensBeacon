@@ -1,0 +1,12 @@
+// Copy this file to Local.xcconfig (same directory) and fill in your own Apple
+// Developer Team ID. Local.xcconfig is gitignored — it is never committed, so a
+// public clone of this repo carries no one's specific Team ID baked in.
+//
+// Find your Team ID at https://developer.apple.com/account (Membership details),
+// or in Xcode ▸ Settings ▸ Accounts ▸ your Apple ID ▸ your team.
+//
+// project.yml (`xcodegen generate`) reads this as the base config for every
+// target, so this one setting is all a fresh clone needs to build and sign
+// locally with automatic signing.
+
+DEVELOPMENT_TEAM = YOUR_TEAM_ID_HERE

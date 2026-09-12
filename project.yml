@@ -22,6 +22,12 @@ configs:
   Debug: debug
   Release: release
 
+# DEVELOPMENT_TEAM lives here, not inline below — see Config/Local.xcconfig.example.
+# It's the one setting a public repo must never bake in as a literal value.
+configFiles:
+  Debug: Config/Local.xcconfig
+  Release: Config/Local.xcconfig
+
 # Applied to every target. XcodeGen contributes no presets on this machine, so the
 # modern default has to be stated explicitly or the test target warns.
 settings:
@@ -69,12 +75,13 @@ targets:
         GENERATE_INFOPLIST_FILE: NO
         INFOPLIST_FILE: LensBeacon/Info.plist
 
-        # Xcode-managed signing against the AVA Research team. Automatic signing
-        # registers the App IDs (app + widget) and the App Group on first device build
-        # or archive; the Apple ID must be added in Xcode ▸ Settings ▸ Accounts.
-        # For a simulator-only / unsigned build, pass CODE_SIGNING_ALLOWED=NO.
+        # Xcode-managed signing. Automatic signing registers the App IDs (app +
+        # widget) and the App Group on first device build or archive; the Apple ID
+        # must be added in Xcode ▸ Settings ▸ Accounts. For a simulator-only /
+        # unsigned build, pass CODE_SIGNING_ALLOWED=NO. DEVELOPMENT_TEAM comes from
+        # Config/Local.xcconfig (see configFiles above and its .example template),
+        # never as a literal here.
         CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: "3L683975L8"
       configs:
         Debug:
           ONLY_ACTIVE_ARCH: YES
@@ -127,7 +134,6 @@ targets:
         INFOPLIST_FILE: LensBeaconWidget/Info.plist
 
         CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: "3L683975L8"
       configs:
         Debug:
           ONLY_ACTIVE_ARCH: YES
@@ -204,7 +210,6 @@ targets:
         INFOPLIST_FILE: LensBeaconWatch/Info.plist
 
         CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: "3L683975L8"
       configs:
         Debug:
           ONLY_ACTIVE_ARCH: YES
@@ -260,7 +265,6 @@ targets:
         GENERATE_INFOPLIST_FILE: NO
         INFOPLIST_FILE: LensBeaconWatchWidget/Info.plist
         CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: "3L683975L8"
       configs:
         Debug:
           ONLY_ACTIVE_ARCH: YES
@@ -305,7 +309,6 @@ targets:
         IPHONEOS_DEPLOYMENT_TARGET: "18.0"
         TARGETED_DEVICE_FAMILY: "1,2"
         CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: "3L683975L8"
 
 schemes:
   LensBeacon:

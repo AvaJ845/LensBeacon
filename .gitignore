@@ -27,5 +27,9 @@ LensBeacon.xcodeproj/project.xcworkspace/
 AuthKey_*.p8
 .env
 
+# Machine/account-specific signing config — a real Apple Developer Team ID has no
+# business in a public repo. Copy Config/Local.xcconfig.example to fill this in.
+Config/Local.xcconfig
+
 # Local raw screenshot captures for the App Store frame builder
 AppStore/raw/

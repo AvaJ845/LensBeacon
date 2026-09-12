@@ -12,12 +12,12 @@ import os
 @MainActor
 final class ScanActivityController {
 
-    // `Activity` is not `Sendable` and its mutating methods are `nonisolated async`,
-    // so the region checker flags passing it into the detached update Task. In
-    // practice ActivityKit is safe to drive from any context, and every access here
-    // is already funnelled through this `@MainActor` type, so we opt this one
-    // reference out of isolation checking rather than contort the call sites.
-    private nonisolated(unsafe) var activity: Activity<ScanActivityAttributes>?
+    /// A plain, fully main-actor-isolated property — every read and write happens on
+    /// this actor, with the compiler actually enforcing that (unlike a
+    /// `nonisolated(unsafe)` escape hatch). The only value that ever crosses off the
+    /// actor is a `SendableActivity`-boxed copy, handed to a `Task` for the async
+    /// `update`/`end` call and never read back.
+    private var activity: Activity<ScanActivityAttributes>?
     private let log = Logger(subsystem: "com.avaresearch.lensbeacon", category: "liveactivity")
 
     var isActive: Bool { activity != nil }
@@ -51,32 +51,36 @@ final class ScanActivityController {
     }
 
     func update(with snapshot: DashboardSnapshot) {
-        guard activity != nil else { return }
+        guard let activity else { return }
         let state = ScanActivityAttributes.ContentState(
             flaggedCount: snapshot.flagged.count,
             strongestTier: snapshot.strongestTier,
             nearestBand: snapshot.nearestBand,
             updatedAt: snapshot.updatedAt
         )
-        // The ActivityKit call happens in a `nonisolated` context (`pushUpdate`), so
-        // the non-`Sendable` `Activity` never crosses an isolation boundary. Only the
-        // `Sendable` content state does.
-        Task { await pushUpdate(state) }
+        let boxed = SendableActivity(activity)
+        Task { await boxed.value.update(.init(state: state, staleDate: Date().addingTimeInterval(120))) }
     }
 
     func end() {
-        guard activity != nil else { return }
-        Task { await pushEnd() }
-    }
-
-    private nonisolated func pushUpdate(_ state: ScanActivityAttributes.ContentState) async {
         guard let activity else { return }
-        await activity.update(.init(state: state, staleDate: Date().addingTimeInterval(120)))
-    }
-
-    private nonisolated func pushEnd() async {
-        guard let activity else { return }
+        // Cleared synchronously, on the main actor, before the async teardown
+        // starts — a `startIfPossible()` that runs while the old activity is still
+        // winding down must see `nil` and be free to request a new Live Activity
+        // immediately, not wait on or race the previous one's teardown.
         self.activity = nil
-        await activity.end(nil, dismissalPolicy: .immediate)
+        let boxed = SendableActivity(activity)
+        Task { await boxed.value.end(nil, dismissalPolicy: .immediate) }
     }
+}
+
+/// `Activity` isn't `Sendable` in the SDK, but ActivityKit documents its instance
+/// methods (`update`, `end`) as safe to call from any context — there is no shared
+/// mutable state inside it for concurrent access to corrupt. This wrapper asserts
+/// exactly that, once, in one place, so no property in this file needs its own
+/// `nonisolated(unsafe)` escape hatch: the boxed value is handed off for a single
+/// fire-and-forget async call and never read back from the isolated side.
+private struct SendableActivity<Attributes: ActivityAttributes>: @unchecked Sendable {
+    let value: Activity<Attributes>
+    init(_ value: Activity<Attributes>) { self.value = value }
 }
