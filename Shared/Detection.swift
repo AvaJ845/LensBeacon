@@ -69,13 +69,17 @@ enum DetectionTier: Int, Codable, Comparable, Sendable, CaseIterable {
         }
     }
 
-    /// One plain sentence the detail screen shows under the chip.
+    /// One plain sentence the detail screen shows under the chip. Every case names
+    /// what was matched and how specific it is — never that the broadcaster is
+    /// genuine. A manufacturer identifier is exactly as self-reported as a name; a
+    /// $0 BLE advertiser tool can clone one with a custom name in under a minute.
+    /// "Confidence" here means match specificity, not verification.
     var explanation: String {
         switch self {
         case .manufacturer:
-            return "The advertisement carries a manufacturer identifier registered to a camera-glasses vendor. This is the strongest signal a passive scan can read."
+            return "The advertisement carries a manufacturer identifier registered to a camera-glasses vendor — the strongest signal a passive scan can read. It's self-reported, though, the same as a name: any Bluetooth device can broadcast this identifier, genuine or not."
         case .serviceUUID:
-            return "The advertisement offers a Bluetooth service used by a wearables vendor. Weaker than a manufacturer match — some other devices from that vendor use it too."
+            return "The advertisement offers a Bluetooth service used by a wearables vendor. Weaker than a manufacturer match — some other devices from that vendor use it too — and just as self-reported, so it can't be verified either."
         case .name:
             return "Only the advertised device name matched a known pattern. Names are freely set and easily imitated, so this alone is treated as a hint, not a finding."
         }

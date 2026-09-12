@@ -46,6 +46,7 @@ Every build decision serves **both** of these:
 | Separates a camera flag from a headset worn openly or display-only glasses with no camera | Flag a headset or display glasses as a covert camera |
 | Keeps a private, on-device sightings history | Send analytics or make any network request |
 | Logs headsets (Quest, Vision Pro) in the live view but never flags or persists them | Defeat or track around BLE address rotation |
+| Ranks tiers by how specific a match is | Claim a match is verified — Bluetooth advertisements are self-reported and unsigned; a manufacturer ID is exactly as spoofable as a name (see `SECURITY.md`) |
 
 ## Free vs. LensBeacon Unlock
 

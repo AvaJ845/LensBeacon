@@ -136,6 +136,22 @@ struct DetectionEngineTests {
         #expect(DetectionEngine.classify(.init(localName: "Meta Quest 3")).canNotifyInBackground == false)
     }
 
+    // MARK: - Every tier admits it's self-reported, not verified
+
+    /// A manufacturer ID and a service UUID are exactly as spoofable as a device
+    /// name — a $0 BLE advertiser tool can clone any of them (confirmed against a
+    /// real capture: a cloned 0x058E broadcast with a custom name). "Confidence"
+    /// must never read as "verified"; pin that every tier's explanation says so.
+    @Test func everyTierExplanationAdmitsItsSelfReported() {
+        for tier: DetectionTier in [.manufacturer, .serviceUUID, .name] {
+            #expect(
+                tier.explanation.localizedCaseInsensitiveContains("self-report")
+                    || tier.explanation.localizedCaseInsensitiveContains("freely set"),
+                "\(tier) explanation should admit the signal is self-reported, not verified: \(tier.explanation)"
+            )
+        }
+    }
+
     // MARK: - Deliberately excluded — must NEVER match
 
     @Test func googleCompanyIDDoesNotMatch() {

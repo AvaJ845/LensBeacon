@@ -38,6 +38,15 @@ DetectionRule
 flagged, never an alert. When a device matches rules in more than one category, the
 **most specific wins**: `displayGlasses` > `cameraGlasses` > `headset` > `unknown`.
 
+**"Confidence" ranks match specificity, not authenticity.** Every AD type here —
+manufacturer data, service UUIDs, the local name — is self-reported by the
+broadcasting device with no signing of any kind (see `SECURITY.md`'s "Known,
+permanent limitation" section). A Tier 1 manufacturer-ID match is exactly as
+spoofable as a Tier 3 name match; it's ranked higher only because fewer legitimate
+products share it, not because it's been verified. Confirmed directly: a real
+capture showed a generic BLE advertiser tool cloning `0x058E` onto a custom name in
+under a minute.
+
 ## The current set
 
 | Rule | Match | Tier | Category | Source |

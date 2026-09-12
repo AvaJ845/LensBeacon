@@ -41,6 +41,30 @@ These are enforced by architecture, not policy (see `ARCHITECTURE.md`,
   a user-opted-in `bluetooth-central` scan with a visible, stoppable Live Activity.
 - **No secrets in the repo or the binary.** There is nothing to embed.
 
+## Known, permanent limitation: BLE advertisements are unauthenticated
+
+**This is disclosed, not undiscovered — please don't file it as a fresh report.**
+Every field a detection rule can match — manufacturer ID, service UUID, advertised
+name — is self-reported by the broadcasting device. Bluetooth LE advertising has no
+signing or authentication for any of it. Any device with a BLE radio and a
+general-purpose advertiser/cloner tool can broadcast a fabricated payload that
+matches a rule in `DetectionRuleTable`, including the "manufacturer ID" tier —
+confirmed directly: a real capture showed a stock BLE advertiser tool cloning Meta's
+company ID (`0x058E`) onto a custom name in under a minute, with no special
+hardware.
+
+This is a property of BLE advertising itself, not a bug in LensBeacon, and there is
+no verification layer a passive scanner could add — the only fix would be Bluetooth
+itself gaining signed advertisements. It's why:
+
+- every tier's on-screen explanation says the matched field is self-reported, never
+  that the broadcaster is verified (`DetectionTier.explanation`, `Copy.selfReported`);
+- "confidence" tiers rank match *specificity*, not authenticity — a manufacturer-ID
+  match is exactly as spoofable as a name match, just less commonly bothered with;
+- LensBeacon never shows alarmist copy at any tier, high or low — a wrong flag from
+  a spoofed signal is exactly as consequential as a wrong flag from a coincidence,
+  and the UI is built assuming both happen.
+
 ## Supported versions
 
 Only the latest App Store / TestFlight build is supported. Fixes ship in a new build.

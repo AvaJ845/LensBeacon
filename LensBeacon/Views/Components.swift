@@ -154,6 +154,7 @@ struct LimitsNote: View {
         DisclosureGroup {
             VStack(alignment: .leading, spacing: 8) {
                 bullet(Copy.notAccusation)
+                bullet(Copy.selfReported)
                 bullet(Copy.standaloneSilence)
                 bullet(Copy.proximityOnly)
                 bullet("Device signatures are refined with each update as vendors change how their hardware broadcasts.")

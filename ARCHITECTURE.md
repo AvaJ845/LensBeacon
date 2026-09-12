@@ -70,6 +70,12 @@ Rules that key on a company ID or service UUID shared across a vendor's whole
 product line (not just their camera glasses) are excluded outright rather than
 tuned — see the exclusion list in `docs/RULES.md`.
 
+**Tier ranks specificity, not authenticity.** BLE advertisements are entirely
+self-reported and unsigned — a manufacturer ID is exactly as spoofable as a name,
+just less commonly bothered with (see `SECURITY.md`'s "Known, permanent
+limitation"). `DetectionTier.explanation` says so at every tier; the UI never
+implies a match is verified.
+
 ## Proximity and signal strength
 
 `RSSISmoother` keeps a light EMA (α = 0.25) per device and only reports a band

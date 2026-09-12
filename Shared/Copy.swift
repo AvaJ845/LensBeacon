@@ -17,4 +17,10 @@ enum Copy {
 
     /// Even Realities line for the display-glasses category.
     static let displayGlasses = "These are display glasses with no camera. LensBeacon lists them so you know what they are; it never counts them as a camera nearby."
+
+    /// Bluetooth advertisements carry no signature — every field a device broadcasts
+    /// is self-reported, including the manufacturer identifier. A $0 BLE advertiser
+    /// tool can clone one in under a minute (confirmed against a real capture); a
+    /// tier says how specific a match is, never that the broadcaster is genuine.
+    static let selfReported = "Every field here is self-reported by the device, the same way a name tag can say anything. LensBeacon reads it, but can't verify it — a match names a signature, never a guarantee."
 }

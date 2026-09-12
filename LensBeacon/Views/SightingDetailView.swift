@@ -103,7 +103,10 @@ struct SightingDetailView: View {
         } header: {
             Text("Evidence")
         } footer: {
-            Text(Copy.notAccusation)
+            VStack(alignment: .leading, spacing: 6) {
+                Text(Copy.notAccusation)
+                Text(Copy.selfReported)
+            }
         }
     }
 
