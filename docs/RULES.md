@@ -60,6 +60,7 @@ under a minute.
 | `even-realities-company` | company `0x5245` ("ER") | 1 | display (no camera) | **captured** on a G2 |
 | `even-realities-name` | name `^Even G[12]_\d+_[LR]_` | 3 | display (no camera) | **captured** on a G2 |
 | `meta-reality-labs-company` | company `0x058E` | 1 | **headset** | shared Meta ID — **captured** on Quest 2 |
+| `meta-01ab-company` | company `0x01AB` | 1 | **headset** | Meta Platforms — SIG assignment confirmed independently; product/state not yet captured (third-party research lead) |
 | `meta-feb8-service` | service `0xFEB8` | 2 | **headset** | Meta (Facebook) UUID — **captured** on Quest 2 (list + data `20 01`) |
 | `oculus-service` | service `0xFD5F` | 2 | **headset** | SIG registry (Oculus VR) — not yet captured |
 | `name-quest` | name `\b(quest\|oculus)\b` | 3 | **headset** | product names |
@@ -80,8 +81,18 @@ outranks the headset guess and makes it a camera flag.
 added. Every Pixel and every Fast Pair accessory broadcasts the Google ID; Samsung's
 is louder still. Neither vendor ships camera glasses. A future rule that needs either
 must gate on a second discriminator (a specific service UUID or name), never the
-company ID alone. This is enforced by `DetectionRuleTableTests` and a load-bearing
-comment in `DetectionRules.swift`.
+company ID alone.
+
+`0x05D6` (Zhuhai Jieli Technology) is excluded too, for the same reason from a
+different direction: it's a chipset OEM, not a product line — the silicon inside
+countless unrelated earbuds, speakers, and generic BLE gadgets from many brands.
+Third-party research reports it "covering several camera-glasses brands," which is
+plausible, but using it alone would flag a big chunk of a big-box electronics aisle.
+Not a safe standalone or corroborating signal without a specific named product's own
+name or service UUID alongside it.
+
+All of the above is enforced by `DetectionRuleTableTests` and a load-bearing comment
+in `DetectionRules.swift`.
 
 ## Where new evidence comes from
 

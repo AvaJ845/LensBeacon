@@ -50,6 +50,28 @@ Every flag comes from `Shared/DetectionRules.swift` (see `RULES.md`).
 (Snap), `0xFD5F` (Oculus), and the camera-glasses name patterns — no real
 Ray-Ban / Oakley Meta or Snap Spectacles has been captured.
 
+**Also sourced only, from third-party community research rather than the SIG
+registry directly** (see `Shared/DetectionRules.swift`'s comment block): `0x01AB`
+(a second Meta Platforms company ID — the assignment itself is independently
+confirmed against the SIG's own registry; which product broadcasts it isn't), and
+an unconfirmed report of a `"META_RB_GLASS"`-style ASCII string embedded in the
+Ray-Ban Meta manufacturer payload (infrastructure for matching this is built —
+`RuleMatch.manufacturerDataContains` — but no rule uses it yet). Also unconfirmed:
+whether `0xFD5F` (today a headset-only rule) also appears on Ray-Ban Meta, and
+critically *when* — a report places it only during power-on/pairing, which
+wouldn't help detect glasses already worn and connected.
+
+**The open question that matters most, bigger than any single rule:** once BLE
+central and peripheral complete a connection, the peripheral generally stops
+advertising on the discovery channels — the link moves to the connection's own
+hopping schedule, which a passive central-role scanner (all this app is) cannot
+see without having captured the original `CONNECT_REQ`. If Ray-Ban Meta glasses
+follow that default and don't keep a secondary discovery beacon alive (the way
+AirPods do), **no passive scanner — LensBeacon or anyone else's — can detect them
+while they're worn and already connected to their owner's phone**, independent of
+which company IDs or service UUIDs are in the rule table. This is the single most
+important thing today's capture can settle, more than any specific ID.
+
 ### The tool — BLE capture (dev only)
 
 A **Debug build** has **Settings ▸ About ▸ BLE capture (dev only)**. It is inside
@@ -83,7 +105,7 @@ AirDrop / Messages / Files).
 | --- | --- |
 | **Meta Quest** | `0x058E` seen already. Check whether `0xFD5F` and/or `0x00E0` (Google) also appear, and the exact name. |
 | **Even Realities G1 / G2** | ✓ confirmed on a G2: company prefix `0x5245` ("ER") + name `Even G<1|2>_<ch>_<L|R>_<id>`. Capture a **G1** and the **right arm** to confirm the pattern holds. |
-| **Ray-Ban / Oakley Meta** | does `0x0D53` or `0x058E` actually appear? The exact advertised name. **Any service UUID at all, in either "Service UUIDs" or "Service data" — not just `0xFD5F`.** This rule is manufacturer-ID-only today, which means it currently cannot be included in the background-scan filter (`ARCHITECTURE.md` → "Background scanning"), so **Unlock's background scanning cannot detect this product at all while backgrounded** until some service UUID is confirmed to add. Also capture with the glasses **connected to their owner's phone, worn normally** — not just powered on and idle — since that's the state that actually matters and it's unconfirmed whether they keep advertising once connected. |
+| **Ray-Ban / Oakley Meta** | does `0x0D53`, `0x058E`, or **`0x01AB`** appear? The exact advertised name. **Any service UUID at all** ("Service UUIDs" or "Service data" — not just `0xFD5F`, and note whether `0xFD5F` shows here at all). Convert the manufacturer data's raw hex to ASCII (the capture tool's `asciiHint`) and check for a readable string like `META_RB_GLASS`. **Capture at three separate moments and label the export for each: (1) power-on, out of the case, (2) pairing mode, (3) already connected to the owner's phone and worn normally** — (3) is the one that actually matters, and it's the one most likely to come back silent (see the open question above). |
 | **Snap Spectacles** | is it `0x03C2`? Exact name. Same service-UUID gap and same connected-state check as above. |
 
 After a table change: `⌘U` (tests stay green — add one for the new signature), then

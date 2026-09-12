@@ -14,10 +14,15 @@ enum RuleMatch: Codable, Equatable, Sendable {
     case nameContains(String)
     /// The advertised local name matches this anchored regular expression. Tier 3.
     case nameRegex(String)
+    /// The manufacturer-specific payload's ASCII content contains this substring,
+    /// case-insensitively, checked in the bytes *after* the 2-byte company prefix.
+    /// Still Tier 1 — it's the same self-reported manufacturer-data field as
+    /// `companyID`, just a longer, more specific fingerprint within it.
+    case manufacturerDataContains(String)
 
     var tier: DetectionTier {
         switch self {
-        case .companyID:      return .manufacturer
+        case .companyID, .manufacturerDataContains: return .manufacturer
         case .serviceUUID16:  return .serviceUUID
         case .nameContains, .nameRegex: return .name
         }
@@ -86,6 +91,21 @@ struct DetectionRuleTable: Codable, Equatable, Sendable {
     //   0x0D53 Luxottica · 0x03C2 Snap · 0xFD5F Oculus · the camera-glasses name
     //   patterns (Ray-Ban / Oakley / Spectacles / HeyCyan / VistaView).
     //
+    // SOURCED FROM THIRD-PARTY COMMUNITY RESEARCH, NOT A FIRST-PARTY CAPTURE
+    // (independent reverse-engineering write-ups, not the SIG registry directly):
+    //   0x01AB Meta Platforms — SIG assignment confirmed independently against the
+    //          Bluetooth SIG's own assigned-numbers registry, but which Meta
+    //          products actually broadcast it, and in what state, is not yet
+    //          verified by us. Treated exactly like 0x058E: a headset guess alone,
+    //          upgraded by a Luxottica ID or a glasses name.
+    //   Also reported, NOT yet added — needs our own capture before it's trusted:
+    //     - A "META_RB_GLASS"-style ASCII string inside the manufacturer payload
+    //       itself (see `RuleMatch.manufacturerDataContains`, added for this).
+    //     - 0xFD5F (already a rule, as a headset signal) reportedly also seen on a
+    //       Ray-Ban Meta capture — but only during power-on/pairing, which doesn't
+    //       help the case that matters (worn, already connected). Not repointed to
+    //       cameraGlasses without our own confirmation of *when* it appears.
+    //
     // TWO SHARED IDENTIFIERS THAT MUST NOT STAND ALONE AS A CAMERA FLAG:
     //   0x058E  Meta Platforms Technologies (Reality Labs / Oculus) — used by the
     //           Quest *and* the Ray-Ban / Oakley Meta glasses. A bare 0x058E is a
@@ -97,6 +117,14 @@ struct DetectionRuleTable: Codable, Equatable, Sendable {
     // DELIBERATELY EXCLUDED — do not re-add without a second discriminator:
     //   0x00E0  Google  — every Pixel and every Fast Pair accessory broadcasts it.
     //   0x0075  Samsung — confirmed above on a Samsung TV. Neither ships glasses.
+    //   0x05D6  Zhuhai Jieli Technology — a chipset OEM (SIG assignment confirmed),
+    //           not a product line. It's the silicon inside countless unrelated
+    //           earbuds/speakers/generic BLE gadgets from many brands; using it
+    //           alone would flag most of a big-box electronics aisle as camera
+    //           glasses. Reported as "covering several camera-glasses brands" by
+    //           third-party research — plausible (some do use Jieli chips), but not
+    //           a safe standalone or even corroborating signal without a specific
+    //           named product's own name/service pattern alongside it.
     // A future rule that needs any of these MUST gate on a second signal, never the
     // company ID by itself. This comment is load-bearing: leave it here.
     // ─────────────────────────────────────────────────────────────────────────────
@@ -195,6 +223,15 @@ struct DetectionRuleTable: Codable, Equatable, Sendable {
                 category: .headset,
                 match: .companyID(0x058E),
                 note: "Manufacturer identifier 0x058E is Meta Platforms Technologies (Reality Labs / Oculus) — shared by the Quest and the Meta glasses. On its own it is treated as a headset; a Luxottica ID or a glasses name upgrades it to camera glasses."
+            ),
+            DetectionRule(
+                id: "meta-01ab-company",
+                productKey: "meta-headset",
+                productName: "Meta wearable",
+                vendor: "Meta Platforms",
+                category: .headset,
+                match: .companyID(0x01AB),
+                note: "Manufacturer identifier 0x01AB is a Meta Platforms company ID — confirmed against the Bluetooth SIG's own assigned-numbers registry, but which Meta products broadcast it (and in what state) isn't yet confirmed by a first-party capture. Treated the same as 0x058E until it is: a headset guess alone, upgraded by a Luxottica ID or a glasses name."
             ),
             DetectionRule(
                 id: "meta-feb8-service",

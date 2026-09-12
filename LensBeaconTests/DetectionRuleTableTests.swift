@@ -48,7 +48,7 @@ struct DetectionRuleTableTests {
     }
 
     @Test func noRuleMatchesOnAnExcludedVendorCompanyID() {
-        for excluded in [UInt16(0x00E0), UInt16(0x0075)] {
+        for excluded in [UInt16(0x00E0), UInt16(0x0075), UInt16(0x05D6)] {
             for r in table.rules {
                 if case .companyID(let id) = r.match { #expect(id != excluded) }
             }

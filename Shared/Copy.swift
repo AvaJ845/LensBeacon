@@ -9,8 +9,13 @@ enum Copy {
     /// Must appear in onboarding AND in the empty state.
     static let notAccusation = "A detection is not proof that anyone is recording, and quiet is not proof that no one is."
 
-    /// The standalone-silence caveat, Fellow-worded.
-    static let standaloneSilence = "Most camera glasses keep broadcasting while they are worn, so they are usually detectable. A few standalone models with no phone link can stay silent."
+    /// The standalone-silence caveat, Fellow-worded. Deliberately hedged in both
+    /// directions rather than asserting "usually detectable" — whether a pair stays
+    /// discoverable once connected to its owner's phone is genuinely unconfirmed
+    /// pending our own hardware capture (docs/DEVICE-TESTING.md), and BLE's own
+    /// mechanics (a connected peripheral typically stops advertising) argue it may
+    /// not. Revisit this string the moment that capture lands either way.
+    static let standaloneSilence = "Whether a pair keeps broadcasting once it's connected to its owner's phone varies by model, and LensBeacon can only detect one that is. A silent scan is never proof nothing is nearby."
 
     /// Proximity honesty.
     static let proximityOnly = "Signal strength gives a rough sense of distance only. LensBeacon never shows a direction, a track, or a name."

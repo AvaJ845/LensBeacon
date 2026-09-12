@@ -45,11 +45,67 @@ struct DetectionEngineTests {
         #expect(d.isCameraFlag)
     }
 
+    @Test func meta01ABAloneIsAlsoAHeadsetNotACameraFlag() {
+        // 0x01AB is the other confirmed Meta Platforms company ID (source: the
+        // Bluetooth SIG assigned-numbers registry, cross-checked independently of
+        // the community write-up that first reported it) — treated exactly like
+        // 0x058E until a first-party capture confirms which product broadcasts it.
+        let d = DetectionEngine.classify(.init(manufacturerData: mfg(0x01AB)))
+        #expect(d.category == .headset)
+        #expect(d.isCameraFlag == false)
+    }
+
+    @Test func meta01ABPlusGlassesNameIsCameraGlasses() {
+        let d = DetectionEngine.classify(.init(manufacturerData: mfg(0x01AB), localName: "Oakley Meta"))
+        #expect(d.category == .cameraGlasses)
+        #expect(d.isCameraFlag)
+    }
+
     @Test func snapCompanyID() {
         let d = DetectionEngine.classify(.init(manufacturerData: mfg(0x03C2)))
         #expect(d.bestTier == .manufacturer)
         #expect(d.evidence.first?.matchedValue == "0x03C2")
         #expect(d.evidence.first?.rawBytes == "C2 03")
+    }
+
+    // MARK: - Manufacturer-data ASCII fingerprint (no live rule yet — infrastructure
+    // only, ready for the day a real capture confirms a string like "META_RB_GLASS"
+    // actually appears; tested against a throwaway table so `.current` stays clean
+    // of unconfirmed rules).
+
+    @Test func manufacturerDataContainsMatchesAnEmbeddedASCIIFingerprint() {
+        let testTable = DetectionRuleTable(schemaVersion: 1, rules: [
+            DetectionRule(id: "t", productKey: "p", productName: "Test Glasses", vendor: "V",
+                          category: .cameraGlasses, match: .manufacturerDataContains("META_RB_GLASS"), note: "t"),
+        ])
+        var data = mfg(0x0D53)
+        data.append(contentsOf: Array("META_RB_GLASS".utf8))
+
+        let d = DetectionEngine.classify(.init(manufacturerData: data), table: testTable)
+        #expect(d.category == .cameraGlasses)
+        #expect(d.bestTier == .manufacturer)
+        #expect(d.evidence.first?.matchedValue == "META_RB_GLASS")
+    }
+
+    @Test func manufacturerDataContainsIsCaseInsensitiveAndIgnoresTheCompanyPrefix() {
+        let testTable = DetectionRuleTable(schemaVersion: 1, rules: [
+            DetectionRule(id: "t", productKey: "p", productName: "P", vendor: "V",
+                          category: .cameraGlasses, match: .manufacturerDataContains("hello"), note: "t"),
+        ])
+        var data = mfg(0x0D53)
+        data.append(contentsOf: Array("xxHELLOxx".utf8))
+
+        let d = DetectionEngine.classify(.init(manufacturerData: data), table: testTable)
+        #expect(d.category == .cameraGlasses)
+    }
+
+    @Test func manufacturerDataContainsDoesNotMatchWhenTheStringIsAbsent() {
+        let testTable = DetectionRuleTable(schemaVersion: 1, rules: [
+            DetectionRule(id: "t", productKey: "p", productName: "P", vendor: "V",
+                          category: .cameraGlasses, match: .manufacturerDataContains("META_RB_GLASS"), note: "t"),
+        ])
+        let d = DetectionEngine.classify(.init(manufacturerData: mfg(0x0D53)), table: testTable)
+        #expect(d.category == .unknown)
     }
 
     // MARK: - Service UUID, both AD forms (0xFD5F → Oculus → headset)

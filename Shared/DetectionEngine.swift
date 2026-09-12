@@ -39,6 +39,21 @@ struct AdvertisementFields: Sendable, Equatable {
         guard let d = manufacturerData, d.count >= 2 else { return nil }
         return String(format: "%02X %02X", d[d.startIndex], d[d.index(after: d.startIndex)])
     }
+
+    /// The manufacturer payload *after* the 2-byte company prefix, decoded as
+    /// lossy ASCII/UTF-8 — for matching an embedded fingerprint string. Non-text
+    /// bytes become replacement characters; they can't accidentally form a false
+    /// match, since a genuine substring match requires the real bytes to be there.
+    var manufacturerPayloadText: String? {
+        guard let d = manufacturerData, d.count > 2 else { return nil }
+        return String(decoding: d.dropFirst(2), as: UTF8.self)
+    }
+
+    /// Full manufacturer data, spaced hex, exactly as it sits on the wire.
+    var manufacturerWireBytes: String? {
+        guard let d = manufacturerData else { return nil }
+        return d.map { String(format: "%02X", $0) }.joined(separator: " ")
+    }
 }
 
 /// Turns one advertisement into a `Detection` plus the evidence behind it.
@@ -124,6 +139,16 @@ enum DetectionEngine {
                 adType: .completeName, ruleID: rule.id, ruleTitle: rule.note,
                 tier: rule.tier, category: rule.category,
                 matchedValue: name, rawBytes: utf8Hex(name)
+            )
+
+        case .manufacturerDataContains(let needle):
+            guard let text = ad.manufacturerPayloadText,
+                  text.range(of: needle, options: .caseInsensitive) != nil
+            else { return nil }
+            return DetectionEvidence(
+                adType: .manufacturerData, ruleID: rule.id, ruleTitle: rule.note,
+                tier: rule.tier, category: rule.category,
+                matchedValue: needle, rawBytes: ad.manufacturerWireBytes ?? ""
             )
         }
     }
