@@ -265,6 +265,31 @@ struct DetectionEngineTests {
         #expect(merged.evidence.allSatisfy { $0.category == .cameraGlasses })
     }
 
+    /// Every rule in the live table always sets `productKey`/`productName`/`vendor`,
+    /// so this never fires through `classify()` today — but `merged` must still
+    /// inherit the *losing* reading's identity fields when the winner's own are
+    /// nil, not silently drop them. Constructed directly, since `classify()` can't
+    /// produce a matched `Detection` with a nil productKey from the current table.
+    @Test func mergeInheritsTheOtherReadingsIdentityWhenTheWinnerHasNone() {
+        let anonymousButCategorized = Detection(
+            category: .cameraGlasses, productKey: nil, productName: nil, vendor: nil,
+            evidence: [DetectionEvidence(
+                adType: .manufacturerData, ruleID: "test-anon", ruleTitle: "test",
+                tier: .manufacturer, category: .cameraGlasses,
+                matchedValue: "0x0000", rawBytes: "00 00"
+            )]
+        )
+        let named = DetectionEngine.classify(.init(localName: "Ray-Ban Meta 9C"))
+
+        // Same category, so the higher tier wins — that's `anonymousButCategorized`
+        // (manufacturer > name) — but it must still pick up `named`'s identity.
+        let merged = anonymousButCategorized.merged(with: named)
+        #expect(merged.bestTier == .manufacturer)
+        #expect(merged.productKey == "meta-glasses")
+        #expect(merged.productName == "Ray-Ban / Oakley Meta")
+        #expect(merged.vendor == "Meta")
+    }
+
     @Test func tierIsAlwaysConsistentWithTheMatchKind() {
         for rule in DetectionRuleTable.current.rules {
             #expect(rule.tier == rule.match.tier)

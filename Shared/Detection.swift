@@ -201,13 +201,18 @@ struct Detection: Codable, Equatable, Sendable {
         guard incoming.matched else { return self }
         guard matched else { return incoming }
 
-        let winner: Detection
+        // Tracked as an explicit flag rather than testing `winner == incoming` —
+        // `Detection` is `Equatable` by value, so if `self` and `incoming` ever
+        // happened to be equal, that comparison would silently mislabel which one
+        // is "self" and which is "other" below.
+        let incomingWins: Bool
         if Self.rank(incoming.category) != Self.rank(category) {
-            winner = Self.rank(incoming.category) > Self.rank(category) ? incoming : self
+            incomingWins = Self.rank(incoming.category) > Self.rank(category)
         } else {
-            winner = (incoming.bestTier ?? .name) >= (bestTier ?? .name) ? incoming : self
+            incomingWins = (incoming.bestTier ?? .name) >= (bestTier ?? .name)
         }
-        let other = (winner == incoming) ? self : incoming
+        let winner = incomingWins ? incoming : self
+        let other = incomingWins ? self : incoming
 
         var mergedEvidence = winner.evidence
         for e in other.evidence
@@ -216,11 +221,18 @@ struct Detection: Codable, Equatable, Sendable {
         }
         mergedEvidence.sort { $0.tier > $1.tier }
 
+        // Falls back to the *other* reading's identity fields, not the winner's
+        // own — every current rule always sets these, but a future rule that
+        // doesn't (or a directly-constructed Detection) must still inherit the
+        // losing reading's identity rather than silently losing it. Using the
+        // implicit `self` here instead of `other` would be a no-op whenever the
+        // winner is `self`, since `winner.productKey ?? self.productKey` is then
+        // always just `winner.productKey`.
         return Detection(
             category: winner.category,
-            productKey: winner.productKey ?? productKey,
-            productName: winner.productName ?? productName,
-            vendor: winner.vendor ?? vendor,
+            productKey: winner.productKey ?? other.productKey,
+            productName: winner.productName ?? other.productName,
+            vendor: winner.vendor ?? other.vendor,
             evidence: mergedEvidence
         )
     }
