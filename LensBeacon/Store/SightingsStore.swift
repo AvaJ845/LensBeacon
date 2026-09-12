@@ -161,8 +161,13 @@ final class SightingsStore {
     /// A plain-language summary of the current log — for saying what you saw, not
     /// analysing a spreadsheet. Same retention window as CSV export, same "yours
     /// to share" pattern: handed to `ShareLink`, never sent anywhere by the app.
-    func sessionReport(mine: MineRegistry) -> String {
-        let visible = sightings.filter { withinRetention($0) }.sorted { $0.lastSeen > $1.lastSeen }
+    ///
+    /// Takes the same `filter` the Sightings list is currently showing, so what
+    /// gets shared always matches what's on screen — sharing while the "Mine" tab
+    /// is selected must never pull in devices that aren't yours and aren't even
+    /// visible in the list you were looking at.
+    func sessionReport(filter: Filter, mine: MineRegistry) -> String {
+        let visible = filtered(filter, mine: mine)
         var lines = [
             "LensBeacon — Session Report",
             "Generated \(Date().formatted(date: .abbreviated, time: .shortened))",

@@ -78,7 +78,7 @@ struct SightingsView: View {
                             .disabled(rows.isEmpty)
                         ShareLink(
                             "Share session report",
-                            item: store.sessionReport(mine: mine)
+                            item: store.sessionReport(filter: filter, mine: mine)
                         )
                         .disabled(!unlock.isUnlocked || rows.isEmpty)
                         Button("Clear history", systemImage: "trash", role: .destructive) {

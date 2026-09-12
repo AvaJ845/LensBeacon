@@ -70,7 +70,7 @@ struct SightingsStoreTests {
         store.record(peripheralKey: "a", detection: metaGlasses(), rssi: -50, proximity: .near, at: Date())
         let mine = MineRegistry()
 
-        let report = store.sessionReport(mine: mine)
+        let report = store.sessionReport(filter: .all, mine: mine)
         #expect(report.hasPrefix("LensBeacon — Session Report"))
         #expect(report.contains("1 recognised device:"))
         #expect(report.contains("Ray-Ban / Oakley Meta"))
@@ -82,8 +82,33 @@ struct SightingsStoreTests {
         let (store, url) = makeStore()
         defer { try? FileManager.default.removeItem(at: url) }
 
-        let report = store.sessionReport(mine: MineRegistry())
+        let report = store.sessionReport(filter: .all, mine: MineRegistry())
         #expect(report.contains("No recognised camera or display glasses in this period."))
+    }
+
+    /// The share sheet must only ever contain what the current tab is showing —
+    /// switching to "Mine" and sharing must never smuggle in someone else's
+    /// nearby glasses that aren't even visible in that filtered list.
+    @Test func sessionReportOnTheMineFilterOnlyIncludesDevicesMarkedMine() {
+        let (store, url) = makeStore()
+        defer { try? FileManager.default.removeItem(at: url) }
+
+        let snapDetection = DetectionEngine.classify(.init(localName: "Spectacles"))
+        store.record(peripheralKey: "meta", detection: metaGlasses(), rssi: -50, proximity: .near, at: Date())
+        store.record(peripheralKey: "snap", detection: snapDetection, rssi: -55, proximity: .near, at: Date())
+
+        let mine = MineRegistry()
+        mine.setMine(true, productKey: metaGlasses().productKey)
+
+        let allReport = store.sessionReport(filter: .all, mine: mine)
+        #expect(allReport.contains("2 recognised devices:"))
+        #expect(allReport.contains("Ray-Ban / Oakley Meta"))
+        #expect(allReport.contains("Spectacles"))
+
+        let mineReport = store.sessionReport(filter: .mine, mine: mine)
+        #expect(mineReport.contains("1 recognised device:"))
+        #expect(mineReport.contains("Ray-Ban / Oakley Meta"))
+        #expect(!mineReport.contains("Spectacles"))
     }
 
     @Test func wipeEmptiesMemoryAndDeletesTheFile() {

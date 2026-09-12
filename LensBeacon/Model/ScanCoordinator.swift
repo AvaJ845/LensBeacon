@@ -97,9 +97,10 @@ final class ScanCoordinator {
     /// The flagged-item payload of the last snapshot we wrote, to suppress no-op writes.
     private var lastSnapshotItems: [DashboardSnapshot.Item] = []
     private var lastSnapshotAt: Date = .distantPast
-    /// A short smoothed-RSSI trail per device, sampled once per tick, purely to feed
-    /// `ActivationSignal` at the moment a device drops out of range. Bounded to the
-    /// same handful of samples `isLikelyCliff` actually looks at; never persisted.
+    /// A short smoothed-RSSI trail per device, sampled once per real packet (never
+    /// on a timer — see `recordRSSIHistory`), purely to feed `ActivationSignal` at
+    /// the moment a device drops out of range. Bounded to the same handful of
+    /// samples `isLikelyCliff` actually looks at; never persisted.
     private var rssiHistory: [String: [ActivationSignal.Sample]] = [:]
     private static let rssiHistoryCap = 8
 
