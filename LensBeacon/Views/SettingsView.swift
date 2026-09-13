@@ -146,7 +146,7 @@ struct SettingsView: View {
                         Text(band.title).tag(band.rawValue)
                     }
                 }
-                .disabled(!unlock.isUnlocked)
+                .disabled(!unlock.isUnlocked || !backgroundScanning)
             }
             Toggle("Quiet hours", isOn: $quietHoursEnabled)
                 .disabled(!unlock.isUnlocked || !alertsEnabled)

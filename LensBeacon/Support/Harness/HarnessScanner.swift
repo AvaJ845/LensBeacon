@@ -40,10 +40,16 @@ struct HarnessAdvertisement: Sendable {
 /// distribution number actually matters.
 final class HarnessScanner: NSObject {
 
-    enum State: Equatable { case idle, unauthorized, poweredOff, unsupported, scanning }
+    enum State: Equatable, Sendable { case idle, unauthorized, poweredOff, unsupported, scanning }
 
-    var onPacket: ((HarnessAdvertisement) -> Void)?
-    var onStateChange: ((State) -> Void)?
+    // `@Sendable`, matching `BluetoothScanner.onEvent`/`onStateChange` exactly —
+    // this class is a plain, non-actor-isolated delegate object (its
+    // `CBCentralManager` happens to run on `queue: .main`, but nothing in the
+    // type system says so), so these closures must be explicitly hopped to the
+    // main actor at the call site (`HarnessCoordinator.init`), never assumed
+    // safe just because they're formed inside a `@MainActor` initializer.
+    var onPacket: (@Sendable (HarnessAdvertisement) -> Void)?
+    var onStateChange: (@Sendable (State) -> Void)?
 
     private(set) var isRunning = false
     private var central: CBCentralManager?

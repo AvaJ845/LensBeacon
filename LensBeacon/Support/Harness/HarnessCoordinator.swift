@@ -36,12 +36,31 @@ final class HarnessCoordinator {
 
     init(context: ModelContext = ModelContext(HarnessStore.container)) {
         self.context = context
-        scanner.onStateChange = { [weak self] state in self?.state = state }
-        scanner.onPacket = { [weak self] packet in self?.ingest(packet) }
+        // `HarnessScanner`'s delegate runs on `queue: .main` (see its own doc),
+        // but the closures it stores are plain `@Sendable` values with no
+        // static guarantee of that — hop explicitly, same as `ScanCoordinator`
+        // does for the identically-shaped `BluetoothScanner.onEvent`.
+        scanner.onStateChange = { [weak self] state in
+            Task { @MainActor in self?.state = state }
+        }
+        scanner.onPacket = { [weak self] packet in
+            Task { @MainActor in self?.ingest(packet) }
+        }
     }
 
     func start() { scanner.start() }
-    func stop() { scanner.stop(); displayTick?.cancel(); displayTick = nil }
+
+    /// Called when the harness screen disappears entirely (leaving `#if DEBUG`
+    /// navigation back to Settings), not when a child screen is merely pushed
+    /// on top of it. If a session is still open at that point, close it here —
+    /// otherwise the scanner that was feeding it stops silently while the
+    /// session itself stays `endedAt == nil` forever, an orphaned "active"
+    /// row with no way to close it short of reopening the harness and
+    /// starting a new session over top of it.
+    func stop() {
+        scanner.stop()
+        if activeSession != nil { endSession() }
+    }
 
     func startSession(environment: HarnessEnvironment, notes: String, deviceStates: [DeviceState]) {
         let session = HarnessSession(environment: environment)

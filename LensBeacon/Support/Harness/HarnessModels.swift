@@ -198,7 +198,15 @@ enum HarnessStore {
     /// research telemetry about the radio, unrelated to a user's sightings.
     static let container: ModelContainer = {
         let schema = Schema([HarnessSession.self, DeviceState.self, RawPacket.self, SessionEvent.self])
-        let url = URL.applicationSupportDirectory.appending(path: "lensbeacon-harness.store")
+        let base = URL.applicationSupportDirectory
+        // Application Support is not guaranteed to exist in a fresh sandbox —
+        // `SharedContainer.sightingsFileURL` already defends against exactly
+        // this for the same reason. Without this, a truly first-run launch
+        // (before anything else has touched this directory) would fail
+        // ModelContainer's init, hit the retry below, fail identically since
+        // the directory is still missing, and crash on the `try!`.
+        try? FileManager.default.createDirectory(at: base, withIntermediateDirectories: true)
+        let url = base.appending(path: "lensbeacon-harness.store")
         let config = ModelConfiguration(schema: schema, url: url)
         do {
             return try ModelContainer(for: schema, configurations: [config])
