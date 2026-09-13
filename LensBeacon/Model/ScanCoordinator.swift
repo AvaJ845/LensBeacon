@@ -288,7 +288,7 @@ final class ScanCoordinator {
                 proximity: current.proximity,
                 at: event.timestamp
             )
-            maybeAlert(for: record, key: key, isMine: current.isMine)
+            maybeAlert(for: record, key: key, isMine: current.isMine, proximity: current.proximity)
         }
 
         workingDirty = true
@@ -297,13 +297,17 @@ final class ScanCoordinator {
 
     /// Background notification gate — Tier 1 / Tier 2 camera detections only. A bare
     /// name match (Tier 3) is logged and badged in-app but never interrupts.
-    private func maybeAlert(for record: Sighting, key: String, isMine: Bool) {
+    private func maybeAlert(for record: Sighting, key: String, isMine: Bool, proximity: ProximityBand) {
         guard !isMine,
               record.detection.canNotifyInBackground,
               !alertedKeys.contains(key),
               SharedContainer.defaults.bool(forKey: SharedContainer.Key.alertsEnabled),
               SharedContainer.isUnlocked,
-              !SharedContainer.quietHours.isActive()
+              !SharedContainer.quietHours.isActive(),
+              // A band, never a distance — see `SharedContainer.alertMinProximity`.
+              // Defaults to `.far`, so an alert fires at any distance until the
+              // user deliberately tightens it in Settings.
+              proximity >= SharedContainer.alertMinProximity
         else { return }
         alertedKeys.insert(key)
         onNewFlag?(record)

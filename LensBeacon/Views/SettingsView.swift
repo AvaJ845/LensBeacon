@@ -22,6 +22,8 @@ struct SettingsView: View {
     private var quietHoursStartMinutes = QuietHours.disabled.startMinutes
     @AppStorage(SharedContainer.Key.quietHoursEndMinutes, store: SharedContainer.defaults)
     private var quietHoursEndMinutes = QuietHours.disabled.endMinutes
+    @AppStorage(SharedContainer.Key.alertMinProximityBand, store: SharedContainer.defaults)
+    private var alertMinProximityBandRaw = ProximityBand.far.rawValue
     @AppStorage(SharedContainer.Key.appearance, store: SharedContainer.defaults)
     private var appearanceRaw = AppAppearance.system.rawValue
 
@@ -138,6 +140,14 @@ struct SettingsView: View {
                 .onChange(of: alertsEnabled) { _, on in
                     if on { Task { _ = await notifier.requestAuthorizationIfNeeded() } }
                 }
+            if alertsEnabled {
+                Picker("Alert me only when at least", selection: $alertMinProximityBandRaw) {
+                    ForEach(ProximityBand.allCases.reversed(), id: \.self) { band in
+                        Text(band.title).tag(band.rawValue)
+                    }
+                }
+                .disabled(!unlock.isUnlocked)
+            }
             Toggle("Quiet hours", isOn: $quietHoursEnabled)
                 .disabled(!unlock.isUnlocked || !alertsEnabled)
             if quietHoursEnabled {
@@ -150,7 +160,7 @@ struct SettingsView: View {
             Text("Scanning")
         } footer: {
             Text("Turn listening off and LensBeacon detects and logs nothing until you turn it back on — the setting sticks across relaunches. " + (unlock.isUnlocked
-                 ? "Background scanning uses a filtered Bluetooth scan and shows a Live Activity so it’s always visible. LensBeacon still never connects to anything. Quiet hours mutes alerts on a schedule — by time only, never by place."
+                 ? "Background scanning uses a filtered Bluetooth scan and shows a Live Activity so it’s always visible. LensBeacon still never connects to anything. \"Alert me only when at least\" limits alerts to a proximity band, never a distance — Bluetooth signal strength can't support a number of metres, only Near / Nearby / Far (see Privacy details). Quiet hours mutes alerts on a schedule — by time only, never by place."
                  : "Background scanning is part of LensBeacon Unlock."))
         }
     }
@@ -301,6 +311,7 @@ struct SettingsView: View {
             backgroundScanning = false
             alertsEnabled = false
             quietHoursEnabled = false
+            alertMinProximityBandRaw = ProximityBand.far.rawValue
             SharedContainer.defaults.removeObject(forKey: SharedContainer.Key.scanningPaused)
             coordinator.setPaused(false)
         }

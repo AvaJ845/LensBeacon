@@ -39,6 +39,12 @@ enum SharedContainer {
         static let quietHoursEnabled = "quietHoursEnabled"
         static let quietHoursStartMinutes = "quietHoursStartMinutes"
         static let quietHoursEndMinutes = "quietHoursEndMinutes"
+        /// Minimum `ProximityBand` a flag must reach before it may raise a
+        /// background alert (Unlock feature) — a `ProximityBand.rawValue`.
+        /// Absent (and `.far`, the permissive default) means "alert at any
+        /// distance," identical to behaviour before this setting existed, so
+        /// nobody's alerts change just from updating the app.
+        static let alertMinProximityBand = "alertMinProximityBand"
     }
 
     /// WidgetKit kind for the Home Screen widget. Shared so the app can target it in
@@ -105,5 +111,19 @@ enum SharedContainer {
             defaults.set(newValue.startMinutes, forKey: Key.quietHoursStartMinutes)
             defaults.set(newValue.endMinutes, forKey: Key.quietHoursEndMinutes)
         }
+    }
+
+    /// A band, never a distance — matching `ProximityBand`'s own rule against
+    /// showing a number of metres. `.far` (the permissive default) means every
+    /// flag is alert-eligible regardless of signal strength, same as before
+    /// this setting existed.
+    static var alertMinProximity: ProximityBand {
+        get {
+            guard let raw = defaults.object(forKey: Key.alertMinProximityBand) as? Int,
+                  let band = ProximityBand(rawValue: raw)
+            else { return .far }
+            return band
+        }
+        set { defaults.set(newValue.rawValue, forKey: Key.alertMinProximityBand) }
     }
 }
