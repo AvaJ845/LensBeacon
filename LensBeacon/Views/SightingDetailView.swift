@@ -255,10 +255,21 @@ private struct EvidenceRow: View {
                 .font(.footnote.monospaced())
                 .textSelection(.enabled)
                 .fixedSize(horizontal: false, vertical: true)
-            Text(evidence.ruleTitle)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+            // Same checkmark language `SettingsView`'s "what LensBeacon does and
+            // doesn't do" statements already use — marks this line as *why*,
+            // distinct from the raw data above it, without adding a claim the
+            // data doesn't already support (see `Copy.notAccusation` in this
+            // screen's evidence footer, right below this row).
+            Label {
+                Text(evidence.ruleTitle)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            } icon: {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.caption)
+                    .foregroundStyle(Palette.accent)
+            }
         }
         .padding(.vertical, 2)
         .accessibilityElement(children: .ignore)
