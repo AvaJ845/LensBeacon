@@ -9,8 +9,10 @@ import os
 /// hears: after 15 minutes their rotating identifiers mean nothing, a wall of
 /// "Unrecognised device" rows is not something the user can act on, and "logs every
 /// Bluetooth device around you" is not the posture a calm awareness tool wants. The
-/// live "also broadcasting nearby" list on the Dashboard still shows everything in
-/// range for the moment it is there, for anyone who wants to sanity-check the scan.
+/// Dashboard's quiet "N in range" summary line still proves the scan is live without
+/// itemizing what's in range — the itemized "also broadcasting nearby" disclosure
+/// that used to sit below it was cut for the same reason nothing here is persisted:
+/// a room's worth of anonymous devices is noise, not something to act on.
 ///
 /// Design constraints:
 ///  - **On-device only.** A single JSON file in the App Group container, written

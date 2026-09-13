@@ -19,7 +19,7 @@ own hardware: confirming the detection rules against real advertisements.
 | --- | --- |
 | Onboarding | 3 panels, Bluetooth ask in context, "awareness not accusation" framing, no account |
 | Empty dashboard | brief "Listening…", then "Nothing flagged" with the not-proof line; calm pulse, no red |
-| Also broadcasting nearby | expand it — AirPods / watch / TV appear live, labelled anonymous, and are **not** written to the log |
+| "N in range" summary | appears once real Bluetooth traffic is around; proves the scan is live without itemizing anonymous devices (that list was cut — see `DashboardView.swift`) |
 | Listening toggle | Settings ▸ Scanning ▸ "Listen for camera glasses" off → header shows "Scanning paused", nothing detected or logged; survives relaunch |
 | Pause button | toolbar pause / header Resume does the same thing |
 | Settings ▸ Data | record count + size; clear history / reset mine / erase all; kill the app right after "clear" → stays cleared |

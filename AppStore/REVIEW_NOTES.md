@@ -40,14 +40,15 @@ an encrypted local file excluded from iCloud and device backup, and Settings
 → Data offers one-tap erase.
 
 Verifying the core feature without camera-glasses hardware: on launch, the
-Nearby tab's "Also broadcasting nearby" disclosure confirms the scanner is
-live against whatever real Bluetooth LE traffic is around the test device —
-that list is unfiltered, so it populates immediately in any normal room or
-office. A recognised match (Ray-Ban Meta, Oakley Meta, Snap Spectacles, Even
-Realities) additionally surfaces as a tiered flag with full evidence (the
-matched field, the raw bytes, the rule) under Sightings; the detection engine
-that produces this is covered by 44 automated unit tests run against real
-captured hardware advertisements, included in the repository.
+Nearby tab's quiet "N in range" summary line (just below the status hero)
+confirms the scanner is live against whatever real Bluetooth LE traffic is
+around the test device — it is unfiltered, so the count populates
+immediately in any normal room or office, without itemizing individual
+anonymous devices. A recognised match (Ray-Ban Meta, Oakley Meta, Snap
+Spectacles, Even Realities) additionally surfaces as a tiered flag with full
+evidence (the matched field, the raw bytes, the rule) under Sightings; the
+detection engine that produces this is covered by 44 automated unit tests run
+against real captured hardware advertisements, included in the repository.
 
 LensBeacon Unlock ($9.99, non-consumable) adds background scanning with a
 Live Activity, a Home Screen widget, local new-flag notifications, unlimited

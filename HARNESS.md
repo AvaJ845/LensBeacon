@@ -85,6 +85,17 @@ Run **before** trusting any TPR number, in this order:
 not 10 consecutive 90-second windows inside one long capture. Vary time of
 day and location loosely; don't run all 10 back-to-back in the same room.
 
+**Multi-component hardware gotcha, confirmed in the first real field data
+(2026-09-12)**: a session's Meta Quest was reported "powered off" in ground
+truth, but its peripheral (self-identified by name, "Quest 2") kept
+advertising for the full session anyway — most likely its **controllers**,
+which have their own BLE radio independent of the headset's power state,
+were still on. A single `poweredOff` toggle can't capture "headset off,
+accessory still on" for hardware with detachable powered components. Not a
+code fix (the Quest isn't the target hardware), but worth remembering for
+any negative control run with multi-part gear: power down every component,
+not just the one you're thinking of.
+
 ## Pre-registered kill criterion
 
 > **If the worn + paired true-positive rate, measured across at least 10

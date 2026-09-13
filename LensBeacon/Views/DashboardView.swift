@@ -12,11 +12,6 @@ struct DashboardView: View {
     @Environment(Router.self) private var router
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    /// Above this, the "everything else" list is capped with a "+N more" line so a
-    /// crowded RF environment never renders hundreds of rows.
-    private let otherDevicesCap = 40
-
-    @State private var showAllDevices = false
     @State private var showWeakSignals = false
     @State private var showSettings = false
     @State private var showUnlock = false
@@ -63,7 +58,6 @@ struct DashboardView: View {
                     }
 
                     seenNotFlaggedSection
-                    otherDevicesSection
                     recentActivationsSection
 
                     LimitsNote()
@@ -152,43 +146,15 @@ struct DashboardView: View {
         }
     }
 
-    @ViewBuilder
-    private var otherDevicesSection: some View {
-        let others = coordinator.allInRange.filter {
-            (!$0.isCameraFlag && !$0.isDisplayGlasses && !$0.detection.isHeadset) || $0.isMine
-        }
-        if !others.isEmpty {
-            let shown = others.prefix(otherDevicesCap)
-            DisclosureGroup(isExpanded: $showAllDevices) {
-                LazyVStack(spacing: 8) {
-                    ForEach(shown) { device in
-                        NavigationLink(value: device.peripheralKey) {
-                            OtherDeviceRow(device: device, isMine: mine.contains(productKey: device.productKey))
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    if others.count > shown.count {
-                        Text("+\(others.count - shown.count) more nearby")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.top, 2)
-                    }
-                    Text("Live view only — these anonymous devices are shown so you can see the scan is working, and are never written to the log.")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top, 2)
-                }
-                .padding(.top, 6)
-            } label: {
-                Label("Also broadcasting nearby (\(others.count))", systemImage: "antenna.radiowaves.left.and.right")
-                    .font(.subheadline.weight(.medium))
-            }
-            .tint(Palette.accent)
-            .padding(.horizontal, 4)
-        }
-    }
+    // `otherDevicesSection` (the "Also broadcasting nearby" disclosure listing
+    // every anonymous, unmatched device in range) was cut entirely — a typical
+    // room has dozens of anonymous BLE peripherals (TVs, earbuds, appliances),
+    // and even collapsed by default, an always-present "(37)" count read as
+    // noise rather than reassurance on a screen whose whole design goal is
+    // calm. `seenNotFlaggedSection` above still shows anything that matched a
+    // pattern without being flagged; `NearbySummary`'s quiet "N in range" line
+    // still proves the scan is live without itemizing what's in range. App
+    // Review verification note updated accordingly — see AppStore/REVIEW_NOTES.md.
 
     /// A signal that read strong, then vanished abruptly rather than fading —
     /// consistent with a device that just connected to a phone, and exactly as
