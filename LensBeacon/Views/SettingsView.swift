@@ -70,13 +70,24 @@ struct SettingsView: View {
     @ViewBuilder
     private var unlockSection: some View {
         Section {
-            if unlock.isUnlocked {
-                Label("LensBeacon Unlock is active", systemImage: "checkmark.seal.fill")
-                    .foregroundStyle(Palette.accent)
-            } else {
-                Button {
-                    showUnlock = true
-                } label: {
+            // Always tappable, in both states — never an inert Label once
+            // unlocked. UnlockView's "Restore Purchase" button (App Store
+            // Review guideline 3.1.2) was only reachable through this row and
+            // the Dashboard's promo card, and both used to disappear the
+            // moment `isUnlocked` became true, leaving no path anywhere in
+            // the app back to Restore for an already-unlocked user — exactly
+            // the reachability gap Apple's review checks for, independent of
+            // whether the purchase is a subscription or (as here) one-time.
+            // UnlockView already renders correctly when already unlocked (its
+            // own header switches to "Unlock is active" and hides only the
+            // buy button), so reusing it here needs no new restore logic.
+            Button {
+                showUnlock = true
+            } label: {
+                if unlock.isUnlocked {
+                    Label("LensBeacon Unlock is active", systemImage: "checkmark.seal.fill")
+                        .foregroundStyle(Palette.accent)
+                } else {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Get LensBeacon Unlock — \(unlock.displayPrice) once")
                             .font(.body.weight(.medium))
@@ -86,6 +97,7 @@ struct SettingsView: View {
                     }
                 }
             }
+            .buttonStyle(.plain)
         }
     }
 

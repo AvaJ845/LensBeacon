@@ -28,62 +28,69 @@ private struct HarnessRootContent: View {
     @Query(sort: \HarnessSession.startedAt, order: .reverse) private var sessions: [HarnessSession]
 
     var body: some View {
-        NavigationStack {
-            List {
-                Section("Scanner") {
-                    LabeledContent("State", value: stateLabel)
-                    LabeledContent("Packets this session", value: "\(coordinator.packetCount)")
-                    LabeledContent("Unique peripherals", value: "\(coordinator.uniquePeripheralCount)")
-                }
-                Section("Session") {
-                    if let session = coordinator.activeSession {
-                        LabeledContent("Environment", value: session.environment.title)
-                        ForEach(session.deviceStates, id: \.id) { state in
-                            Text("• \(state.label) — \(state.asRecord.category.title)")
-                                .font(.caption)
-                        }
-                        if !session.notes.isEmpty {
-                            Text(session.notes).font(.caption).foregroundStyle(.secondary)
-                        }
-                        Button("End session", role: .destructive) { coordinator.endSession() }
-                    } else {
-                        Button("Start tagged session…") { showSessionForm = true }
-                        Text("Nothing is captured before a session starts — an untagged packet has no ground truth.")
-                            .font(.caption2).foregroundStyle(.secondary)
-                    }
-                }
+        // No NavigationStack here — this view is only ever presented pushed
+        // onto SettingsView's own stack (see the NavigationLink in
+        // SettingsView.aboutSection). Nesting a second NavigationStack inside
+        // a pushed destination is a known SwiftUI trap: popping the *outer*
+        // stack's back button doesn't reliably tear down the inner stack's
+        // view identity, so `.onDisappear` below could silently not fire —
+        // confirmed in the field: backing out with the back button left the
+        // scanner state reading "Scanning" instead of stopping. NavigationLink
+        // still works fine pushing onto the ambient (outer) stack without one.
+        List {
+            Section("Scanner") {
+                LabeledContent("State", value: stateLabel)
+                LabeledContent("Packets this session", value: "\(coordinator.packetCount)")
+                LabeledContent("Unique peripherals", value: "\(coordinator.uniquePeripheralCount)")
+            }
+            Section("Session") {
                 if let session = coordinator.activeSession {
-                    Section("Mark an event") {
-                        Text("Tap the instant it happens — this is what lets the packet timeline be checked for anything unusual right around that moment. Events are sparse by nature, so reading this list back is cheap, unlike the packet log.")
-                            .font(.caption2).foregroundStyle(.secondary)
-                        ForEach(SessionEventKind.allCases) { kind in
-                            Button("\(kind.emoji) \(kind.title)") { coordinator.markEvent(kind) }
-                        }
-                        if !session.events.isEmpty {
-                            ForEach(session.events.sorted { $0.at > $1.at }, id: \.id) { event in
-                                Text("• \(event.kind.title) — \(event.at.formatted(date: .omitted, time: .standard))")
-                                    .font(.caption2).foregroundStyle(.secondary)
-                            }
-                        }
+                    LabeledContent("Environment", value: session.environment.title)
+                    ForEach(session.deviceStates, id: \.id) { state in
+                        Text("• \(state.label) — \(state.asRecord.category.title)")
+                            .font(.caption)
                     }
-                }
-                Section {
-                    NavigationLink("All sessions (\(sessions.count))") { SessionListView(sessions: sessions) }
-                    NavigationLink("Aggregate analysis") { AggregateAnalysisView(sessions: sessions) }
-                }
-                Section {
-                    Text("Promiscuous scan — no service filter, allowDuplicates. Background collection is throttled by iOS once this app is backgrounded for more than a brief window; there is no workaround for an unfiltered scan. See HARNESS.md.")
+                    if !session.notes.isEmpty {
+                        Text(session.notes).font(.caption).foregroundStyle(.secondary)
+                    }
+                    Button("End session", role: .destructive) { coordinator.endSession() }
+                } else {
+                    Button("Start tagged session…") { showSessionForm = true }
+                    Text("Nothing is captured before a session starts — an untagged packet has no ground truth.")
                         .font(.caption2).foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle("Detection Harness")
-            .navigationBarTitleDisplayMode(.inline)
-            .task { coordinator.start() }
-            .onDisappear { coordinator.stop() }
-            .sheet(isPresented: $showSessionForm) {
-                SessionFormView { environment, notes, deviceStates in
-                    coordinator.startSession(environment: environment, notes: notes, deviceStates: deviceStates)
+            if let session = coordinator.activeSession {
+                Section("Mark an event") {
+                    Text("Tap the instant it happens — this is what lets the packet timeline be checked for anything unusual right around that moment. Events are sparse by nature, so reading this list back is cheap, unlike the packet log.")
+                        .font(.caption2).foregroundStyle(.secondary)
+                    ForEach(SessionEventKind.allCases) { kind in
+                        Button("\(kind.emoji) \(kind.title)") { coordinator.markEvent(kind) }
+                    }
+                    if !session.events.isEmpty {
+                        ForEach(session.events.sorted { $0.at > $1.at }, id: \.id) { event in
+                            Text("• \(event.kind.title) — \(event.at.formatted(date: .omitted, time: .standard))")
+                                .font(.caption2).foregroundStyle(.secondary)
+                        }
+                    }
                 }
+            }
+            Section {
+                NavigationLink("All sessions (\(sessions.count))") { SessionListView(sessions: sessions) }
+                NavigationLink("Aggregate analysis") { AggregateAnalysisView(sessions: sessions) }
+            }
+            Section {
+                Text("Promiscuous scan — no service filter, allowDuplicates. Background collection is throttled by iOS once this app is backgrounded for more than a brief window; there is no workaround for an unfiltered scan. See HARNESS.md.")
+                    .font(.caption2).foregroundStyle(.secondary)
+            }
+        }
+        .navigationTitle("Detection Harness")
+        .navigationBarTitleDisplayMode(.inline)
+        .task { coordinator.start() }
+        .onDisappear { coordinator.stop() }
+        .sheet(isPresented: $showSessionForm) {
+            SessionFormView { environment, notes, deviceStates in
+                coordinator.startSession(environment: environment, notes: notes, deviceStates: deviceStates)
             }
         }
     }
